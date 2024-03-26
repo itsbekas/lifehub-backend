@@ -11,8 +11,11 @@ class Trading212(API):
     def _get(self, endpoint: str):
         return self._get_with_token(endpoint)
 
-    def get_account(self):
+    def get_account_cash(self):
         return self._get("equity/account/cash")
+
+    def get_account_metadata(self):
+        return self._get("equity/account/info")
 
     def _error_msg(self, res):
         return res.text

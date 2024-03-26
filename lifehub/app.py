@@ -18,7 +18,7 @@ def main():
 
     t212 = Trading212()
 
-    account = t212.get_account()
+    account = t212.get_account_cash()
 
     print(f"Trading212: {account['total']}")
     total_balance += account["total"]

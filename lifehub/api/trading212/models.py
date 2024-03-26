@@ -23,3 +23,20 @@ class AccountCash:
 
     def __repr__(self):
         return f"<Trading212 AccountCash: {self.total}>"
+
+
+class AccountMetadata:
+    def __init__(
+        self,
+        currencyCode: str,
+        id: int,
+    ):
+        self.currencyCode: str = currencyCode
+        self.id: int = id
+
+    @classmethod
+    def from_response(cls, data: dict):
+        return cls(**data)
+
+    def __repr__(self):
+        return f"<Trading212 AccountMetadata: {self.id}>"
