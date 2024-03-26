@@ -19,18 +19,27 @@ class API:
         if res.status_code != 200:
             print(type(self).__name__)
             raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res.json())
+                type(self).__name__, url, res.status_code, self._error_msg(res)
             )
         return res.json()
 
     def _get_with_token(self, endpoint: str, params: dict = {}):
+        url = f"{self.base_url}/{endpoint}"
+        res = requests.get(url, headers={"Authorization": self.token}, params=params)
+        if res.status_code != 200:
+            raise APIException(
+                type(self).__name__, url, res.status_code, self._error_msg(res)
+            )
+        return res.json()
+
+    def _get_with_token_bearer(self, endpoint: str, params: dict = {}):
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(
             url, headers={"Authorization": f"Bearer {self.token}"}, params=params
         )
         if res.status_code != 200:
             raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res.json())
+                type(self).__name__, url, res.status_code, self._error_msg(res)
             )
         return res.json()
 
@@ -40,9 +49,9 @@ class API:
         if res.status_code != 200:
             print(res.json())
             raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res.json())
+                type(self).__name__, url, res.status_code, self._error_msg(res)
             )
         return res.json()
 
-    def _error_msg(self, res: dict):
+    def _error_msg(self, res: requests.Response):
         raise NotImplementedError
