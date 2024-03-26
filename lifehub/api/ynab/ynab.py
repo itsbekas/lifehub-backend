@@ -14,7 +14,7 @@ class YNAB(API):
     def _get(self, endpoint: str):
         # TODO: Maybe catch exceptions here and return None
         # TODO: Save endpoint's last knowledge of server
-        return self._get_with_token(endpoint)
+        return self._get_with_token_bearer(endpoint)
 
     def get_user(self):
         # TODO: return object
@@ -66,5 +66,5 @@ class YNAB(API):
             )
         return self._get(f"budgets/{self.budget}/months/{month}/categories/{category}")
 
-    def _error_msg(self, res: dict):
-        return res.get("error", {}).get("detail")
+    def _error_msg(self, res):
+        return res.json().get("error", {}).get("detail")
