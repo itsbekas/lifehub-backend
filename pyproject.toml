@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lifehub-backend"
+version = "0.0.1"
+dependencies = [
+    "requests",
+]
+
+[tool.setuptools.packages]
+find = {}
+
+[project.scripts]
+lifehub = "lifehub.app:main"
