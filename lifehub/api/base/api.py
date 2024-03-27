@@ -60,7 +60,6 @@ class API:
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(url, headers=headers, params=params)
         if res.status_code != 200:
-            print(res.json())
             raise APIException(
                 type(self).__name__, url, res.status_code, self._error_msg(res)
             )

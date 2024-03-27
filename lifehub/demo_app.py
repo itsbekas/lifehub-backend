@@ -1,5 +1,6 @@
 from lifehub.api.ynab import YNAB
 from lifehub.api.trading212 import Trading212
+from lifehub.api.habitica import Habitica
 
 
 def cash_demo():
@@ -25,6 +26,18 @@ def cash_demo():
     print(f"Total: {round(total_balance, 2)}")
 
 
+def tasks_demo():
+    habitica = Habitica()
+
+    # tasks = habitica.get_user_dailies()
+    # tasks = habitica.get_user_habits()
+    tasks = habitica.get_user_todos()
+
+    print(tasks)
+
+
 def main_demo():
     cash_demo()
     print("")
+    tasks_demo()
+
