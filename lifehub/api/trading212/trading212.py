@@ -1,4 +1,5 @@
 from lifehub.api.base import API
+from .models import AccountCash, AccountMetadata
 
 
 class Trading212(API):
@@ -11,10 +12,20 @@ class Trading212(API):
         return self._get_with_token(endpoint)
 
     def get_account_cash(self):
-        return self._get("equity/account/cash")
+        try:
+            res = self._get("equity/account/cash")
+            return AccountCash.from_response(res)
+        except Exception as e:
+            print(e)
+            return None
 
     def get_account_metadata(self):
-        return self._get("equity/account/info")
+        try:
+            res = self._get("equity/account/info")
+            return AccountMetadata.from_response(res)
+        except Exception as e:
+            print(e)
+            return None
 
     def _error_msg(self, res):
         return res.text

@@ -1,6 +1,7 @@
 import requests
 from os import getenv
 
+
 class APIException(Exception):
     def __init__(self, api: str, url: str, status_code: int, msg: str):
         self.api = api
@@ -31,7 +32,8 @@ class API:
         GET request to the API with token in the header
         """
         url = f"{self.base_url}/{endpoint}"
-        res = requests.get(url, headers={"Authorization": self.token}, params=params)
+        headers = {"Authorization": self.token}
+        res = requests.get(url, headers=headers, params=params)
         if res.status_code != 200:
             raise APIException(
                 type(self).__name__, url, res.status_code, self._error_msg(res)
@@ -43,16 +45,15 @@ class API:
         GET request to the API with token bearer in the header
         """
         url = f"{self.base_url}/{endpoint}"
-        res = requests.get(
-            url, headers={"Authorization": f"Bearer {self.token}"}, params=params
-        )
+        headers = {"Authorization": f"Bearer {self.token}"}
+        res = requests.get(url, headers=headers, params=params)
         if res.status_code != 200:
             raise APIException(
                 type(self).__name__, url, res.status_code, self._error_msg(res)
             )
         return res.json()
 
-    def _get_with_header(self, endpoint: str, headers: dict = {}, params: dict = {}):
+    def _get_with_headers(self, endpoint: str, headers: dict = {}, params: dict = {}):
         """
         GET request to the API with custom headers
         """

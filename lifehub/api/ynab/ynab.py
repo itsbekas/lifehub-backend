@@ -35,8 +35,7 @@ class YNAB(API):
         try:
             res = self._get(f"budgets/{budget}/accounts")
             data = res.get("data", {}).get("accounts", [])
-            accounts = [Account.from_response(a) for a in data]
-            return accounts
+            return [Account.from_response(a) for a in data]
         except Exception as e:
             print(e)
             return []
@@ -49,8 +48,7 @@ class YNAB(API):
         try:
             res = self._get(f"budgets/{self.budget}/categories")
             data = res.get("data", {}).get("category_groups", [])
-            category_groups = [CategoryGroup.from_response(c) for c in data]
-            return category_groups
+            return [CategoryGroup.from_response(c) for c in data]
         except Exception as e:
             print(e)
             return []
