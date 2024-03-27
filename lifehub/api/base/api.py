@@ -1,5 +1,5 @@
 import requests
-
+from os import getenv
 
 class APIException(Exception):
     def __init__(self, api: str, url: str, status_code: int, msg: str):
@@ -14,6 +14,9 @@ class APIException(Exception):
 
 class API:
     def _get_basic(self, endpoint: str, params: dict = {}):
+        """
+        Basic GET request to the API
+        """
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(url, params=params)
         if res.status_code != 200:
@@ -24,6 +27,9 @@ class API:
         return res.json()
 
     def _get_with_token(self, endpoint: str, params: dict = {}):
+        """
+        GET request to the API with token in the header
+        """
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(url, headers={"Authorization": self.token}, params=params)
         if res.status_code != 200:
@@ -33,6 +39,9 @@ class API:
         return res.json()
 
     def _get_with_token_bearer(self, endpoint: str, params: dict = {}):
+        """
+        GET request to the API with token bearer in the header
+        """
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(
             url, headers={"Authorization": f"Bearer {self.token}"}, params=params
@@ -44,6 +53,9 @@ class API:
         return res.json()
 
     def _get_with_header(self, endpoint: str, headers: dict = {}, params: dict = {}):
+        """
+        GET request to the API with custom headers
+        """
         url = f"{self.base_url}/{endpoint}"
         res = requests.get(url, headers=headers, params=params)
         if res.status_code != 200:
@@ -54,4 +66,14 @@ class API:
         return res.json()
 
     def _error_msg(self, res: requests.Response):
+        """
+        Get the error message from the response
+        """
         raise NotImplementedError
+
+    def _load_env_token(self, env_var: str):
+        """
+        Load token from environment variable
+        """
+
+        return getenv(env_var)

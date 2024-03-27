@@ -1,4 +1,3 @@
-from os import getenv
 import re
 from .models import CategoryGroup, Account
 from lifehub.api.base import API
@@ -8,7 +7,7 @@ class YNAB(API):
     base_url = "https://api.ynab.com/v1"
 
     def __init__(self, budget: str = "last-used"):
-        self.token = getenv("YNAB_TOKEN")
+        self.token = self._load_env_token("YNAB_TOKEN")
         self.budget = budget
 
     def _get(self, endpoint: str):
