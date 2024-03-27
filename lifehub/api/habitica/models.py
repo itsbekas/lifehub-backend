@@ -1,3 +1,5 @@
+import datetime as dt
+
 class Task:
     pass
 
@@ -33,7 +35,7 @@ class HabitTask(Task):
         self.challenge: dict = challenge
         self.counterDown: int = counterDown
         self.counterUp: int = counterUp
-        self.createdAt: str = createdAt #TODO: Convert to datetime
+        self.createdAt: dt.datetime = dt.datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.down: bool = down
         self.frequency: str = frequency
         self.group: dict = group
@@ -46,7 +48,7 @@ class HabitTask(Task):
         self.text: str = text
         self.type: str = type
         self.up: bool = up
-        self.updatedAt: str = updatedAt #TODO: Convert to datetime
+        self.updatedAt: dt.datetime = dt.datetime.strptime(updatedAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.userId: str = userId
         self.value: float = value
     
@@ -98,7 +100,7 @@ class DailyTask(Task):
         self.checklist: list = checklist
         self.collapseChecklist: bool = collapseChecklist
         self.completed: bool = completed
-        self.createdAt: str = createdAt #TODO: Convert to datetime
+        self.createdAt: dt.datetime = dt.datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.daysOfMonth: list = daysOfMonth
         self.everyX: int = everyX
         self.frequency: str = frequency
@@ -111,12 +113,12 @@ class DailyTask(Task):
         self.priority: float = priority
         self.repeat: dict = repeat
         self.reminders: list = reminders
-        self.startDate: str = startDate #TODO: Convert to datetime
+        self.startDate: dt.datetime = dt.datetime.strptime(startDate, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.streak: int = streak
         self.tags: list = tags
         self.text: str = text
         self.type: str = type
-        self.updatedAt: str = updatedAt #TODO: Convert to datetime
+        self.updatedAt: dt.datetime = dt.datetime.strptime(updatedAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.userId: str = userId
         self.value: float = value
         self.weeksOfMonth: list = weeksOfMonth
@@ -159,7 +161,7 @@ class TodoTask(Task):
         self.checklist: list = checklist
         self.collapseChecklist: bool = collapseChecklist
         self.completed: bool = completed
-        self.createdAt: str = createdAt #TODO: Convert to datetime
+        self.createdAt: dt.datetime = dt.datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.group: dict = group
         self.id: str = id
         self.notes: str = notes
@@ -168,7 +170,7 @@ class TodoTask(Task):
         self.tags: list = tags
         self.text: str = text
         self.type: str = type
-        self.updatedAt: str = updatedAt #TODO: Convert to datetime
+        self.updatedAt: dt.datetime = dt.datetime.strptime(updatedAt, "%Y-%m-%dT%H:%M:%S.%fZ")
         self.userId: str = userId
         self.value: float = value
     
