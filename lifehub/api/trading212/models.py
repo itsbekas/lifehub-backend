@@ -1,21 +1,21 @@
 class AccountCash:
     def __init__(
         self,
-        blocked: int,
-        free: int,
-        invested: int,
-        pieCash: int,
-        ppl: int,
-        result: int,
-        total: int,
+        blocked: float,
+        free: float,
+        invested: float,
+        pieCash: float,
+        ppl: float,
+        result: float,
+        total: float,
     ):
-        self.blocked: int = blocked
-        self.free: int = free
-        self.invested: int = invested
-        self.pieCash: int = pieCash
-        self.ppl: int = ppl
-        self.result: int = result
-        self.total: int = total
+        self.blocked: float = blocked
+        self.free: float = free
+        self.invested: float = invested
+        self.pieCash: float = pieCash
+        self.ppl: float = ppl
+        self.result: float = result
+        self.total: float = total
 
     @classmethod
     def from_response(cls, data: dict):
