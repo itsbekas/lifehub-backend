@@ -1,6 +1,6 @@
 import re
 from .models import CategoryGroup, Account
-from lifehub.api.base import API
+from lifehub.lib.api.base import API
 
 
 class YNAB(API):

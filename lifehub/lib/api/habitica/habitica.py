@@ -1,4 +1,4 @@
-from lifehub.api.base import API
+from lifehub.lib.api.base import API
 from .models import HabitTask, DailyTask, TodoTask
 
 

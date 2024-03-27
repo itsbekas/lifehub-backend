@@ -1,6 +1,4 @@
-from lifehub.api.ynab import YNAB
-from lifehub.api.trading212 import Trading212
-from lifehub.api.habitica import Habitica
+from lifehub.lib.api import YNAB, Trading212, Habitica
 
 
 def cash_demo():
