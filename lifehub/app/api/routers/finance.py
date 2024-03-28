@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordBearer
 from lifehub.lib.finance import get_networth
 from pydantic import BaseModel
 
@@ -7,9 +10,14 @@ router = APIRouter(
     tags=["finance"],
 )
 
+
 class Networth(BaseModel):
     total: float
 
-@router.get("/networth")
-async def networth() -> Networth:
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+
+
+@router.get("/networth", response_model=Networth)
+async def networth(token: Annotated[str, Depends(oauth2_scheme)]):
     return Networth(total=get_networth())

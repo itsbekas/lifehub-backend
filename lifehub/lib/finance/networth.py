@@ -1,5 +1,6 @@
 from lifehub.lib.api import YNAB, Trading212, Habitica
 
+
 def get_networth() -> float:
     ynab = YNAB()
 

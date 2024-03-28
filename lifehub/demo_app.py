@@ -38,4 +38,3 @@ def main_demo():
     cash_demo()
     print("")
     tasks_demo()
-

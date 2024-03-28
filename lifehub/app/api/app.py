@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import finance
+
+from .routers import finance, auth
 from dotenv import load_dotenv
 
+#### Setup ####
 load_dotenv()
 
+#### Config ####
 app = FastAPI(
     title="LifeHub API",
     description="API for LifeHub",
@@ -14,6 +17,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+#### CORS ####
 origins = [
     "http://localhost:5173",
 ]
@@ -26,4 +30,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#### Routers ####
+app.include_router(auth.router)
 app.include_router(finance.router)

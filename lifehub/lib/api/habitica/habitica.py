@@ -26,7 +26,7 @@ class Habitica(API):
         except Exception as e:
             print(e)
             return []
-    
+
     def get_user_habits(self):
         data = self._get_user_tasks("habits")
         return [HabitTask.from_response(t) for t in data]
