@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+from argon2 import PasswordHasher
 from pydantic import BaseModel
 
 router = APIRouter(
@@ -17,7 +17,7 @@ users_db = {
     "bekas": {
         "username": "bekas",
         "name": "Bernardo",
-        "hashed_password": "$2b$12$Fh3lcnYHHkicFUpxLvovZewiiR5VLAgxLTTpBZ5gFFDdUc4mnY72C",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$FxzS+hhC02MMTCjYWtrnuQ$gDoGJxJKWvE7bV6Loi43/42sQ49CGT1CgWqIrSw5bk8",
     }
 }
 
@@ -40,7 +40,7 @@ class UserInDB(User):
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pw_hasher = PasswordHasher()
 
 
 class CredentialsException(HTTPException):
@@ -53,11 +53,11 @@ class CredentialsException(HTTPException):
 
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    return pw_hasher.verify(hashed_password, plain_password)
 
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    return pw_hasher.hash(password)
 
 
 def get_user(db, username: str):
