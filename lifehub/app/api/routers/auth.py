@@ -25,6 +25,7 @@ users_db = {
 class Token(BaseModel):
     access_token: str
     token_type: str
+    expires_in: int
 
 
 class TokenData(BaseModel):
@@ -75,9 +76,9 @@ def authenticate_user(users_db, username: str, password: str):
     return user
 
 
-def create_access_token(data: dict):
+def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(days=30)
+    expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
     return jwt.encode(
         to_encode, getenv("AUTH_SECRET_KEY"), algorithm=getenv("AUTH_ALGORITHM")
@@ -111,5 +112,13 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = authenticate_user(users_db, form_data.username, form_data.password)
     if not user:
         raise CredentialsException()
-    access_token = create_access_token(data={"sub": user.username})
-    return Token(access_token=access_token, token_type="bearer")
+    expires_delta = timedelta(days=30)
+    access_token = create_access_token(
+        data={"sub": user.username},
+        expires_delta=expires_delta
+    )
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=expires_delta.total_seconds()
+    )
