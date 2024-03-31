@@ -1,5 +1,6 @@
-import requests
 from os import getenv
+
+import requests
 
 
 class APIException(Exception):

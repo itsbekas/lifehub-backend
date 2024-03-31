@@ -1,4 +1,4 @@
-from lifehub.lib.api import YNAB, Trading212, Habitica
+from lifehub.lib.api import YNAB, Trading212
 
 
 def get_networth() -> float:

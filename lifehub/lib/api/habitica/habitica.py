@@ -1,5 +1,6 @@
 from lifehub.lib.api.base import API
-from .models import HabitTask, DailyTask, TodoTask
+
+from .models import DailyTask, HabitTask, TodoTask
 
 
 class Habitica(API):

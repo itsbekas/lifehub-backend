@@ -1,8 +1,8 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import finance, auth
-from dotenv import load_dotenv
+from .routers import auth_router, finance_router
 
 #### Setup ####
 load_dotenv()
@@ -31,5 +31,5 @@ app.add_middleware(
 )
 
 #### Routers ####
-app.include_router(auth.router)
-app.include_router(finance.router)
+app.include_router(auth_router)
+app.include_router(finance_router)
