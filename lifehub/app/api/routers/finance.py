@@ -12,6 +12,8 @@ router = APIRouter(
 
 
 class Networth(BaseModel):
+    cash: float
+    investments: float
     total: float
 
 
@@ -20,4 +22,4 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 @router.get("/networth", response_model=Networth)
 async def networth(token: Annotated[str, Depends(oauth2_scheme)]):
-    return Networth(total=get_networth())
+    return Networth(**get_networth())

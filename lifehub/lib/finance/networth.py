@@ -6,17 +6,17 @@ def get_networth() -> float:
 
     accounts = ynab.get_accounts()
 
-    total_balance = 0
+    cash = 0
 
     for a in accounts:
-        total_balance += a.balance
+        cash += a.balance
 
     t212 = Trading212()
 
-    account_cash = t212.get_account_cash()
+    investments = t212.get_account_cash().total
 
-    total_balance += account_cash.total
-
-    total_rounded: float = round(total_balance, 2)
-
-    return total_rounded
+    return {
+        "cash": round(cash, 2),
+        "investments": round(investments, 2),
+        "total": round(cash + investments, 2),
+    }
