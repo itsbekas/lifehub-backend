@@ -1,4 +1,4 @@
-from lifehub.lib.api.base import API
+from lifehub.lib.api.base import API, APIException
 
 from .models import DailyTask, HabitTask, TodoTask
 
@@ -24,7 +24,7 @@ class Habitica(API):
             params = {"type": task_type}
             res = self._get("tasks/user", params=params)
             return res.get("data", [])
-        except Exception as e:
+        except APIException as e:
             print(e)
             return []
 
@@ -41,4 +41,5 @@ class Habitica(API):
         return [TodoTask.from_response(t) for t in data]
 
     def _error_msg(self, res):
-        return res.json()["errors"][0]["message"]
+        msg = res.json()
+        return f"{msg.get('error', '')}: {msg.get('message', '')}"

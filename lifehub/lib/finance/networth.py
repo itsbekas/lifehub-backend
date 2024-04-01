@@ -1,17 +1,13 @@
 from lifehub.lib.api import YNAB, Trading212
 
 
-def get_networth() -> float:
-    ynab = YNAB()
-
+def get_networth(ynab: YNAB = YNAB(), t212: Trading212 = Trading212()) -> float:
     accounts = ynab.get_accounts()
 
     cash = 0
 
     for a in accounts:
         cash += a.balance
-
-    t212 = Trading212()
 
     investments = t212.get_account_cash().total
 
