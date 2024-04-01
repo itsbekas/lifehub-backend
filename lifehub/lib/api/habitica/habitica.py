@@ -7,17 +7,17 @@ class Habitica(API):
     base_url = "https://habitica.com/api/v3"
 
     def __init__(self):
-        self.token = self._load_env_token("HABITICA_TOKEN")
-        self.x_user = self._load_env_token("HABITICA_USER")
-        self.x_client = self._load_env_token("HABITICA_CLIENT")
+        token = self._load_env_token("HABITICA_TOKEN")
+        x_user = self._load_env_token("HABITICA_USER")
+        x_client = self._load_env_token("HABITICA_CLIENT")
+        self.headers = {
+            "x-client": x_client,
+            "x-api-user": x_user,
+            "x-api-key": token,
+        }
 
     def _get(self, endpoint: str, params: dict = {}):
-        headers = {
-            "x-client": self.x_client,
-            "x-api-user": self.x_user,
-            "x-api-key": self.token,
-        }
-        return self._get_with_headers(endpoint, headers=headers, params=params)
+        return self._get_with_headers(endpoint, params=params)
 
     def _get_user_tasks(self, task_type: str):
         try:

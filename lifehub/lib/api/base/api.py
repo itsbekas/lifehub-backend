@@ -53,12 +53,24 @@ class API:
             )
         return res.json()
 
-    def _get_with_headers(self, endpoint: str, headers: dict = {}, params: dict = {}):
+    def _get_with_headers(self, endpoint: str, params: dict = {}):
         """
         GET request to the API with custom headers
         """
         url = f"{self.base_url}/{endpoint}"
-        res = requests.get(url, headers=headers, params=params)
+        res = requests.get(url, headers=self.headers, params=params)
+        if res.status_code != 200:
+            raise APIException(
+                type(self).__name__, url, res.status_code, self._error_msg(res)
+            )
+        return res.json()
+
+    def _get_with_cookies(self, endpoint: str, params: dict = {}):
+        """
+        GET request to the API with cookies
+        """
+        url = f"{self.base_url}/{endpoint}"
+        res = requests.get(url, cookies=self.cookies, params=params)
         if res.status_code != 200:
             raise APIException(
                 type(self).__name__, url, res.status_code, self._error_msg(res)
