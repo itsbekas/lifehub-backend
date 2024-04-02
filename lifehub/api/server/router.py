@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from lifehub.app.api.auth.lib import oauth2_scheme
+from lifehub.api.auth.lib import oauth2_scheme
 from lifehub.lib.server.qbittorrent import get_server_state
 
 from .models import AllTimeStats

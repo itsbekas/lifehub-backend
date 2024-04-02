@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from lifehub.app.api.auth.lib import oauth2_scheme
+from lifehub.api.auth.lib import oauth2_scheme
 from lifehub.lib.finance import get_networth
 
 from .models import Networth

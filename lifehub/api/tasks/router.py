@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from lifehub.app.api.auth.lib import oauth2_scheme
+from lifehub.api.auth.lib import oauth2_scheme
 from lifehub.lib.tasks import get_tasks
 
 from .models import Tasks
