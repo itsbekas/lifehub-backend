@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from lifehub.api.auth.lib import oauth2_scheme
-from lifehub.lib.finance import get_networth
 
-from .models import Networth
+from .lib import get_networth
+from .schemas import Networth
 
 router = APIRouter(
     prefix="/finance",

@@ -2,10 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from lifehub.api.auth.lib import oauth2_scheme
-from lifehub.lib.tasks import get_tasks
-
-from .models import Tasks
+from ..auth.lib import oauth2_scheme
+from .lib import get_tasks
+from .schemas import Tasks
 
 router = APIRouter(
     prefix="/tasks",

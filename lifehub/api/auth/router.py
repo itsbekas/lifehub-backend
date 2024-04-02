@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from .lib import CredentialsException, authenticate_user, create_access_token, users_db
-from .models import Token
+from .schemas import Token
 
 router = APIRouter(
     prefix="/auth",
