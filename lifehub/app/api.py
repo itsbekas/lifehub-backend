@@ -1,14 +1,10 @@
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import auth_router, finance_router, server_router, tasks_router
-
-#### Setup ####
-load_dotenv()
+from ..api.routers import auth_router, finance_router, server_router, tasks_router
 
 #### Config ####
-app = FastAPI(
+api = FastAPI(
     title="LifeHub API",
     description="API for LifeHub",
     version="0.1.0",
@@ -22,7 +18,7 @@ origins = [
     "http://localhost:5173",
 ]
 
-app.add_middleware(
+api.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -31,7 +27,7 @@ app.add_middleware(
 )
 
 #### Routers ####
-app.include_router(auth_router)
-app.include_router(finance_router)
-app.include_router(tasks_router)
-app.include_router(server_router)
+api.include_router(auth_router)
+api.include_router(finance_router)
+api.include_router(tasks_router)
+api.include_router(server_router)
