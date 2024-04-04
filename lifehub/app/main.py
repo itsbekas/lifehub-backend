@@ -1,6 +1,8 @@
-from dotenv import load_dotenv
-from .api import api
 import uvicorn
+from dotenv import load_dotenv
+
+from .api import api
+
 
 def run():
     load_dotenv()

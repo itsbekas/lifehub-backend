@@ -17,7 +17,4 @@ def get_networth(ynab: YNAB = None, t212: Trading212 = None):
 
     investments = t212.get_account_cash().total
 
-    return {
-        "cash": round(cash, 2),
-        "investments": round(investments, 2)
-    }
+    return {"cash": round(cash, 2), "investments": round(investments, 2)}

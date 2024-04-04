@@ -17,7 +17,9 @@ greenlet==3.0.3
 h11==0.14.0
 identify==2.5.35
 idna==3.6
+mariadb==1.1.10
 nodeenv==1.8.0
+packaging==24.0
 platformdirs==4.2.0
 pre-commit==3.7.0
 pyasn1==0.6.0
