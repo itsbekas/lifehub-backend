@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from sqlmodel import Session
 
 from lifehub.app.db import get_session
@@ -28,8 +27,6 @@ def fetch_networth(
 
 
 if __name__ == "__main__":
-    load_dotenv()
-
     ynab = YNAB()
     t212 = Trading212()
 

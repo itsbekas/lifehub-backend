@@ -5,9 +5,7 @@ from sqlmodel import Field, SQLModel
 
 
 class T212Transaction(SQLModel, table=True):
-    ticker: str = Field(max_length=10, primary_key=True)
-    quantity: Decimal = Field(decimal_places=7, max_digits=10)
-    price: Decimal = Field(decimal_places=2, max_digits=10)
-    timestamp: datetime.datetime = Field(
-        default_factory=datetime.datetime.now, primary_key=True
-    )
+    type: str = Field(max_length=10)  # TODO: get the correct length (maybe Enum?)
+    amount: Decimal = Field(decimal_places=2, max_digits=10)
+    id: str = Field(max_length=128, primary_key=True)  # TODO: get the correct length
+    timestamp: datetime.datetime = Field()

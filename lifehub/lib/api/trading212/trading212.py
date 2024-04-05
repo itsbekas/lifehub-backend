@@ -1,6 +1,6 @@
-from lifehub.lib.api.base import API
+from lifehub.lib.api.base import API, APIException
 
-from .models import AccountCash, AccountMetadata
+from .models import AccountCash, AccountMetadata, Order, Transaction
 
 
 class Trading212(API):
@@ -16,7 +16,7 @@ class Trading212(API):
         try:
             res = self._get("equity/account/cash")
             return AccountCash.from_response(res)
-        except Exception as e:
+        except APIException as e:
             print(e)
             return None
 
@@ -24,7 +24,28 @@ class Trading212(API):
         try:
             res = self._get("equity/account/info")
             return AccountMetadata.from_response(res)
-        except Exception as e:
+        except APIException as e:
+            print(e)
+            return None
+
+    def get_order_history(self):
+        try:
+            res = self._get("equity/history/orders")
+            data = res.get("items", [])
+            return [Order.from_response(o) for o in data]
+        except APIException as e:
+            print(e)
+            return None
+
+    def get_paid_out_dividends(self):
+        raise NotImplementedError
+
+    def get_transactions(self):
+        try:
+            res = self._get("history/transactions")
+            data = res.get("items", [])
+            return [Transaction.from_response(t) for t in data]
+        except APIException as e:
             print(e)
             return None
 
