@@ -1,11 +1,12 @@
 import datetime as dt
 
-from sqlmodel import Session, select
+from sqlmodel import Session
 
 from lifehub.app.db import get_session
 from lifehub.lib.api import Trading212
-from lifehub.models.finance import T212Order, T212Transaction
-from lifehub.models.utils import FetchUpdate
+from lifehub.lib.models.finance import T212Order, T212Transaction
+
+from .utils import get_and_update_fetch_timestamp
 
 T212HISTORY_FETCH = "t212history_fetch"
 
@@ -49,21 +50,9 @@ def fetch_t212history(
 
 if __name__ == "__main__":
     with get_session() as db_session:
-        current_time = dt.datetime.now()
-
-        query = select(FetchUpdate).where(FetchUpdate.id == T212HISTORY_FETCH)
-
-        res = db_session.exec(query).first()
-
-        if res is None:  # TODO: Setup a default value on table creation
-            last_update = dt.datetime.min
-        else:
-            last_update = res.last_update
+        last_update = get_and_update_fetch_timestamp(db_session, T212HISTORY_FETCH)
 
         fetch_t212history(db_session, last_update)
-
-        res.last_update = current_time
-        db_session.add(res)
 
         db_session.commit()
         db_session.close()

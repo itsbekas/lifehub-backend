@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from sqlmodel import Session, SQLModel, create_engine
 
-import lifehub.models  # noqa: F401
+import lifehub.lib.models  # noqa: F401
 
 load_dotenv()
 
