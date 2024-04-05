@@ -15,6 +15,21 @@ class APIException(Exception):
 
 
 class API:
+    __instance = None
+
+    def __init__(self):
+        if type(self).__instance is not None:
+            raise Exception(
+                f"{type(self).__name__} API is a singleton. Use get_instance() method."
+            )
+        type(self).__instance = self
+
+    @classmethod
+    def get_instance(cls):
+        if cls.__instance is None:
+            cls()
+        return cls.__instance
+
     def _get_basic(self, endpoint: str, params: dict = {}):
         """
         Basic GET request to the API

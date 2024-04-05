@@ -9,6 +9,7 @@ class YNAB(API):
     base_url = "https://api.ynab.com/v1"
 
     def __init__(self, budget: str = "last-used"):
+        super().__init__()
         self.token = self._load_env_token("YNAB_TOKEN")
         self.budget = budget
 

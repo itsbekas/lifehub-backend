@@ -11,12 +11,10 @@ T212HISTORY_FETCH = "t212history_fetch"
 
 
 def fetch_t212history(
-    t212: Trading212 = None,
     db_session: Session = None,
     last_update: dt.datetime = dt.datetime.min,
 ):
-    if t212 is None:
-        t212 = Trading212()
+    t212 = Trading212.get_instance()
 
     orders = t212.get_order_history()
     transactions = t212.get_transactions()
@@ -50,8 +48,6 @@ def fetch_t212history(
 
 
 if __name__ == "__main__":
-    t212 = Trading212()
-
     with get_session() as db_session:
         current_time = dt.datetime.now()
 
@@ -64,7 +60,7 @@ if __name__ == "__main__":
         else:
             last_update = res.last_update
 
-        fetch_t212history(t212, db_session, last_update)
+        fetch_t212history(db_session, last_update)
 
         res.last_update = current_time
         db_session.add(res)

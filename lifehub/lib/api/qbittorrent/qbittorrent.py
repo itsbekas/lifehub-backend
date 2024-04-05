@@ -9,6 +9,8 @@ class QBittorrent(API):
     base_url = "https://qb.b21.tech/api/v2"
 
     def __init__(self):
+        super().__init__()
+
         from requests import post
 
         username = self._load_env_token("QBITTORRENT_USERNAME")

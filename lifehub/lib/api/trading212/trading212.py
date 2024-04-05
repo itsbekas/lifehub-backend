@@ -7,6 +7,7 @@ class Trading212(API):
     base_url = "https://live.trading212.com/api/v0"
 
     def __init__(self):
+        super().__init__()
         self.token = self._load_env_token("T212_TOKEN")
 
     def _get(self, endpoint: str, params: dict = {}):

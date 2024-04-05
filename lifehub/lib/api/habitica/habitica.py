@@ -7,6 +7,7 @@ class Habitica(API):
     base_url = "https://habitica.com/api/v3"
 
     def __init__(self):
+        super().__init__()
         token = self._load_env_token("HABITICA_TOKEN")
         x_user = self._load_env_token("HABITICA_USER")
         x_client = self._load_env_token("HABITICA_CLIENT")
