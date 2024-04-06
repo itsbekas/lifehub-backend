@@ -1,0 +1,39 @@
+from lifehub.lib.api import Trading212
+from lifehub.lib.models.finance import T212Order, T212Transaction
+from lifehub.app.fetch_scripts.fetch import Fetch
+
+class T212HistoryFetch(Fetch):
+    table_id = "t212history_fetch"
+
+    def fetch_data(self):
+        t212 = Trading212.get_instance()
+
+        orders = t212.get_order_history()
+        transactions = t212.get_transactions()
+
+        for order in orders:
+            if order.date_modified > self.last_update:
+                quantity = order.filled_quantity
+
+                if quantity is None:
+                    quantity = order.filled_value / order.fill_price
+
+                new_order = T212Order(
+                    type=order.type,
+                    id=order.id,
+                    ticker=order.ticker,
+                    quantity=quantity,
+                    price=order.fill_price,
+                    timestamp=order.date_modified,
+                )
+                self.session.add(new_order)
+
+        for transaction in transactions:
+            if transaction.date_time > self.last_update:
+                new_transaction = T212Transaction(
+                    type=transaction.type,
+                    amount=transaction.amount,
+                    id=transaction.reference,
+                    timestamp=transaction.date_time,
+                )
+                self.session.add(new_transaction)

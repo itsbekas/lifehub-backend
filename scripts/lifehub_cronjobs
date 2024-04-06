@@ -1,0 +1,2 @@
+0,30 * * * * FETCH networth
+0 2 * * * FETCH t212history
