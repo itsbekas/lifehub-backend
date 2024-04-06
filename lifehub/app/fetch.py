@@ -1,7 +1,7 @@
 import sys
 
-def run():
 
+def run():
     if len(sys.argv) < 2:
         raise ValueError("Please provide a fetch script to run")
 
@@ -9,13 +9,22 @@ def run():
 
     match fetch_script:
         case "t212history":
-            from lifehub.app.fetch_scripts.t212history import T212HistoryFetch
-            T212HistoryFetch().fetch()
+            from lifehub.app.fetchers.t212history import T212HistoryFetcher
+
+            T212HistoryFetcher().fetch()
         case "networth":
-            from lifehub.app.fetch_scripts.networth import NetworthFetch
-            NetworthFetch().fetch()
+            from lifehub.app.fetchers.networth import NetworthFetcher
+
+            NetworthFetcher().fetch()
+        case "qbitstats":
+            from lifehub.app.fetchers.qbittorrent_stats import (
+                QBittorrentStatsFetcher,
+            )
+
+            QBittorrentStatsFetcher().fetch()
         case _:
             raise ValueError(f"Fetch script {fetch_script} not found")
+
 
 if __name__ == "__main__":
     run()

@@ -1,19 +1,20 @@
-from sqlmodel import Session, select
+import datetime as dt
+
+from sqlmodel import select
 
 from lifehub.app.db import get_session
 from lifehub.lib.models.utils.fetch_update import FetchUpdate
-import datetime as dt
 
-class Fetch:
 
+class Fetcher:
     table_id: str | None = None
 
     def fetch(self):
         with get_session() as self.session:
-            self.last_updated: dt.datetime = self._update_fetch_timestamp()
+            self.last_update: dt.datetime = self._update_fetch_timestamp()
             self.fetch_data()
             self.session.commit()
-    
+
     def fetch_data(self):
         raise NotImplementedError("fetch_data must be implemented in the subclass")
 
