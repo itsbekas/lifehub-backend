@@ -2,15 +2,19 @@ import datetime as dt
 
 from sqlmodel import select
 
-from lifehub.lib.db import get_session
+from lifehub.lib.db.base import DatabaseClient
 from lifehub.lib.models.utils.fetch_update import FetchUpdate
 
 
 class BaseFetcher:
     table_id: str | None = None
 
+    def __init__(self):
+        # Setup the database engine
+        self.db = DatabaseClient()
+
     def fetch(self):
-        with get_session() as self.session:
+        with self.db.get_session() as self.session:
             self.last_update: dt.datetime = self._update_fetch_timestamp()
             self.fetch_data()
             self.session.commit()

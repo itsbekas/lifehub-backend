@@ -1,11 +1,15 @@
 import sys
 
+from dotenv import load_dotenv
+
 
 def run():
     if len(sys.argv) < 2:
         raise ValueError("Please provide a fetch script to run")
 
     fetch_script = sys.argv[1]
+
+    load_dotenv()
 
     match fetch_script:
         case "t212history":

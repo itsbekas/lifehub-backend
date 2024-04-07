@@ -4,7 +4,7 @@ from lifehub.lib.models.finance import T212Order, T212Transaction
 
 
 class T212HistoryFetcher(BaseFetcher):
-    table_id = "t212history_fetch"
+    table_id = "t212history"
 
     def fetch_data(self):
         t212 = Trading212APIClient.get_instance()
