@@ -13,7 +13,7 @@ dependencies = [
 find = {}
 
 [project.scripts]
-lifehub = "lifehub.app.main:run"
+lifehub-api = "lifehub.app.api:run"
 lifehub-fetch = "lifehub.app.fetch:run"
 
 [tool.ruff]

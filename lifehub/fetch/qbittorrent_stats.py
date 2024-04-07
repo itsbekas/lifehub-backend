@@ -1,9 +1,9 @@
-from lifehub.app.fetchers.fetch import Fetcher
+from lifehub.fetch.base_fetcher import BaseFetcher
 from lifehub.lib.api import QBittorrent
 from lifehub.lib.models.server import QBittorrentStats
 
 
-class QBittorrentStatsFetcher(Fetcher):
+class QBittorrentStatsFetcher(BaseFetcher):
     table_id = "qbit_stats_fetch"
 
     def fetch_data(self):

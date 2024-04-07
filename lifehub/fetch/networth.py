@@ -1,9 +1,9 @@
-from lifehub.app.fetchers.fetch import Fetcher
+from lifehub.fetch.base_fetcher import BaseFetcher
 from lifehub.lib.api import YNAB, Trading212
 from lifehub.lib.models.finance import Networth
 
 
-class NetworthFetcher(Fetcher):
+class NetworthFetcher(BaseFetcher):
     table_id = "networth_fetch"
 
     def fetch_data(self):

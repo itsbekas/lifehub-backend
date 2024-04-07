@@ -2,11 +2,11 @@ import datetime as dt
 
 from sqlmodel import select
 
-from lifehub.app.db import get_session
+from lifehub.lib.db import get_session
 from lifehub.lib.models.utils.fetch_update import FetchUpdate
 
 
-class Fetcher:
+class BaseFetcher:
     table_id: str | None = None
 
     def fetch(self):

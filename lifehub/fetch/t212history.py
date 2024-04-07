@@ -1,9 +1,9 @@
-from lifehub.app.fetchers.fetch import Fetcher
+from lifehub.fetch.base_fetcher import BaseFetcher
 from lifehub.lib.api import Trading212
 from lifehub.lib.models.finance import T212Order, T212Transaction
 
 
-class T212HistoryFetch(Fetcher):
+class T212HistoryFetch(BaseFetcher):
     table_id = "t212history_fetch"
 
     def fetch_data(self):

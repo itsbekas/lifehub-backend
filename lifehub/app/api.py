@@ -1,7 +1,9 @@
+import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from ..api.routers import auth_router, finance_router, server_router, tasks_router
+from lifehub.api.routers import auth_router, finance_router, server_router, tasks_router
 
 #### Config ####
 api = FastAPI(
@@ -31,3 +33,13 @@ api.include_router(auth_router)
 api.include_router(finance_router)
 api.include_router(tasks_router)
 api.include_router(server_router)
+
+
+def run():
+    load_dotenv()
+
+    uvicorn.run(api, host="localhost", port=8000)
+
+
+if __name__ == "__main__":
+    run()
