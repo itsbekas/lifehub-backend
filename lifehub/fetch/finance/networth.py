@@ -1,5 +1,5 @@
-from lifehub.fetch.base_fetcher import BaseFetcher
-from lifehub.lib.api import YNAB, Trading212
+from lifehub.fetch.base import BaseFetcher
+from lifehub.lib.api import Trading212APIClient, YNABAPIClient
 from lifehub.lib.models.finance import Networth
 
 
@@ -7,8 +7,8 @@ class NetworthFetcher(BaseFetcher):
     table_id = "networth_fetch"
 
     def fetch_data(self):
-        ynab = YNAB.get_instance()
-        t212 = Trading212.get_instance()
+        ynab = YNABAPIClient.get_instance()
+        t212 = Trading212APIClient.get_instance()
 
         ynab_accounts = ynab.get_accounts()
         t212_cash = t212.get_account_cash()

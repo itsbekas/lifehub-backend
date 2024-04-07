@@ -1,9 +1,9 @@
-from lifehub.lib.api.base import API, APIException
+from lifehub.lib.api.base import APIClient, APIException
 
 from .models import DailyTask, HabitTask, TodoTask
 
 
-class Habitica(API):
+class HabiticaAPIClient(APIClient):
     base_url = "https://habitica.com/api/v3"
 
     def __init__(self):

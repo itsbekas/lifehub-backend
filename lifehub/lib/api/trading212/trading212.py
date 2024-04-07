@@ -1,9 +1,9 @@
-from lifehub.lib.api.base import API, APIException
+from lifehub.lib.api.base import APIClient, APIException
 
 from .models import AccountCash, AccountMetadata, Order, Transaction
 
 
-class Trading212(API):
+class Trading212APIClient(APIClient):
     base_url = "https://live.trading212.com/api/v0"
 
     def __init__(self):

@@ -1,11 +1,11 @@
 from requests import Response
 
-from lifehub.lib.api.base import API
+from lifehub.lib.api.base import APIClient
 
 from .models import MainData
 
 
-class QBittorrent(API):
+class QBittorrentAPIClient(APIClient):
     base_url = "https://qb.b21.tech/api/v2"
 
     def __init__(self):

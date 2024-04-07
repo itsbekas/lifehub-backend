@@ -1,11 +1,11 @@
 import re
 
-from lifehub.lib.api.base import API
+from lifehub.lib.api.base import APIClient
 
 from .models import Account, CategoryGroup
 
 
-class YNAB(API):
+class YNABAPIClient(APIClient):
     base_url = "https://api.ynab.com/v1"
 
     def __init__(self, budget: str = "last-used"):
@@ -19,19 +19,15 @@ class YNAB(API):
         return self._get_with_token_bearer(endpoint)
 
     def get_user(self):
-        # TODO: return object
         return self._get("user")
 
     def get_budgets(self):
-        # TODO: return object
         return self._get("budgets")
 
     def get_budget(self, budget: str = "last-used"):
-        # TODO: return object
         return self._get(f"budgets/{budget}")
 
     def get_budget_settings(self, budget: str = "last-used"):
-        # TODO: return object
         return self._get(f"budgets/{budget}/settings")
 
     def get_accounts(self, budget: str = "last-used"):
@@ -44,7 +40,6 @@ class YNAB(API):
             return []
 
     def get_account(self, account: str):
-        # TODO: return object
         return self._get(f"budgets/{self.budget}/accounts/{account}")
 
     def get_categories(self):

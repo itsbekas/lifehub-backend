@@ -11,9 +11,9 @@ class MainData:
     ):
         self.rid: int = rid
         self.full_update: bool = full_update
-        self.torrents: dict = torrents  # TODO: Torrent model
-        self.trackers: dict = trackers  # TODO: Tracker model
-        self.categories: dict = categories  # TODO: Category model
+        self.torrents: dict = torrents
+        self.trackers: dict = trackers
+        self.categories: dict = categories
         self.tags: list[str] = tags
         self.server_state: ServerState = ServerState.from_response(server_state)
 

@@ -9,15 +9,15 @@ def run():
 
     match fetch_script:
         case "t212history":
-            from lifehub.fetch.t212history import T212HistoryFetcher
+            from lifehub.fetch.finance.t212history import T212HistoryFetcher
 
             T212HistoryFetcher().fetch()
         case "networth":
-            from lifehub.fetch.networth import NetworthFetcher
+            from lifehub.fetch.finance.networth import NetworthFetcher
 
             NetworthFetcher().fetch()
         case "qbitstats":
-            from lifehub.fetch.qbittorrent_stats import (
+            from lifehub.fetch.server.qbittorrent_stats import (
                 QBittorrentStatsFetcher,
             )
 

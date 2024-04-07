@@ -14,7 +14,7 @@ class APIException(Exception):
         return f"{self.api} API: Error accessing {self.url} - HTTP {self.status_code}: {self.msg}"
 
 
-class API:
+class APIClient:
     __instance = None
 
     def __init__(self):

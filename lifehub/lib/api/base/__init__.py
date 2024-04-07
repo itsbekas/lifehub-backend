@@ -1,3 +1,3 @@
-from .api import API, APIException
+from .api import APIClient, APIException
 
-__all__ = ["API", "APIException"]
+__all__ = ["APIClient", "APIException"]
