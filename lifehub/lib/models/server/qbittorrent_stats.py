@@ -7,7 +7,7 @@ from sqlmodel import Field, SQLModel
 
 class QBittorrentStats(SQLModel, table=True):
     timestamp: datetime.datetime = Field(
-        default_factory=datetime.datetime.now, primary_key=True
+        default_factory=datetime.datetime.now, primary_key=True, index=True
     )
     alltime_dl: int = Field(sa_column=Column(BigInteger()))
     alltime_ul: int = Field(sa_column=Column(BigInteger()))

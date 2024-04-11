@@ -1,17 +1,19 @@
+import os
+
 from dotenv import load_dotenv
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, create_engine
 
 import lifehub.lib.models  # noqa: F401
-from lifehub.lib.db.base import DatabaseClient
 
 
 def run():
     load_dotenv()
 
-    client = DatabaseClient()
+    db_url = os.getenv("DATABASE_URL")
+    engine = create_engine(db_url)
 
     try:
-        SQLModel.metadata.create_all(client.engine)
+        SQLModel.metadata.create_all(engine)
     except Exception as e:
         print("Error creating database tables: ", e)
 

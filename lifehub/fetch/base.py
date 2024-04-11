@@ -2,7 +2,7 @@ import datetime as dt
 
 from sqlmodel import select
 
-from lifehub.lib.db.base import DatabaseClient
+from lifehub.lib.db import DatabaseClient
 from lifehub.lib.models.utils.fetch_update import FetchUpdate
 
 
@@ -11,7 +11,7 @@ class BaseFetcher:
 
     def __init__(self):
         # Setup the database engine
-        self.db = DatabaseClient()
+        self.db = DatabaseClient.get_instance()
 
     def fetch(self):
         with self.db.get_session() as self.session:

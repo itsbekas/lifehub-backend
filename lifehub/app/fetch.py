@@ -26,6 +26,14 @@ def run():
             )
 
             QBittorrentStatsFetcher().fetch()
+        case "all":
+            from lifehub.fetch.finance.networth import NetworthFetcher
+            from lifehub.fetch.finance.t212history import T212HistoryFetcher
+            from lifehub.fetch.server.qbittorrent_stats import QBittorrentStatsFetcher
+
+            T212HistoryFetcher().fetch()
+            NetworthFetcher().fetch()
+            QBittorrentStatsFetcher().fetch()
         case _:
             raise ValueError(f"Fetch script {fetch_script} not found")
 

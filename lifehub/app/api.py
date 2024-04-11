@@ -3,7 +3,14 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from lifehub.api.routers import auth_router, finance_router, server_router, tasks_router
+load_dotenv()
+
+from lifehub.api.routers import (  # noqa: E402
+    auth_router,
+    finance_router,
+    server_router,
+    tasks_router,
+)
 
 #### Config ####
 api = FastAPI(
@@ -36,9 +43,7 @@ api.include_router(server_router)
 
 
 def run():
-    load_dotenv()
-
-    uvicorn.run(api, host="localhost", port=8000)
+    uvicorn.run("lifehub.app.api:api", host="localhost", port=8000, reload=True)
 
 
 if __name__ == "__main__":
