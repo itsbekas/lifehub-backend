@@ -5,6 +5,7 @@ from lifehub.models.finance import Networth
 
 class NetworthFetcher(BaseFetcher):
     table_id = "networth"
+    tokens = ["ynab", "trading212"]
 
     def fetch_data(self):
         ynab = YNABAPIClient.get_instance()

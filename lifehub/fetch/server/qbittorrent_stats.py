@@ -5,6 +5,7 @@ from lifehub.models.server import QBittorrentStats
 
 class QBittorrentStatsFetcher(BaseFetcher):
     table_id = "qbitstats"
+    tokens = "qbittorrent"
 
     def fetch_data(self):
         qb = QBittorrentAPIClient.get_instance()

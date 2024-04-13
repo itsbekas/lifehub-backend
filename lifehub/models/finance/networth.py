@@ -1,10 +1,12 @@
 import datetime
+import uuid
 from decimal import Decimal
 
 from sqlmodel import Field, SQLModel
 
 
 class Networth(SQLModel, table=True):
+    user_id: uuid.UUID = Field(foreign_key="user.id")
     timestamp: datetime.datetime = Field(
         default_factory=datetime.datetime.now, primary_key=True, index=True
     )

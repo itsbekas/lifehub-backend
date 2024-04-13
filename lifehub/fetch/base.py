@@ -1,5 +1,7 @@
 import datetime as dt
+import uuid
 
+from sqlalchemy import func
 from sqlmodel import select
 
 from lifehub.clients.db import DatabaseClient
@@ -9,10 +11,21 @@ from lifehub.models.utils.fetch_update import FetchUpdate
 
 class BaseFetcher:
     table_id: str | None = None
+    tokens: list[str] | None = None
 
     def __init__(self):
         # Setup the database engine
         self.db = DatabaseClient.get_instance()
+
+    def _get_users(self) -> list[uuid.UUID]:
+        # Get all the users that have the required tokens
+        query = (
+            select(APIToken.user_id)
+            .where(APIToken.token.in_(self.tokens))
+            .group_by(APIToken.user_id)
+            .having(func.count(APIToken.token) == len(self.tokens))
+        )
+        return self.session.exec(query).all()
 
     def fetch(self):
         with self.db.get_session() as self.session:
