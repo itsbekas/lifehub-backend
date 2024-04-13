@@ -1,4 +1,4 @@
-from lifehub.lib.api.base import APIClient, APIException
+from lifehub.clients.api.base import APIClient, APIException
 
 from .models import AccountCash, AccountMetadata, Order, Transaction
 

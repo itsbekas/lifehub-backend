@@ -8,8 +8,8 @@ from lifehub.api.lib.user import (
     create_access_token,
     create_user,
 )
-from lifehub.lib.db import get_session
-from lifehub.lib.models.user import UserToken
+from lifehub.clients.db import get_session
+from lifehub.models.user import UserToken
 
 router = APIRouter(
     prefix="/user",

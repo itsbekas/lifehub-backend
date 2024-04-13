@@ -1,6 +1,6 @@
+from lifehub.clients.api import QBittorrentAPIClient
 from lifehub.fetch.base import BaseFetcher
-from lifehub.lib.api import QBittorrentAPIClient
-from lifehub.lib.models.server import QBittorrentStats
+from lifehub.models.server import QBittorrentStats
 
 
 class QBittorrentStatsFetcher(BaseFetcher):

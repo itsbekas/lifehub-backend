@@ -1,15 +1,12 @@
-# Python
 venv/
-__pycache__/
 
-# Build
 *.egg-info/
 
-# Ruff
-.ruff_cache/
-
-# Secrets
 .env
+test.env
 
-# VSCode
 .vscode/
+
+__pycache__/
+.pytest_cache/
+.ruff_cache/

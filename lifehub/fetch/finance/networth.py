@@ -1,6 +1,6 @@
+from lifehub.clients.api import Trading212APIClient, YNABAPIClient
 from lifehub.fetch.base import BaseFetcher
-from lifehub.lib.api import Trading212APIClient, YNABAPIClient
-from lifehub.lib.models.finance import Networth
+from lifehub.models.finance import Networth
 
 
 class NetworthFetcher(BaseFetcher):

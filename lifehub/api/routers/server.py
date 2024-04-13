@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from lifehub.api.routers.dependencies import oauth2_scheme
-from lifehub.lib.db import get_session
-from lifehub.lib.models.server import QBittorrentStats
+from lifehub.clients.db import get_session
+from lifehub.models.server import QBittorrentStats
 
 router = APIRouter(
     prefix="/server",

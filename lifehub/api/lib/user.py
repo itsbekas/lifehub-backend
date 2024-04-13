@@ -7,7 +7,7 @@ from fastapi import HTTPException, status
 from jose import jwt
 from sqlmodel import Session, select
 
-from lifehub.lib.models.user import User, UserToken
+from lifehub.models.user import User, UserToken
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]

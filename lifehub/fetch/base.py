@@ -2,8 +2,9 @@ import datetime as dt
 
 from sqlmodel import select
 
-from lifehub.lib.db import DatabaseClient
-from lifehub.lib.models.utils.fetch_update import FetchUpdate
+from lifehub.clients.db import DatabaseClient
+from lifehub.models.user import APIToken
+from lifehub.models.utils.fetch_update import FetchUpdate
 
 
 class BaseFetcher:

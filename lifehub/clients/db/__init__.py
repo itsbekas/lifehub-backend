@@ -1,6 +1,6 @@
 from sqlmodel import Session
 
-from .client import DatabaseClient
+from .db_service import DatabaseClient
 
 __db_client = DatabaseClient.get_instance()
 
