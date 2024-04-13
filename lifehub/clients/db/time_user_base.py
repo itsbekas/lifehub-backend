@@ -7,7 +7,7 @@ from .base import BaseModel
 from .user_base import UserBaseDBClient
 
 
-class TimeUserBaseDBClient(UserBaseDBClient):
+class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):
     def __init__(self, model: Type[BaseModel], user_id: uuid.UUID):
         super().__init__(model, user_id)
 

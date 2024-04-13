@@ -1,4 +1,7 @@
+import uuid
+
 from lifehub.clients.api import Trading212APIClient, YNABAPIClient
+from lifehub.clients.db.networth import NetworthDBClient
 from lifehub.fetch.base import BaseFetcher
 from lifehub.models.finance import Networth
 
@@ -7,9 +10,9 @@ class NetworthFetcher(BaseFetcher):
     table_id = "networth"
     tokens = ["ynab", "trading212"]
 
-    def fetch_data(self):
-        ynab = YNABAPIClient.get_instance()
-        t212 = Trading212APIClient.get_instance()
+    def fetch_data(self, user_id: uuid.UUID):
+        ynab = YNABAPIClient()
+        t212 = Trading212APIClient()
 
         ynab_accounts = ynab.get_accounts()
         t212_cash = t212.get_account_cash()
@@ -28,4 +31,6 @@ class NetworthFetcher(BaseFetcher):
             total=total,
         )
 
-        self.session.add(networth)
+        db = NetworthDBClient(user_id)
+
+        db.add(networth)

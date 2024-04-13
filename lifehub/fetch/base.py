@@ -1,11 +1,10 @@
 import datetime as dt
 import uuid
 
-from sqlalchemy import func
 from sqlmodel import select
 
-from lifehub.clients.db import DatabaseClient
-from lifehub.models.user import APIToken
+from lifehub.clients.db.api_token import APITokenDBClient
+from lifehub.clients.db.db_service import DatabaseService
 from lifehub.models.utils.fetch_update import FetchUpdate
 
 
@@ -15,17 +14,14 @@ class BaseFetcher:
 
     def __init__(self):
         # Setup the database engine
-        self.db = DatabaseClient.get_instance()
+        self.db = DatabaseService()
 
     def _get_users(self) -> list[uuid.UUID]:
-        # Get all the users that have the required tokens
-        query = (
-            select(APIToken.user_id)
-            .where(APIToken.token.in_(self.tokens))
-            .group_by(APIToken.user_id)
-            .having(func.count(APIToken.token) == len(self.tokens))
-        )
-        return self.session.exec(query).all()
+        api_token_db = APITokenDBClient()
+        if self.tokens is None:
+            raise ValueError("Tokens must be set in the subclass")
+        user_ids = api_token_db.get_user_ids_with_tokens(self.tokens)
+        return user_ids
 
     def fetch(self):
         with self.db.get_session() as self.session:

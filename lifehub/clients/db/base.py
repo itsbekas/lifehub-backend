@@ -12,27 +12,27 @@ class BaseDBClient(Generic[BaseModel]):
         self.model: Type[BaseModel] = model
         self.session: Session = DatabaseService().get_session()
 
-    def create(self, obj: BaseModel) -> BaseModel:
-        with self.session() as session:
+    def add(self, obj: BaseModel) -> BaseModel:
+        with self.session as session:
             session.add(obj)
             session.commit()
             session.refresh(obj)
             return obj
 
     def get_all(self) -> List[BaseModel]:
-        with self.session() as session:
+        with self.session as session:
             statement = select(self.model)
             result = session.exec(statement)
             return result.all()
 
     def update(self, obj: BaseModel) -> BaseModel:
-        with self.session() as session:
+        with self.session as session:
             session.add(obj)
             session.commit()
             session.refresh(obj)
             return obj
 
     def delete(self, obj: BaseModel) -> None:
-        with self.session() as session:
+        with self.session as session:
             session.delete(obj)
             session.commit()
