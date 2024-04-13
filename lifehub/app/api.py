@@ -1,3 +1,5 @@
+from os import getenv
+
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -43,7 +45,8 @@ api.include_router(server_router)
 
 
 def run():
-    uvicorn.run("lifehub.app.api:api", host="localhost", port=8000, reload=True)
+    host = getenv("UVICORN_HOST", "localhost")
+    uvicorn.run("lifehub.app.api:api", host=host, port=8000, reload=True)
 
 
 if __name__ == "__main__":
