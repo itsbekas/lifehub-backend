@@ -1,8 +1,10 @@
+import uuid
+
 import pytest
 from sqlmodel import Field, SQLModel
 
 from lifehub.clients.db.user_base import UserBaseDBClient
-import uuid
+
 
 # Test model
 class UserBaseTestModel(SQLModel, table=True):
@@ -10,37 +12,60 @@ class UserBaseTestModel(SQLModel, table=True):
     user_id: uuid.UUID = Field()
     text: str = Field(max_length=10)
 
+
 @pytest.fixture(scope="module")
 def user_id1():
     return uuid.uuid4()
+
 
 @pytest.fixture(scope="module")
 def user_id2():
     return uuid.uuid4()
 
+
 @pytest.fixture(scope="function")
 def db_client(engine, user_id1):
-    # Create table
     UserBaseTestModel.metadata.create_all(bind=engine)
     yield UserBaseDBClient(UserBaseTestModel, user_id1)
-    # Drop table
     UserBaseTestModel.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def obj1_user1(user_id1):
     return UserBaseTestModel(id=1, user_id=user_id1, text="obj1")
 
+
 @pytest.fixture(scope="function")
 def obj2_user1(user_id1):
     return UserBaseTestModel(id=2, user_id=user_id1, text="obj2")
+
 
 @pytest.fixture(scope="function")
 def obj1_user2(user_id2):
     return UserBaseTestModel(id=1, user_id=user_id2, text="obj1")
 
+
 @pytest.fixture(scope="function")
 def obj2_user2(user_id2):
     return UserBaseTestModel(id=2, user_id=user_id2, text="obj2")
+
+
+def test_creation():
+    """
+    Test creating a UserBaseDBClient object
+    Expected: Object is created
+    """
+    assert UserBaseDBClient(UserBaseTestModel, uuid.uuid4())
+
+
+def test_creation_without_user_id():
+    """
+    Test creating a UserBaseDBClient object without a user ID
+    Expected: TypeError is raised
+    """
+    with pytest.raises(TypeError):
+        UserBaseDBClient(UserBaseTestModel)
+
 
 class TestAdd:
     def test_correct_user(self, db_client, obj1_user1):
@@ -50,7 +75,7 @@ class TestAdd:
         """
         db_client.add(obj1_user1)
         assert db_client.get_all() == [obj1_user1]
-    
+
     def test_incorrect_user(self, db_client, obj1_user2):
         """
         Test adding an object with an incorrect user ID
@@ -58,6 +83,7 @@ class TestAdd:
         """
         with pytest.raises(ValueError):
             db_client.add(obj1_user2)
+
 
 class TestGetAll:
     def test_no_objects(self, db_client):
@@ -85,6 +111,7 @@ class TestGetAll:
         user2_db_client.add(obj1_user2)
         assert db_client.get_all() == []
 
+
 class TestUpdate:
     def test_correct_user(self, db_client, obj1_user1, obj2_user1):
         """
@@ -105,6 +132,7 @@ class TestUpdate:
         db_client.add(obj1_user1)
         with pytest.raises(ValueError):
             db_client.update(obj1_user2)
+
 
 class TestDelete:
     def test_correct_user(self, db_client, obj1_user1, obj2_user1):

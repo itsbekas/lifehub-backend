@@ -12,10 +12,8 @@ class BaseTestModel(SQLModel, table=True):
 
 @pytest.fixture(scope="function")
 def db_client(engine):
-    # Create table
     BaseTestModel.metadata.create_all(bind=engine)
     yield BaseDBClient(BaseTestModel)
-    # Drop table
     BaseTestModel.metadata.drop_all(bind=engine)
 
 
@@ -27,6 +25,14 @@ def obj1():
 @pytest.fixture(scope="function")
 def obj2():
     return BaseTestModel(id=2, name="obj2")
+
+
+def test_creation():
+    """
+    Test creating a BaseDBClient object
+    Expected: Object is created
+    """
+    assert BaseDBClient(BaseTestModel)
 
 
 class TestAdd:

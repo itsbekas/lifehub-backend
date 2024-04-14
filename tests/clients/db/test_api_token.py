@@ -63,6 +63,14 @@ def db_client(engine):
     APIToken.metadata.drop_all(bind=engine)
 
 
+def test_creation():
+    """
+    Test creating an APITokenDBClient object
+    Expected: Object is created
+    """
+    assert APITokenDBClient()
+
+
 class TestGetUserIDsWithTokens:
     def test_no_entries(self, db_client):
         """
