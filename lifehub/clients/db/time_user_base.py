@@ -12,12 +12,12 @@ class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):
         super().__init__(model, user_id)
 
     def get_latest(self) -> BaseModel:
-        with self.session() as session:
+        with self.session as session:
             statement = (
                 select(self.model)
                 .where(self.model.user_id == self.user_id)
-                .order_by(self.model.date.desc())
+                .order_by(self.model.timestamp.desc())
                 .limit(1)
             )
             result = session.exec(statement)
-            return result.one()
+            return result.one_or_none()
