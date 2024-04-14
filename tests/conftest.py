@@ -2,28 +2,31 @@ import os
 
 import pytest
 from dotenv import load_dotenv
-from sqlmodel import SQLModel, create_engine, MetaData
+from sqlmodel import MetaData, SQLModel, create_engine
 
+import lifehub.models  # noqa: F401
 from lifehub.models.user import User
-import lifehub.models # noqa: F401
 
-
-# Load the environment 
+# Load the environment
 load_dotenv("test.env")
 testing_flag = os.getenv("TESTING")
 if testing_flag is None or testing_flag != "True":
     raise ValueError("TESTING flag must be set to True in test.env")
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_session():
-    # Setup the database
+
+@pytest.fixture(scope="session")
+def engine():
     db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url)
+    return create_engine(db_url)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_session(engine):
     try:
         SQLModel.metadata.create_all(engine)
     except Exception as e:
         print("Error creating database tables: ", e)
-    
+
     yield
 
     metadata = MetaData()

@@ -4,7 +4,6 @@ import pytest
 
 from lifehub.clients.db.api_token import APITokenDBClient
 from lifehub.models.user import APIToken
-from sqlmodel import select
 
 
 @pytest.fixture(scope="module")
@@ -58,18 +57,12 @@ def api_token2_user2(user2, token_id2):
 
 
 @pytest.fixture(scope="function")
-def db_client():
-    return APITokenDBClient()
-
-@pytest.fixture(scope="function", autouse=True)
-def cleanup_db(db_client):
-    yield
-    tokens = db_client.get_all()
-    for token in tokens:
-        db_client.delete(token)
+def db_client(engine):
+    APIToken.metadata.create_all(bind=engine)
+    yield APITokenDBClient()
+    APIToken.metadata.drop_all(bind=engine)
 
 
-# @pytest.mark.usefixtures("db_client", "user1", "user2", "token_id1", "token_id2", "api_token1_user1", "api_token1_user2", "api_token2_user1", "api_token2_user2")
 class TestGetUserIDsWithTokens:
     def test_no_entries(self, db_client):
         """
@@ -95,8 +88,14 @@ class TestGetUserIDsWithTokens:
         assert db_client.get_user_ids_with_tokens([]) == []
 
     def test_single_token_all_users(
-        self, 
-        db_client, user1, user2, token_id1, api_token1_user1, api_token2_user1, api_token1_user2
+        self,
+        db_client,
+        user1,
+        user2,
+        token_id1,
+        api_token1_user1,
+        api_token2_user1,
+        api_token1_user2,
     ):
         """
         Test that when a single token is provided, all users with that token are returned
@@ -109,8 +108,7 @@ class TestGetUserIDsWithTokens:
         assert user2.id in db_client.get_user_ids_with_tokens([token_id1])
 
     def test_single_token_some_users(
-        self, 
-        db_client,user1, token_id1, api_token1_user1, api_token2_user2
+        self, db_client, user1, token_id1, api_token1_user1, api_token2_user2
     ):
         """
         Test that when a single token is provided, only the users with that token are returned
@@ -121,8 +119,7 @@ class TestGetUserIDsWithTokens:
         assert user1.id in db_client.get_user_ids_with_tokens([token_id1])
 
     def test_single_token_no_users(
-        self, 
-        db_client,token_id1, api_token2_user1, api_token2_user2
+        self, db_client, token_id1, api_token2_user1, api_token2_user2
     ):
         """
         Test that when a single token is provided, no users are returned if they don't have that token
