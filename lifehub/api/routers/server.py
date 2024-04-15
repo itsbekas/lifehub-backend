@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from lifehub.api.routers.dependencies import oauth2_scheme, get_session
+from lifehub.api.routers.dependencies import get_user_id, get_session
 from lifehub.models.server import QBittorrentStats
 
 router = APIRouter(
@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.get("/qbit-stats", response_model=QBittorrentStats)
 async def stats(
-    token: Annotated[str, Depends(oauth2_scheme)],
+    user_id: Annotated[str, Depends(get_user_id)],
     session: Session = Depends(get_session),
 ):
     with session as s:

@@ -5,7 +5,7 @@ from sqlmodel import Session
 
 from lifehub.api.lib.user import (
     authenticate_user,
-    create_access_token,
+    get_access_token,
     create_user,
 )
 from lifehub.api.routers.dependencies import get_session
@@ -21,10 +21,9 @@ router = APIRouter(
 async def login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
-    session: Session = Depends(get_session),
 ):
-    user = authenticate_user(session, username, password)
-    token = create_access_token(user)
+    user = authenticate_user(username, password)
+    token = get_access_token(user)
     return token
 
 
@@ -33,8 +32,7 @@ async def signup(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
-    session: Session = Depends(get_session),
 ):
-    new_user = create_user(session, username, password, name)
-    token = create_access_token(new_user)
+    new_user = create_user(username, password, name)
+    token = get_access_token(new_user)
     return token

@@ -1,12 +1,15 @@
 import datetime as dt
 import os
+from typing import Annotated
+import uuid
 
 import argon2
 from argon2 import PasswordHasher
-from fastapi import HTTPException, status
-from jose import jwt
+from fastapi import Depends, HTTPException, status
+from jose import JWTError, jwt
 from sqlmodel import Session, select
 
+from lifehub.clients.db.user import UserDBClient
 from lifehub.models.user import User, UserToken
 from lifehub.clients.db.user_token import UserTokenDBClient
 from fastapi.security import OAuth2PasswordBearer
@@ -26,6 +29,12 @@ class CredentialsException(HTTPException):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+class UserExistsException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User already exists",
+        )
 
 def hash_password(password: str) -> str:
     return ph.hash(password)
@@ -38,21 +47,21 @@ def verify_password(password: str, hashed_password: str) -> bool:
         return False
 
 
-def authenticate_user(session: Session, username: str, password: str) -> User | None:
-    query = select(User).where(User.username == username)
-    user = session.exec(query).first()
+def authenticate_user(username: str, password: str) -> User | None:
+    db_client = UserDBClient()
+    user = db_client.get_by_username(username)
     if not user or not verify_password(password, user.password):
         raise CredentialsException()
     return user
 
 
-def create_user(session: Session, username: str, password: str, name: str) -> User:
+def create_user(username: str, password: str, name: str) -> User:
     hashed_password = hash_password(password)
+    db_client = UserDBClient()
+    if db_client.get_by_username(username):
+        raise UserExistsException()
     new_user = User(username=username, password=hashed_password, name=name)
-    session.add(new_user)
-    session.commit()
-    session.refresh(new_user)
-    return new_user
+    return db_client.add(new_user)
 
 
 def create_access_token(user: User) -> UserToken:
@@ -65,3 +74,10 @@ def create_access_token(user: User) -> UserToken:
     )
     token = UserToken(user_id=user.id, token=jwtoken, created_at=created_at, expires_at=expires_at)
     return UserTokenDBClient(user_id=user.id).add(token)
+
+def get_access_token(user: User) -> UserToken:
+    db_client = UserTokenDBClient(user_id=user.id)
+    token = db_client.get_all()[0]
+    if token and token.expires_at > dt.datetime.now():
+        return token
+    return create_access_token(user)
