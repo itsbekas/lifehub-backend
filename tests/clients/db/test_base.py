@@ -1,5 +1,6 @@
 import pytest
 from sqlmodel import Field, SQLModel
+from decimal import Decimal
 
 from lifehub.clients.db.base import BaseDBClient
 
@@ -8,6 +9,7 @@ from lifehub.clients.db.base import BaseDBClient
 class BaseTestModel(SQLModel, table=True):
     id: int = Field(primary_key=True)
     name: str = Field(max_length=10)
+    number: Decimal = Field(decimal_places=2, max_digits=4)
 
 
 @pytest.fixture(scope="function")
@@ -19,12 +21,12 @@ def db_client(engine):
 
 @pytest.fixture(scope="function")
 def obj1():
-    return BaseTestModel(id=1, name="obj1")
+    return BaseTestModel(id=1, name="obj1", number=Decimal('1.1'))
 
 
 @pytest.fixture(scope="function")
 def obj2():
-    return BaseTestModel(id=2, name="obj2")
+    return BaseTestModel(id=2, name="obj2", number=Decimal('2.2'))
 
 
 def test_creation():
@@ -59,27 +61,55 @@ class TestAdd:
         Expected: Exception is raised
         """
         db_client.add(obj1)
-        duplicate_obj = BaseTestModel(id=1, name="obj1")
+        duplicate_obj = BaseTestModel(id=obj1.id, name=obj1.name, number=obj1.number)
         with pytest.raises(Exception):
             db_client.add(duplicate_obj)
 
-    def test_max_length(self, db_client):
+    def test_max_length(self, db_client, obj1):
         """
         Test adding an object with a field that meets the max_length constraint
         Expected: Object is added to the database
         """
-        obj = BaseTestModel(id=1, name="a" * 10)
-        db_client.add(obj)
-        assert db_client.get_all() == [obj]
+        obj1.name = "a" * 10
+        db_client.add(obj1)
+        assert db_client.get_all() == [obj1]
 
-    def test_max_length_exceeded(self, db_client):
+    def test_max_length_exceeded(self, db_client, obj1):
         """
         Test adding an object with a field that exceeds the max_length constraint
         Expected: Exception is raised
         """
-        obj = BaseTestModel(id=1, name="a" * 11)
+        obj1.name = "a" * 11
         with pytest.raises(Exception):
-            db_client.add(obj)
+            db_client.add(obj1)
+    
+    def test_decimal_places(self, db_client, obj1):
+        """
+        Test adding an object with a field that meets the decimal_places constraint
+        Expected: Object is added to the database
+        """
+        obj1.number = Decimal('12.34')
+        db_client.add(obj1)
+        assert db_client.get_all() == [obj1]
+    
+    def test_decimal_places_exceeded(self, db_client, obj1):
+        """
+        Test adding an object with a field that exceeds the decimal_places constraint
+        Expected: Number is rounded to the nearest decimal_places
+        """
+        obj1.number = Decimal('1.789')
+        db_client.add(obj1)
+        assert obj1.number == Decimal('1.79')
+
+    def test_max_digits(self, db_client):
+        """
+        Test adding an object with a field that meets the max_digits constraint
+        Expected: Object is added to the database
+        """
+        obj1.number = Decimal('123.45')
+        with pytest.raises(Exception):
+            db_client.add(obj1)
+
 
 
 class TestGetAll:
