@@ -3,8 +3,8 @@ import uuid
 
 from sqlmodel import select
 
-from lifehub.clients.db.api_token import APITokenDBClient
-from lifehub.clients.db.db_service import DatabaseService
+from lifehub.clients.db.service import DatabaseService
+from lifehub.clients.db.user import APITokenDBClient
 from lifehub.models.utils.fetch_update import FetchUpdate
 
 

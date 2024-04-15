@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.time_base import TimeBaseDBClient
+from lifehub.clients.db.base import TimeBaseDBClient
 
 
 # Test model

@@ -6,8 +6,7 @@ from argon2 import PasswordHasher
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
-from lifehub.clients.db.user import UserDBClient
-from lifehub.clients.db.user_token import UserTokenDBClient
+from lifehub.clients.db.user import UserDBClient, UserTokenDBClient
 from lifehub.models.user import User, UserToken
 
 from .exceptions import CredentialsException, UserExistsException

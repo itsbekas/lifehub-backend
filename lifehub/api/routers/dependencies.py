@@ -10,7 +10,7 @@ from lifehub.api.lib.user import (
     CredentialsException,
     oauth2_scheme,
 )
-from lifehub.clients.db.db_service import DatabaseService
+from lifehub.clients.db.service import DatabaseService
 from lifehub.clients.db.user import UserDBClient
 
 db_service = DatabaseService()

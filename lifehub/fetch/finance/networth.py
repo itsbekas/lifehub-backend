@@ -1,5 +1,5 @@
 from lifehub.clients.api import Trading212APIClient, YNABAPIClient
-from lifehub.clients.db.networth import NetworthDBClient
+from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.fetch.base import BaseFetcher
 from lifehub.models.finance import Networth
 

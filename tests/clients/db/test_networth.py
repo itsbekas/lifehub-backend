@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from lifehub.clients.db.networth import NetworthDBClient
+from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.models.finance import Networth
 
 

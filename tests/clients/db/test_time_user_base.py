@@ -4,7 +4,7 @@ import uuid
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.time_user_base import TimeUserBaseDBClient
+from lifehub.clients.db.base import TimeUserBaseDBClient
 
 
 # Test model

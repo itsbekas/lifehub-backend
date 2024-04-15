@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from lifehub.clients.db.user_token import UserTokenDBClient
+from lifehub.clients.db.user import UserTokenDBClient
 from lifehub.models.user import UserToken
 
 

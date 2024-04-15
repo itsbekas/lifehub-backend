@@ -2,7 +2,7 @@ from typing import Generic, List, Type, TypeVar
 
 from sqlmodel import Session, SQLModel, select
 
-from lifehub.clients.db.db_service import DatabaseService
+from lifehub.clients.db.service import DatabaseService
 
 BaseModel = TypeVar("BaseModel", bound=SQLModel)
 

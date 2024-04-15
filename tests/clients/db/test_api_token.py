@@ -2,7 +2,7 @@ import datetime as dt
 
 import pytest
 
-from lifehub.clients.db.api_token import APITokenDBClient
+from lifehub.clients.db.user import APITokenDBClient
 from lifehub.models.user import APIToken
 
 

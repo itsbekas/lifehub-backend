@@ -1,6 +1,6 @@
 import uuid
 
-from lifehub.clients.db.user_base import UserBaseDBClient
+from lifehub.clients.db.base import UserBaseDBClient
 from lifehub.models.user import UserToken
 
 
