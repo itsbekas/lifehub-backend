@@ -29,12 +29,12 @@ def obj2():
     return BaseTestModel(id=2, name="obj2", number=Decimal('2.2'))
 
 
-def test_creation():
+def test_creation(db_client):
     """
     Test creating a BaseDBClient object
     Expected: Object is created
     """
-    assert BaseDBClient(BaseTestModel)
+    assert db_client
 
 
 class TestAdd:

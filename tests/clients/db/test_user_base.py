@@ -50,12 +50,12 @@ def obj2_user2(user_id2):
     return UserBaseTestModel(id=2, user_id=user_id2, text="obj2")
 
 
-def test_creation():
+def test_creation(db_client):
     """
     Test creating a UserBaseDBClient object
     Expected: Object is created
     """
-    assert UserBaseDBClient(UserBaseTestModel, uuid.uuid4())
+    assert db_client
 
 
 def test_creation_without_user_id():

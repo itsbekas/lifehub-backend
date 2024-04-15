@@ -69,12 +69,12 @@ def obj_latest_user2(user_id2, date_latest):
     )
 
 
-def test_creation():
+def test_creation(db_client):
     """
     Test creating a TimeUserBaseDBClient object
     Expected: Object is created
     """
-    assert TimeUserBaseDBClient(TimeUserBaseTestModel, uuid.uuid4())
+    assert db_client
 
 
 class TestGetLatest:

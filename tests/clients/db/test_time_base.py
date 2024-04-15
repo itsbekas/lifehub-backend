@@ -39,12 +39,12 @@ def obj_latest(date_latest):
     return TimeBaseTestModel(date=date_latest, text="obj_latest")
 
 
-def test_creation():
+def test_creation(db_client):
     """
     Test creating a TimeBaseDBClient object
     Expected: Object is created
     """
-    assert TimeBaseDBClient(TimeBaseTestModel)
+    assert db_client
 
 
 class TestGetLatest:

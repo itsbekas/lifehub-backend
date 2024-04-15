@@ -24,10 +24,11 @@ class BaseFetcher:
         return user_ids
 
     def fetch(self):
-        with self.db.get_session() as self.session:
-            self.last_update: dt.datetime = self._update_fetch_timestamp()
-            self.fetch_data()
-            self.session.commit()
+        for self.user_id in self._get_users():
+            with self.db.get_session() as self.session:
+                self.last_update: dt.datetime = self._update_fetch_timestamp()
+                self.fetch_data()
+                self.session.commit()
 
     def fetch_data(self):
         raise NotImplementedError("fetch_data must be implemented in the subclass")
