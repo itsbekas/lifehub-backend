@@ -14,27 +14,14 @@ from lifehub.models.user import User, UserToken
 from lifehub.clients.db.user_token import UserTokenDBClient
 from fastapi.security import OAuth2PasswordBearer
 
+from .exceptions import CredentialsException, UserExistsException
+
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]
 
 ph = PasswordHasher()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
-
-class CredentialsException(HTTPException):
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-class UserExistsException(HTTPException):
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="User already exists",
-        )
 
 def hash_password(password: str) -> str:
     return ph.hash(password)
@@ -72,12 +59,12 @@ def create_access_token(user: User) -> UserToken:
         AUTH_SECRET_KEY,
         algorithm=AUTH_ALGORITHM,
     )
-    token = UserToken(user_id=user.id, token=jwtoken, created_at=created_at, expires_at=expires_at)
+    token = UserToken(user_id=user.id, access_token=jwtoken, token_type="bearer", created_at=created_at, expires_at=expires_at)
     return UserTokenDBClient(user_id=user.id).add(token)
 
 def get_access_token(user: User) -> UserToken:
     db_client = UserTokenDBClient(user_id=user.id)
-    token = db_client.get_all()[0]
+    token = db_client.get_one_or_none()
     if token and token.expires_at > dt.datetime.now():
         return token
     return create_access_token(user)

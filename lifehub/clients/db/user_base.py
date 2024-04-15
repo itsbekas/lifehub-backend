@@ -16,6 +16,12 @@ class UserBaseDBClient(BaseDBClient[BaseModel]):
             return super().add(obj)
         raise ValueError("User ID does not match")
 
+    def get_one_or_none(self) -> BaseModel:
+        with self.session as session:
+            statement = select(self.model).where(self.model.user_id == self.user_id)
+            result = session.exec(statement)
+            return result.one_or_none()
+
     def get_all(self) -> list[BaseModel]:
         with self.session as session:
             statement = select(self.model).where(self.model.user_id == self.user_id)
