@@ -1,3 +1,11 @@
-from fastapi.security import OAuth2PasswordBearer
+from lifehub.clients.db.db_service import DatabaseService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
+
+db_service = DatabaseService()
+
+def get_session():
+    session = db_service.get_session()
+    try:
+        yield session
+    finally:
+        session.close()

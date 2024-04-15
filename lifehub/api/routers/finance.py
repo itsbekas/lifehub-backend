@@ -3,8 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from lifehub.api.routers.dependencies import oauth2_scheme
-from lifehub.clients.db import get_session
+from lifehub.api.routers.dependencies import oauth2_scheme, get_session
 from lifehub.models.finance import Networth
 
 router = APIRouter(

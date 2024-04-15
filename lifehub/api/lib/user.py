@@ -8,12 +8,15 @@ from jose import jwt
 from sqlmodel import Session, select
 
 from lifehub.models.user import User, UserToken
+from lifehub.clients.db.user_token import UserTokenDBClient
+from fastapi.security import OAuth2PasswordBearer
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]
 
 ph = PasswordHasher()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 class CredentialsException(HTTPException):
     def __init__(self):
@@ -53,9 +56,12 @@ def create_user(session: Session, username: str, password: str, name: str) -> Us
 
 
 def create_access_token(user: User) -> UserToken:
-    token = jwt.encode(
-        {"sub": user.username, "exp": dt.datetime.now() + dt.timedelta(days=30)},
+    created_at = dt.datetime.now()
+    expires_at = created_at + dt.timedelta(days=30)
+    jwtoken = jwt.encode(
+        {"sub": user.username, "exp": expires_at},
         AUTH_SECRET_KEY,
         algorithm=AUTH_ALGORITHM,
     )
-    return UserToken(user_id=user.id, token=token)
+    token = UserToken(user_id=user.id, token=jwtoken, created_at=created_at, expires_at=expires_at)
+    return UserTokenDBClient(user_id=user.id).add(token)

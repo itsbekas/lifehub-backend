@@ -8,7 +8,7 @@ from lifehub.api.lib.user import (
     create_access_token,
     create_user,
 )
-from lifehub.clients.db import get_session
+from lifehub.api.routers.dependencies import get_session
 from lifehub.models.user import UserToken
 
 router = APIRouter(
@@ -37,5 +37,4 @@ async def signup(
 ):
     new_user = create_user(session, username, password, name)
     token = create_access_token(new_user)
-    print(token)
     return token
