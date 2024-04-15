@@ -3,7 +3,8 @@ from typing import Type
 
 from sqlmodel import select
 
-from lifehub.clients.db.base import BaseModel, UserBaseDBClient
+from lifehub.clients.db.base.base import BaseModel
+from lifehub.clients.db.base.user_base import UserBaseDBClient
 
 
 class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):
