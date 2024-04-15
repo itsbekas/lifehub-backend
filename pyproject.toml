@@ -16,6 +16,7 @@ find = {}
 lifehub-api = "lifehub.app.api:run"
 lifehub-fetch = "lifehub.app.fetch:run"
 lifehub-setup = "lifehub.app.setup:run"
+lifehub-clean = "lifehub.app.clean:run"
 
 [tool.ruff]
 lint.extend-select = ["I"]
