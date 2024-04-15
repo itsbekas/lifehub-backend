@@ -1,13 +1,12 @@
+import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from sqlmodel import Session, select
 
-from lifehub.api.routers.dependencies import get_user_id, get_session
+from lifehub.api.lib.exceptions import NoDataForUserException
+from lifehub.api.routers.dependencies import get_user_id
 from lifehub.clients.db.networth import NetworthDBClient
 from lifehub.models.finance import Networth
-import uuid
-from lifehub.api.lib.exceptions import NoDataForUserException
 
 router = APIRouter(
     prefix="/finance",

@@ -1,6 +1,7 @@
+from decimal import Decimal
+
 import pytest
 from sqlmodel import Field, SQLModel
-from decimal import Decimal
 
 from lifehub.clients.db.base import BaseDBClient
 
@@ -21,12 +22,12 @@ def db_client(engine):
 
 @pytest.fixture(scope="function")
 def obj1():
-    return BaseTestModel(id=1, name="obj1", number=Decimal('1.1'))
+    return BaseTestModel(id=1, name="obj1", number=Decimal("1.1"))
 
 
 @pytest.fixture(scope="function")
 def obj2():
-    return BaseTestModel(id=2, name="obj2", number=Decimal('2.2'))
+    return BaseTestModel(id=2, name="obj2", number=Decimal("2.2"))
 
 
 def test_creation(db_client):
@@ -82,34 +83,33 @@ class TestAdd:
         obj1.name = "a" * 11
         with pytest.raises(Exception):
             db_client.add(obj1)
-    
+
     def test_decimal_places(self, db_client, obj1):
         """
         Test adding an object with a field that meets the decimal_places constraint
         Expected: Object is added to the database
         """
-        obj1.number = Decimal('12.34')
+        obj1.number = Decimal("12.34")
         db_client.add(obj1)
         assert db_client.get_all() == [obj1]
-    
+
     def test_decimal_places_exceeded(self, db_client, obj1):
         """
         Test adding an object with a field that exceeds the decimal_places constraint
         Expected: Number is rounded to the nearest decimal_places
         """
-        obj1.number = Decimal('1.789')
+        obj1.number = Decimal("1.789")
         db_client.add(obj1)
-        assert obj1.number == Decimal('1.79')
+        assert obj1.number == Decimal("1.79")
 
     def test_max_digits(self, db_client):
         """
         Test adding an object with a field that meets the max_digits constraint
         Expected: Object is added to the database
         """
-        obj1.number = Decimal('123.45')
+        obj1.number = Decimal("123.45")
         with pytest.raises(Exception):
             db_client.add(obj1)
-
 
 
 class TestGetAll:

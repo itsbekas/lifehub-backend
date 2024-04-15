@@ -1,14 +1,12 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form
-from sqlmodel import Session
+from fastapi import APIRouter, Form
 
 from lifehub.api.lib.user import (
     authenticate_user,
-    get_access_token,
     create_user,
+    get_access_token,
 )
-from lifehub.api.routers.dependencies import get_session
 from lifehub.models.user import UserToken
 
 router = APIRouter(

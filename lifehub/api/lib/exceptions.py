@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status
 
+
 class CredentialsException(HTTPException):
     def __init__(self):
         super().__init__(
@@ -8,12 +9,14 @@ class CredentialsException(HTTPException):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+
 class UserExistsException(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
             detail="User already exists",
         )
+
 
 class NoDataForUserException(HTTPException):
     def __init__(self):

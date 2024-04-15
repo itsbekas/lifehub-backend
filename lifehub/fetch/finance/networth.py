@@ -1,5 +1,3 @@
-import uuid
-
 from lifehub.clients.api import Trading212APIClient, YNABAPIClient
 from lifehub.clients.db.networth import NetworthDBClient
 from lifehub.fetch.base import BaseFetcher

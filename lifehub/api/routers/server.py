@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from lifehub.api.routers.dependencies import get_user_id, get_session
+from lifehub.api.routers.dependencies import get_session, get_user_id
 from lifehub.models.server import QBittorrentStats
 
 router = APIRouter(

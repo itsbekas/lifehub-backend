@@ -1,18 +1,14 @@
 import datetime as dt
 import os
-from typing import Annotated
-import uuid
 
 import argon2
 from argon2 import PasswordHasher
-from fastapi import Depends, HTTPException, status
-from jose import JWTError, jwt
-from sqlmodel import Session, select
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt
 
 from lifehub.clients.db.user import UserDBClient
-from lifehub.models.user import User, UserToken
 from lifehub.clients.db.user_token import UserTokenDBClient
-from fastapi.security import OAuth2PasswordBearer
+from lifehub.models.user import User, UserToken
 
 from .exceptions import CredentialsException, UserExistsException
 
@@ -22,6 +18,7 @@ AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]
 ph = PasswordHasher()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
+
 
 def hash_password(password: str) -> str:
     return ph.hash(password)
@@ -59,8 +56,15 @@ def create_access_token(user: User) -> UserToken:
         AUTH_SECRET_KEY,
         algorithm=AUTH_ALGORITHM,
     )
-    token = UserToken(user_id=user.id, access_token=jwtoken, token_type="bearer", created_at=created_at, expires_at=expires_at)
+    token = UserToken(
+        user_id=user.id,
+        access_token=jwtoken,
+        token_type="bearer",
+        created_at=created_at,
+        expires_at=expires_at,
+    )
     return UserTokenDBClient(user_id=user.id).add(token)
+
 
 def get_access_token(user: User) -> UserToken:
     db_client = UserTokenDBClient(user_id=user.id)
