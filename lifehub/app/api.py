@@ -10,6 +10,7 @@ load_dotenv()
 from lifehub.api.routers import (  # noqa: E402
     auth_router,
     finance_router,
+    provider_router,
     server_router,
     tasks_router,
 )
@@ -43,6 +44,7 @@ api.include_router(auth_router)
 api.include_router(finance_router)
 api.include_router(tasks_router)
 api.include_router(server_router)
+api.include_router(provider_router)
 
 # TODO: Eventually replace this with a reverse proxy
 app.include_router(api, prefix="/api/v0")

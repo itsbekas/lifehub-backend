@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from sqlmodel import SQLModel, create_engine
 
 import lifehub.models  # noqa: F401
+from lifehub.config.providers import setup_providers
 
 
 def run():
@@ -16,6 +17,8 @@ def run():
         SQLModel.metadata.create_all(engine)
     except Exception as e:
         print("Error creating database tables: ", e)
+
+    setup_providers()
 
 
 if __name__ == "__main__":

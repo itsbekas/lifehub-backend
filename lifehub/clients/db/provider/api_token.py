@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy import func, select
 
 from lifehub.clients.db.base import BaseDBClient
-from lifehub.models.user import APIToken
+from lifehub.models.provider import APIToken
 
 
 class APITokenDBClient(BaseDBClient[APIToken]):

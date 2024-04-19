@@ -9,7 +9,7 @@ from jose import jwt
 from lifehub.clients.db.user import UserDBClient, UserTokenDBClient
 from lifehub.models.user import User, UserToken
 
-from .exceptions import CredentialsException, UserExistsException
+from ..exceptions.user import CredentialsException, UserExistsException
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]

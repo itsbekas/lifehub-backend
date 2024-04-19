@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from lifehub.api.lib.exceptions import NoDataForUserException
+from lifehub.api.exceptions.user import NoDataForUserException
 from lifehub.api.routers.dependencies import get_user_id
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.models.finance import Networth
