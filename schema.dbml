@@ -1,0 +1,109 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Project lifehub {
+    database_type: "MariaDB"
+}
+  
+Table user {
+    id uuid [pk]
+    username text(32)
+    password text(128)
+    name text(64)
+    created_at datetime
+}
+
+Table module {
+    id int [pk, increment]
+    name text(32)
+}
+
+Table provider {
+    id int [pk, increment]
+    name text(32)
+    type provider_type
+}
+
+enum provider_type {
+    "basic"
+    "token"
+    "oauth"
+}
+
+Table module_provider {
+    module_id int [pk, ref: <> module.id]
+    provider_id int [pk, ref: <> provider.id]
+}
+
+Table user_token {
+    user_id uuid [pk, ref: - user.id]
+    access_token text(256)
+    token_type text(16)
+    created_at datetime
+    expires_at datetime
+}
+
+Table user_module {
+    user_id uuid [pk, ref: > user.id]
+    module_id int [pk, ref: > module.id]
+    created_at datetime
+}
+
+Table fetch_update {
+    module_id int [pk, ref: - module.id]
+    last_update datetime
+}
+
+Table api_token {
+    user_id uuid [pk, ref: > user.id]
+    provider_id int [pk, ref: < provider.id]
+    token text(128)
+    created_at datetime
+    expires_at datetime
+}
+
+Table oauth_provider_config {
+    provider_id int [pk, ref: - provider.id]
+    auth_url text(64)
+    token_url text(64)
+    client_id text(64)
+    client_secret text(64)
+    scope text(64)
+    redirect_uri text(64)
+}
+
+Table networth {
+    user_id uuid [pk, ref: > user.id]
+    timestamp datetime [pk, default: `now()`]
+    bank_cash decimal(2,10)
+    uninvested_cash decimal(2,10)
+    invested decimal(2,10)
+    returns decimal(2,10)
+    total decimal(2,10)
+}
+
+Table t212_order {
+    user_id uuid [pk, ref: > user.id]
+    type text(10)
+    id bigint
+    ticker text(10)
+    quantity decimal(7,15)
+    price decimal(2,10)
+    timestamp datetime
+}
+
+Table t212_transaction {
+    user_id uuid [pk, ref: > user.id]
+    type text(10)
+    amount decimal(2,10)
+    id text(128)
+    timestamp datetime
+}
+
+Table qbittorrent_stats {
+    user_id uuid [pk, ref: > user.id]
+    timestamp datetime [pk, default: `now()`]
+    alltime_dl bigint
+    alltime_ul bigint
+    alltime_ratio decimal(2,5)
+}
