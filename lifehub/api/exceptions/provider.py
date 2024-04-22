@@ -26,8 +26,8 @@ class ProviderDetailsIncompleteException(HTTPException):
 
 
 class ProviderTypeInvalidException(HTTPException):
-    def __init__(self):
+    def __init__(self, provider_type: str):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Provider type is invalid",
+            detail=f"Provider type must be {provider_type}",
         )

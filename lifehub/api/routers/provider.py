@@ -1,4 +1,3 @@
-import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
@@ -7,74 +6,65 @@ from lifehub.api.exceptions.provider import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
-from lifehub.api.routers.dependencies import get_user_id
+from lifehub.api.routers.dependencies import user_is_authenticated
 from lifehub.clients.db.provider import (
-    APITokenDBClient,
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
-from lifehub.models.provider import APIToken
+from lifehub.models.provider import Provider
 
 router = APIRouter(
     prefix="/provider",
     tags=["provider"],
+    dependencies=[Depends(user_is_authenticated)],
 )
 
 
-def verify_provider(name: str):
+def verify_provider(provider: str):
     db_client = ProviderDBClient()
-    provider = db_client.get_by_name(name)
-    if not provider:
-        raise ProviderDoesNotExistException(name)
-    return provider
+    p = db_client.get_by_name(provider)
+    if not p:
+        raise ProviderDoesNotExistException(provider)
+    return p
 
 
-def verify_oauth_provider(provider: Annotated[str, Depends(verify_provider)]):
+VerifyProviderDep = Annotated[Provider, Depends(verify_provider)]
+
+
+def verify_oauth_provider(provider: VerifyProviderDep):
     if provider.type != "oauth":
-        raise ProviderTypeInvalidException()
+        raise ProviderTypeInvalidException("OAuth")
     return provider.name
 
 
-def verify_token_provider(provider: Annotated[str, Depends(verify_provider)]):
+def verify_token_provider(provider: VerifyProviderDep):
     if provider.type != "token":
-        raise ProviderTypeInvalidException()
+        raise ProviderTypeInvalidException("Token")
     return provider.name
 
 
-@router.get("/oauth/auth", response_model=str)
+VerifyOAuthProviderDep = Annotated[str, Depends(verify_oauth_provider)]
+VerifyTokenProviderDep = Annotated[str, Depends(verify_token_provider)]
+
+
+@router.get("/{provider}/auth_url", response_model=str)
 async def oauth_authorization_url(
-    provider: Annotated[str, Depends(verify_oauth_provider)],
-    user_id: Annotated[uuid.UUID, Depends(get_user_id)],
+    provider: VerifyOAuthProviderDep,
 ):
     db_client = OAuthProviderConfigDBClient()
     config = db_client.get_by_name(provider)
     return config.build_auth_url()
 
 
-@router.get("/oauth/token", response_model=str)
+@router.get(
+    "/{provider}/token_url",
+    dependencies=[Depends(verify_oauth_provider)],
+    response_model=str,
+)
 async def oauth_token_url(
-    provider: Annotated[str, Depends(verify_oauth_provider)],
-    user_id: Annotated[uuid.UUID, Depends(get_user_id)],
+    provider: VerifyOAuthProviderDep,
     code: str,
 ):
     db_client = OAuthProviderConfigDBClient()
     config = db_client.get_by_name(provider)
     return config.build_token_url(code)
-
-
-@router.post("/token", response_model=None)
-async def token(
-    provider: Annotated[str, Depends(verify_token_provider)],
-    user_id: Annotated[uuid.UUID, Depends(get_user_id)],
-    token: str,
-):
-    api_token = APIToken(
-        provider=provider,
-        token=token,
-        user_id=user_id,
-        created_at=None,
-        expires_at=None,
-    )
-
-    db_client = APITokenDBClient()
-    db_client.add(api_token)
