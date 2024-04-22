@@ -16,9 +16,9 @@ class ProviderType(str, Enum):
 
 
 class Provider(SQLModel, table=True):
-    id: int = Field(primary_key=True, sa_column_args={"autoincrement": True})
+    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
     name: str = Field(max_length=32, unique=True, nullable=False)
-    type: ProviderType = Field(nullable=False)
+    type: ProviderType
 
     modules: list["Module"] = Relationship(
         back_populates="providers", link_model=ModuleProvider

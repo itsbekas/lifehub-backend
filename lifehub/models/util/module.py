@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class Module(SQLModel, table=True):
-    id: int = Field(primary_key=True, sa_column_args={"autoincrement": True})
+    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
     name: str = Field(max_length=32, unique=True, nullable=False)
 
     providers: list["Provider"] = Relationship(
