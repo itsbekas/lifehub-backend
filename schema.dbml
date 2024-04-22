@@ -6,22 +6,16 @@ Project lifehub {
 }
   
 Table user {
-    id uuid [pk]
-    username text(32)
-    password text(128)
-    name text(64)
-    created_at datetime
+    id uuid [pk, default: `uuid.uuid4()`]
+    username text(32) [unique, not null]
+    password text(128) [not null]
+    name text(64) [not null]
+    created_at datetime [default: `datetime.now()`]
 }
 
 Table module {
     id int [pk, increment]
-    name text(32)
-}
-
-Table provider {
-    id int [pk, increment]
-    name text(32)
-    type provider_type
+    name text(32) [unique, not null]
 }
 
 enum provider_type {
@@ -30,62 +24,66 @@ enum provider_type {
     "oauth"
 }
 
+Table provider {
+    id int [pk, increment]
+    name text(32) [unique, not null]
+    type provider_type [not null]
+}
+
 Table module_provider {
-    module_id int [pk, ref: <> module.id]
-    provider_id int [pk, ref: <> provider.id]
+    module_id int [pk, ref: > module.id]
+    provider_id int [pk, ref: > provider.id]
 }
 
 Table user_token {
     user_id uuid [pk, ref: - user.id]
-    access_token text(256)
-    token_type text(16)
-    created_at datetime
+    access_token text(256) [not null]
+    token_type text(16) [not null]
+    created_at datetime [default: `datetime.now()`]
     expires_at datetime
 }
 
 Table user_module {
     user_id uuid [pk, ref: > user.id]
     module_id int [pk, ref: > module.id]
-    created_at datetime
 }
 
 Table fetch_update {
     module_id int [pk, ref: - module.id]
-    last_update datetime
+    last_update datetime [default: `datetime.min`]
 }
 
 Table api_token {
     user_id uuid [pk, ref: > user.id]
     provider_id int [pk, ref: < provider.id]
-    token text(128)
-    created_at datetime
+    token text(128) [not null]
+    created_at datetime [default: `datetime.now()`]
     expires_at datetime
 }
 
 Table oauth_provider_config {
     provider_id int [pk, ref: - provider.id]
-    auth_url text(64)
-    token_url text(64)
-    client_id text(64)
-    client_secret text(64)
-    scope text(64)
-    redirect_uri text(64)
+    auth_url text(64) [not null]
+    token_url text(64) [not null]
+    client_id text(64) [not null]
+    client_secret text(64) [not null]
+    scope text(64) [not null]
+    redirect_uri text(64) [not null]
 }
 
 Table networth {
     user_id uuid [pk, ref: > user.id]
-    timestamp datetime [pk, default: `now()`]
-    bank_cash decimal(2,10)
-    uninvested_cash decimal(2,10)
+    timestamp datetime [pk, default: `datetime.now()`]
+    bank decimal(2,10)
+    uninvested decimal(2,10)
     invested decimal(2,10)
     returns decimal(2,10)
     total decimal(2,10)
 }
 
 Table t212_order {
-    user_id uuid [pk, ref: > user.id]
-    type text(10)
-    id bigint
+    id bigint [pk]
+    user_id uuid [ref: > user.id]
     ticker text(10)
     quantity decimal(7,15)
     price decimal(2,10)
@@ -93,16 +91,15 @@ Table t212_order {
 }
 
 Table t212_transaction {
-    user_id uuid [pk, ref: > user.id]
-    type text(10)
+    id bigint [pk]
+    user_id uuid [ref: > user.id]
     amount decimal(2,10)
-    id text(128)
     timestamp datetime
 }
 
 Table qbittorrent_stats {
     user_id uuid [pk, ref: > user.id]
-    timestamp datetime [pk, default: `now()`]
+    timestamp datetime [pk, default: `datetime.now()`]
     alltime_dl bigint
     alltime_ul bigint
     alltime_ratio decimal(2,5)

@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel
 
 
 class OAuthProviderConfig(SQLModel, table=True):
-    name: str = Field(max_length=32, foreign_key="provider.name", primary_key=True)
+    provider_id: int = Field(primary_key=True, foreign_key="provider.id")
     auth_url: str = Field(max_length=64, nullable=False)
     token_url: str = Field(max_length=64, nullable=False)
     client_id: str = Field(max_length=64, nullable=False)

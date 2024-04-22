@@ -5,8 +5,8 @@ from sqlmodel import Field, SQLModel
 
 
 class UserToken(SQLModel, table=True):
-    user_id: uuid.UUID = Field(primary_key=True, nullable=False)
+    user_id: uuid.UUID = Field(primary_key=True, foreign_key="user.id")
     access_token: str = Field(max_length=256, nullable=False)
     token_type: str = Field(max_length=16, nullable=False)
     created_at: datetime = Field(default_factory=datetime.now)
-    expires_at: datetime = Field(nullable=False)
+    expires_at: datetime = Field()
