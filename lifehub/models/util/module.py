@@ -15,7 +15,9 @@ class Module(SQLModel, table=True):
     name: str = Field(max_length=32, unique=True, nullable=False)
 
     providers: list["Provider"] = Relationship(
-        back_populates="modules", link_model=ModuleProvider
+        back_populates="modules",
+        link_model=ModuleProvider,
+        sa_relationship_kwargs={"lazy": "subquery"},
     )
 
     users: list["User"] = Relationship(back_populates="modules", link_model=UserModule)

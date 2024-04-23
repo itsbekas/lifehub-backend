@@ -21,17 +21,13 @@ def get_session():
         yield session
 
 
-def user_is_authenticated(token: Annotated[str, Depends(oauth2_scheme)]) -> str:
+def get_user(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
     try:
         payload = jwt.decode(token, AUTH_SECRET_KEY, algorithms=[AUTH_ALGORITHM])
     except JWTError:
         raise CredentialsException()
-    return payload.get("sub")
-
-
-def get_user(username: Annotated[str, user_is_authenticated]) -> User:
     db_client = UserDBClient()
-    user = db_client.get_by_username(username)
+    user = db_client.get_by_username(payload.get("sub"))
     if user is None:
         raise CredentialsException()
     return user

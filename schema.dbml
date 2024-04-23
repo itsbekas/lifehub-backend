@@ -58,7 +58,7 @@ Table api_token {
     provider_id int [pk, ref: < provider.id]
     token text(128) [not null]
     created_at datetime [default: `datetime.now()`]
-    expires_at datetime
+    expires_at datetime [default: `datetime.max`]
 }
 
 Table oauth_provider_config {

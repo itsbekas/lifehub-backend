@@ -5,8 +5,10 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship, SQLModel
 
 from .user_module import UserModule
+from .user_provider import UserProvider
 
 if TYPE_CHECKING:
+    from lifehub.models.provider import Provider
     from lifehub.models.util import Module
 
 
@@ -20,3 +22,4 @@ class User(SQLModel, table=True):
     modules: list["Module"] = Relationship(
         back_populates="users", link_model=UserModule
     )
+    providers: list["Provider"] = Relationship(link_model=UserProvider)

@@ -1,5 +1,5 @@
 from lifehub.clients.db.base import BaseDBClient
-from lifehub.models.utils import FetchUpdate
+from lifehub.models.util import FetchUpdate
 
 
 class FetchUpdateDBClient(BaseDBClient[FetchUpdate]):

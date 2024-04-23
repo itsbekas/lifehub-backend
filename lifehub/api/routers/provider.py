@@ -1,14 +1,14 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form
+from sqlmodel import Session
 
 from lifehub.api.exceptions.provider import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
-from lifehub.api.routers.dependencies import get_user, user_is_authenticated
+from lifehub.api.routers.dependencies import get_session, get_user
 from lifehub.clients.db.provider import (
-    APITokenDBClient,
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
@@ -18,7 +18,7 @@ from lifehub.models.user import User
 router = APIRouter(
     prefix="/provider",
     tags=["provider"],
-    dependencies=[Depends(user_is_authenticated)],
+    dependencies=[Depends(get_user)],
 )
 
 
@@ -79,15 +79,15 @@ async def oauth_token_url(
     return config.build_token_url(code)
 
 
-@router.get("/{provider}/login")
+@router.post("/{provider}/login")
 async def basic_login(
+    session: Annotated[Session, Depends(get_session)],
     provider: VerifyBasicProviderDep,
     user: Annotated[User, Depends(get_user)],
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     url: Annotated[str, Form()],
 ):
-    db_client = APITokenDBClient()
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
@@ -95,4 +95,8 @@ async def basic_login(
         created_at=None,
         expires_at=None,
     )
-    db_client.add(api_token)
+    session.add(api_token)
+    user = session.merge(user)
+    user.providers.append(provider)
+    session.add(user)
+    session.commit()
