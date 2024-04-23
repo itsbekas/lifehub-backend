@@ -5,12 +5,11 @@ from lifehub.models.finance import Networth
 
 
 class NetworthFetcher(BaseFetcher):
-    table_id = "networth"
-    tokens = ["ynab", "trading212"]
+    module_name = "networth"
 
     def fetch_data(self):
-        ynab = YNABAPIClient(self.user_id)
-        t212 = Trading212APIClient(self.user_id)
+        ynab = YNABAPIClient(self.user.id)
+        t212 = Trading212APIClient(self.user.id)
 
         ynab_accounts = ynab.get_accounts()
         t212_cash = t212.get_account_cash()
@@ -29,6 +28,6 @@ class NetworthFetcher(BaseFetcher):
             total=total,
         )
 
-        db = NetworthDBClient(self.user_id)
+        db = NetworthDBClient(self.user.id)
 
         db.add(networth)

@@ -110,7 +110,7 @@ async def token_login(
     provider: VerifyTokenProviderDep,
     user: Annotated[User, Depends(get_user)],
     session: Annotated[Session, Depends(get_session)],
-    token: Annotated[str, Form()],
+    token: str,
 ):
     api_token = APIToken(
         user_id=user.id,
