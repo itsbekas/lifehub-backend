@@ -3,9 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from lifehub.api.exceptions.user import NoDataForUserException
-from lifehub.api.routers.dependencies import get_user_id
+from lifehub.api.routers.dependencies import get_user
 from lifehub.clients.db.server import QBittorrentStatsDBClient
 from lifehub.models.server import QBittorrentStats
+from lifehub.models.user import User
 
 router = APIRouter(
     prefix="/server",
@@ -14,8 +15,8 @@ router = APIRouter(
 
 
 @router.get("/qbit-stats", response_model=QBittorrentStats)
-async def stats(user_id: Annotated[str, Depends(get_user_id)]):
-    db_client = QBittorrentStatsDBClient(user_id)
+async def stats(user: Annotated[User, Depends(get_user)]):
+    db_client = QBittorrentStatsDBClient(user.id)
     stats = db_client.get_latest()
 
     if stats is None:

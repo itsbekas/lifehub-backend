@@ -12,26 +12,29 @@ from lifehub.api.lib.user import (
 )
 from lifehub.clients.db.service import DatabaseService
 from lifehub.clients.db.user import UserDBClient
-
-db_service = DatabaseService()
+from lifehub.models.user import User
 
 
 def get_session():
-    session = db_service.get_session()
-    try:
+    db_service = DatabaseService()
+    with db_service.get_session() as session:
         yield session
-    finally:
-        session.close()
 
 
-def get_user_id(token: Annotated[str, Depends(oauth2_scheme)]) -> uuid.UUID:
+def user_is_authenticated(token: Annotated[str, Depends(oauth2_scheme)]) -> str:
     try:
         payload = jwt.decode(token, AUTH_SECRET_KEY, algorithms=[AUTH_ALGORITHM])
     except JWTError:
         raise CredentialsException()
-    username = payload.get("sub")
+    return payload.get("sub")
+
+
+def get_user(username: Annotated[str, user_is_authenticated]) -> User:
     db_client = UserDBClient()
     user = db_client.get_by_username(username)
     if user is None:
         raise CredentialsException()
-    return user.id
+    return user
+
+
+UserDep = Annotated[uuid.UUID, Depends(get_user)]
