@@ -1,6 +1,8 @@
+import datetime as dt
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form
+import requests
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlmodel import Session
 
 from lifehub.api.exceptions.provider import (
@@ -20,6 +22,11 @@ router = APIRouter(
     tags=["provider"],
     dependencies=[Depends(get_user)],
 )
+
+
+class OAuthTokenRequestFailedException(HTTPException):
+    def __init__(self, response: requests.Response):
+        super().__init__(response.status_code, response.text)
 
 
 def verify_provider(provider: str) -> Provider:
@@ -56,7 +63,7 @@ VerifyTokenProviderDep = Annotated[str, Depends(verify_token_provider)]
 VerifyBasicProviderDep = Annotated[str, Depends(verify_basic_provider)]
 
 
-@router.get("/{provider}/auth_url", response_model=str)
+@router.get("/{provider}/oauth_url", response_model=str)
 async def oauth_authorization_url(
     provider: VerifyOAuthProviderDep,
 ):
@@ -65,25 +72,65 @@ async def oauth_authorization_url(
     return config.build_auth_url()
 
 
-@router.get(
-    "/{provider}/token_url",
-    dependencies=[Depends(verify_oauth_provider)],
-    response_model=str,
-)
-async def oauth_token_url(
+@router.get("/{provider}/oauth_token")
+async def oauth_token(
     provider: VerifyOAuthProviderDep,
+    user: Annotated[User, Depends(get_user)],
+    session: Annotated[Session, Depends(get_session)],
     code: str,
 ):
     db_client = OAuthProviderConfigDBClient()
-    config = db_client.get_by_name(provider)
-    return config.build_token_url(code)
+    config = db_client.get(provider.id)
+    url = config.build_token_url(code)
+    res = requests.post(url)
+    if res.status_code != 200:
+        raise OAuthTokenRequestFailedException(res)
+    data = res.json()
+
+    created_at: dt.datetime = dt.datetime.fromtimestamp(data["created_at"])
+    expires_at: dt.datetime = created_at + dt.timedelta(seconds=data["expires_in"])
+
+    api_token = APIToken(
+        user_id=user.id,
+        provider_id=provider.id,
+        token=data["access_token"],
+        refresh_token=data.get("refresh_token"),
+        created_at=created_at,
+        expires_at=expires_at,
+    )
+    session.add(api_token)
+    user = session.merge(user)
+    user.providers.append(provider)
+    session.add(user)
+    session.commit()
+
+
+@router.post("/{provider}/token")
+async def token_login(
+    provider: VerifyTokenProviderDep,
+    user: Annotated[User, Depends(get_user)],
+    session: Annotated[Session, Depends(get_session)],
+    token: Annotated[str, Form()],
+):
+    api_token = APIToken(
+        user_id=user.id,
+        provider_id=provider.id,
+        token=token,
+        created_at=None,
+        expires_at=None,
+    )
+    session.add(api_token)
+    user = session.merge(user)
+    user.providers.append(provider)
+    session.add(user)
+    session.commit()
 
 
 @router.post("/{provider}/login")
 async def basic_login(
-    session: Annotated[Session, Depends(get_session)],
     provider: VerifyBasicProviderDep,
     user: Annotated[User, Depends(get_user)],
+    session: Annotated[Session, Depends(get_session)],
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     url: Annotated[str, Form()],

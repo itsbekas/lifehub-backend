@@ -8,7 +8,9 @@ class OAuthProviderConfigDBClient(BaseDBClient[OAuthProviderConfig]):
     def __init__(self):
         super().__init__(OAuthProviderConfig)
 
-    def get_by_name(self, name: str) -> OAuthProviderConfig | None:
+    def get(self, provider_id: int) -> OAuthProviderConfig | None:
         with self.session as session:
-            query = select(OAuthProviderConfig).where(OAuthProviderConfig.name == name)
+            query = select(OAuthProviderConfig).where(
+                OAuthProviderConfig.provider_id == provider_id
+            )
             return session.exec(query).one_or_none()
