@@ -2,6 +2,7 @@ from os import getenv
 
 from lifehub.clients.db.service import DatabaseService
 from lifehub.models.provider import OAuthProviderConfig, Provider, ProviderType
+from lifehub.models.util import Module
 
 
 def oauth_redirect_uri(provider_name: str) -> str:
@@ -40,3 +41,23 @@ def setup_providers():
         for name in oauth_provider_configs:
             session.add(oauth_provider_configs[name])
         session.commit()
+
+    modules = {
+        "networth": Module(
+            name="networth",
+            providers=[providers["trading212"], providers["ynab"]],
+            users=[],
+        ),
+        "server": Module(
+            name="server",
+            providers=[providers["qbittorrent"]],
+            users=[],
+        ),
+    }
+
+    with db.get_session() as session:
+        for name in modules:
+            session.add(modules[name])
+        session.commit()
+        for name in modules:
+            session.refresh(modules[name])
