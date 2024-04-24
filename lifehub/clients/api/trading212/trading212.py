@@ -10,6 +10,9 @@ class Trading212APIClient(APIClient):
     def _get(self, endpoint: str, params: dict = {}):
         return self._get_with_token(endpoint, params=params)
 
+    def _test(self):
+        self.get_account_metadata()
+
     def get_account_cash(self) -> AccountCash | None:
         try:
             res = self._get("equity/account/cash")

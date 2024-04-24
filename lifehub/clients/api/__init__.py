@@ -7,3 +7,9 @@ __all__ = [
     "YNABAPIClient",
     "QBittorrentAPIClient",
 ]
+
+api_clients = {
+    "trading212": Trading212APIClient,
+    "ynab": YNABAPIClient,
+    "qbittorrent": QBittorrentAPIClient,
+}

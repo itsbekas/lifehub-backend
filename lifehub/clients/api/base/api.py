@@ -27,6 +27,12 @@ class APIClient:
             )
             self.token = APITokenDBClient(session).get(user, self.provider).token
 
+    def _get(self, endpoint: str):
+        """
+        GET request to the API
+        """
+        raise NotImplementedError
+
     def _get_basic(self, endpoint: str, params: dict = {}):
         """
         Basic GET request to the API
@@ -101,3 +107,19 @@ class APIClient:
         """
 
         return getenv(env_var)
+
+    def _test(self):
+        """
+        Test connection to the API
+        """
+        raise NotImplementedError
+
+    def test_connection(self):
+        """
+        Test connection to the API
+        """
+        try:
+            self._test()
+            return True
+        except APIException:
+            return False

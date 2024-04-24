@@ -16,6 +16,9 @@ class YNABAPIClient(APIClient):
         # TODO: Save endpoint's last knowledge of server
         return self._get_with_token_bearer(endpoint)
 
+    def _test(self):
+        self.get_user()
+
     def get_user(self):
         return self._get("user")
 
