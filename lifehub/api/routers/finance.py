@@ -1,12 +1,9 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from lifehub.api.exceptions.user import NoDataForUserException
-from lifehub.api.routers.dependencies import get_user
+from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.models.finance import Networth
-from lifehub.models.user import User
 
 router = APIRouter(
     prefix="/finance",
@@ -16,9 +13,10 @@ router = APIRouter(
 
 @router.get("/networth", response_model=Networth)
 async def networth(
-    user: Annotated[User, Depends(get_user)],
+    user: UserDep,
+    session: SessionDep,
 ):
-    db_client = NetworthDBClient(user.id)
+    db_client = NetworthDBClient(user, session)
     networth = db_client.get_latest()
 
     if networth is None:

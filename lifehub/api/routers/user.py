@@ -1,14 +1,13 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, HTTPException, status
-from sqlmodel import Session
 
 from lifehub.api.lib.user import (
     authenticate_user,
     create_user,
     get_access_token,
 )
-from lifehub.api.routers.dependencies import get_session, get_user
+from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.util import ModuleDBClient
 from lifehub.models.user import User, UserToken
 from lifehub.models.util import Module
@@ -66,8 +65,8 @@ async def signup(
 
 @router.post("/module")
 async def add_module(
-    session: Annotated[Session, Depends(get_session)],
-    user: Annotated[User, Depends(get_user)],
+    user: UserDep,
+    session: SessionDep,
     module: Annotated[Module, Depends(verify_module)],
 ):
     user = session.merge(user)

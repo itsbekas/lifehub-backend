@@ -3,19 +3,17 @@ from typing import Annotated
 
 import requests
 from fastapi import APIRouter, Depends, Form, HTTPException
-from sqlmodel import Session
 
 from lifehub.api.exceptions.provider import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
-from lifehub.api.routers.dependencies import get_session, get_user
+from lifehub.api.routers.dependencies import SessionDep, UserDep, get_user
 from lifehub.clients.db.provider import (
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
 from lifehub.models.provider import APIToken, Provider
-from lifehub.models.user import User
 
 router = APIRouter(
     prefix="/provider",
@@ -66,8 +64,9 @@ VerifyBasicProviderDep = Annotated[str, Depends(verify_basic_provider)]
 @router.get("/{provider}/oauth_url", response_model=str)
 async def oauth_authorization_url(
     provider: VerifyOAuthProviderDep,
+    session: SessionDep,
 ):
-    db_client = OAuthProviderConfigDBClient()
+    db_client = OAuthProviderConfigDBClient(session)
     config = db_client.get(provider.id)
     return config.build_auth_url()
 
@@ -75,8 +74,8 @@ async def oauth_authorization_url(
 @router.get("/{provider}/oauth_token")
 async def oauth_token(
     provider: VerifyOAuthProviderDep,
-    user: Annotated[User, Depends(get_user)],
-    session: Annotated[Session, Depends(get_session)],
+    user: UserDep,
+    session: SessionDep,
     code: str,
 ):
     db_client = OAuthProviderConfigDBClient()
@@ -108,8 +107,8 @@ async def oauth_token(
 @router.post("/{provider}/token")
 async def token_login(
     provider: VerifyTokenProviderDep,
-    user: Annotated[User, Depends(get_user)],
-    session: Annotated[Session, Depends(get_session)],
+    user: UserDep,
+    session: SessionDep,
     token: str,
 ):
     api_token = APIToken(
@@ -129,8 +128,8 @@ async def token_login(
 @router.post("/{provider}/login")
 async def basic_login(
     provider: VerifyBasicProviderDep,
-    user: Annotated[User, Depends(get_user)],
-    session: Annotated[Session, Depends(get_session)],
+    user: UserDep,
+    session: SessionDep,
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     url: Annotated[str, Form()],
