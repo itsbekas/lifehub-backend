@@ -1,13 +1,13 @@
 import datetime as dt
 
-from sqlmodel import select
+from sqlmodel import Session, select
 
 from lifehub.clients.db.base import BaseDBClient
 from lifehub.models.util import FetchUpdate, Module
 
 
 class FetchUpdateDBClient(BaseDBClient[FetchUpdate]):
-    def __init__(self, session=None):
+    def __init__(self, session: Session):
         super().__init__(FetchUpdate, session)
 
     def get(self, module: Module) -> FetchUpdate:
