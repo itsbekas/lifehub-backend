@@ -10,17 +10,17 @@ from lifehub.api.lib.user import (
     CredentialsException,
     oauth2_scheme,
 )
-from lifehub.clients.db.service import DatabaseService
+from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient
 from lifehub.models.user import User
 
 
-def get_session():
-    with DatabaseService().get_session() as session:
+def yield_session():
+    with get_session() as session:
         yield session
 
 
-SessionDep = Annotated[Session, Depends(get_session)]
+SessionDep = Annotated[Session, Depends(yield_session)]
 
 
 def get_user(

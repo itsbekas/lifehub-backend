@@ -3,6 +3,7 @@ from os import getenv
 import requests
 
 from lifehub.clients.db.provider import APITokenDBClient, ProviderDBClient
+from lifehub.clients.db.service import get_session
 from lifehub.models.provider import Provider
 from lifehub.models.user import User
 
@@ -20,8 +21,11 @@ class APIException(Exception):
 
 class APIClient:
     def __init__(self, user: User):
-        self.provider: Provider = ProviderDBClient().get_by_name(self.provider_name)
-        self.token = APITokenDBClient().get(user, self.provider).token
+        with get_session() as session:
+            self.provider: Provider = ProviderDBClient(session).get_by_name(
+                self.provider_name
+            )
+            self.token = APITokenDBClient(session).get(user, self.provider).token
 
     def _get_basic(self, endpoint: str, params: dict = {}):
         """

@@ -15,3 +15,7 @@ class DatabaseService:
 
     def get_session(self):
         return Session(self.engine)
+
+
+def get_session():
+    return DatabaseService().get_session()

@@ -27,12 +27,14 @@ class OAuthTokenRequestFailedException(HTTPException):
         super().__init__(response.status_code, response.text)
 
 
-def verify_provider(provider: str) -> Provider:
-    db_client = ProviderDBClient()
-    p = db_client.get_by_name(provider)
-    if not p:
-        raise ProviderDoesNotExistException(provider)
-    return p
+def verify_provider(
+    provider_name: str,
+    session: SessionDep,
+) -> Provider:
+    provider = ProviderDBClient(session).get_by_name(provider_name)
+    if not provider:
+        raise ProviderDoesNotExistException(provider_name)
+    return provider
 
 
 VerifyProviderDep = Annotated[Provider, Depends(verify_provider)]
@@ -61,7 +63,7 @@ VerifyTokenProviderDep = Annotated[str, Depends(verify_token_provider)]
 VerifyBasicProviderDep = Annotated[str, Depends(verify_basic_provider)]
 
 
-@router.get("/{provider}/oauth_url", response_model=str)
+@router.get("/{provider_name}/oauth_url", response_model=str)
 async def oauth_authorization_url(
     provider: VerifyOAuthProviderDep,
     session: SessionDep,
@@ -71,16 +73,14 @@ async def oauth_authorization_url(
     return config.build_auth_url()
 
 
-@router.get("/{provider}/oauth_token")
+@router.get("/{provider_name}/oauth_token")
 async def oauth_token(
     provider: VerifyOAuthProviderDep,
     user: UserDep,
     session: SessionDep,
     code: str,
 ):
-    db_client = OAuthProviderConfigDBClient()
-    config = db_client.get(provider.id)
-    url = config.build_token_url(code)
+    url = OAuthProviderConfigDBClient(session).get(provider.id).build_token_url(code)
     res = requests.post(url)
     if res.status_code != 200:
         raise OAuthTokenRequestFailedException(res)
@@ -104,7 +104,7 @@ async def oauth_token(
     session.commit()
 
 
-@router.post("/{provider}/token")
+@router.post("/{provider_name}/token")
 async def token_login(
     provider: VerifyTokenProviderDep,
     user: UserDep,
@@ -125,7 +125,7 @@ async def token_login(
     session.commit()
 
 
-@router.post("/{provider}/login")
+@router.post("/{provider_name}/login")
 async def basic_login(
     provider: VerifyBasicProviderDep,
     user: UserDep,

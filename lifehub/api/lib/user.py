@@ -6,6 +6,7 @@ from argon2 import PasswordHasher
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
+from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient, UserTokenDBClient
 from lifehub.models.user import User, UserToken
 
@@ -30,9 +31,23 @@ def verify_password(password: str, hashed_password: str) -> bool:
         return False
 
 
+def get_user(username: str) -> User | None:
+    with get_session() as session:
+        db_client = UserDBClient(session)
+        return db_client.get_by_username(username)
+
+
+def add_user(user: User) -> User:
+    with get_session() as session:
+        db_client = UserDBClient(session)
+        db_client.add(user)
+        db_client.commit()
+        db_client.refresh(user)
+        return user
+
+
 def authenticate_user(username: str, password: str) -> User | None:
-    db_client = UserDBClient()
-    user = db_client.get_by_username(username)
+    user = get_user(username)
     if not user or not verify_password(password, user.password):
         raise CredentialsException()
     return user
@@ -40,11 +55,11 @@ def authenticate_user(username: str, password: str) -> User | None:
 
 def create_user(username: str, password: str, name: str) -> User:
     hashed_password = hash_password(password)
-    db_client = UserDBClient()
-    if db_client.get_by_username(username):
+    user = get_user(username)
+    if user:
         raise UserExistsException()
     new_user = User(username=username, password=hashed_password, name=name)
-    return db_client.add(new_user)
+    return add_user(new_user)
 
 
 def create_access_token(user: User) -> UserToken:
@@ -62,12 +77,18 @@ def create_access_token(user: User) -> UserToken:
         created_at=created_at,
         expires_at=expires_at,
     )
-    return UserTokenDBClient(user=user).add(token)
+    with get_session() as session:
+        db_client = UserTokenDBClient(user, session)
+        db_client.add(token)
+        db_client.commit()
+        db_client.refresh(token)
+    return token
 
 
 def get_access_token(user: User) -> UserToken:
-    db_client = UserTokenDBClient(user)
-    token = db_client.get_one_or_none()
+    with get_session() as session:
+        db_client = UserTokenDBClient(user, session)
+        token = db_client.get_one_or_none()
     if token and token.expires_at > dt.datetime.now():
         return token
     return create_access_token(user)

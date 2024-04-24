@@ -8,8 +8,8 @@ class NetworthFetcher(BaseFetcher):
     module_name = "networth"
 
     def fetch_data(self):
-        ynab = YNABAPIClient(self.user.id)
-        t212 = Trading212APIClient(self.user.id)
+        ynab = YNABAPIClient(self.user)
+        t212 = Trading212APIClient(self.user)
 
         ynab_accounts = ynab.get_accounts()
         t212_cash = t212.get_account_cash()
@@ -21,13 +21,14 @@ class NetworthFetcher(BaseFetcher):
         total = bank_cash + uninvested_cash + invested + returns
 
         networth = Networth(
-            bank_cash=bank_cash,
-            uninvested_cash=uninvested_cash,
+            user_id=self.user.id,
+            bank=bank_cash,
+            uninvested=uninvested_cash,
             invested=invested,
             returns=returns,
             total=total,
         )
 
-        db = NetworthDBClient(self.user.id)
+        db = NetworthDBClient(self.user, self.session)
 
         db.add(networth)

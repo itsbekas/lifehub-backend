@@ -13,4 +13,4 @@ class APITokenDBClient(BaseDBClient[APIToken]):
         stmt = select(APIToken).where(
             APIToken.user_id == user.id, APIToken.provider_id == provider.id
         )
-        return self.session.exec(stmt).scalar_one_or_none()
+        return self.session.exec(stmt).one_or_none()

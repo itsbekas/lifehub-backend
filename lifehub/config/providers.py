@@ -1,6 +1,6 @@
 from os import getenv
 
-from lifehub.clients.db.service import DatabaseService
+from lifehub.clients.db.service import get_session
 from lifehub.models.provider import OAuthProviderConfig, Provider, ProviderType
 from lifehub.models.util import FetchUpdate, Module
 
@@ -10,15 +10,13 @@ def oauth_redirect_uri(provider_name: str) -> str:
 
 
 def setup_providers():
-    db = DatabaseService()
-
     providers = {
         "trading212": Provider(name="trading212", type=ProviderType.token),
         "ynab": Provider(name="ynab", type=ProviderType.oauth),
         "qbittorrent": Provider(name="qbittorrent", type=ProviderType.basic),
     }
 
-    with db.get_session() as session:
+    with get_session() as session:
         for name in providers:
             session.add(providers[name])
         session.commit()
@@ -37,7 +35,7 @@ def setup_providers():
         ),
     }
 
-    with db.get_session() as session:
+    with get_session() as session:
         for name in oauth_provider_configs:
             session.add(oauth_provider_configs[name])
         session.commit()
@@ -60,7 +58,7 @@ def setup_providers():
         ),
     }
 
-    with db.get_session() as session:
+    with get_session() as session:
         for name in modules:
             session.add(modules[name])
         session.commit()
@@ -73,7 +71,7 @@ def setup_providers():
         "t212history": FetchUpdate(module_id=modules["t212history"].id),
     }
 
-    with db.get_session() as session:
+    with get_session() as session:
         for name in fetch_updates:
             session.add(fetch_updates[name])
         session.commit()

@@ -34,12 +34,11 @@ class UserDoesNotHaveProvidersException(HTTPException):
         )
 
 
-def verify_module(module_name: str) -> Module:
-    db_client = ModuleDBClient()
-    m = db_client.get_by_name(module_name)
-    if not m:
+def verify_module(module_name: str, session: SessionDep) -> Module:
+    module = ModuleDBClient(session).get_by_name(module_name)
+    if not module:
         raise ModuleDoesNotExistException(module_name)
-    return m
+    return module
 
 
 @router.post("/login", response_model=UserToken)
