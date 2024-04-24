@@ -28,4 +28,4 @@ class BaseFetcher:
         raise NotImplementedError("fetch_data must be implemented in the subclass")
 
     def _update_fetch_timestamp(self):
-        FetchUpdateDBClient().update(self.module.id)
+        FetchUpdateDBClient().update(self.module)

@@ -59,7 +59,7 @@ async def signup(
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
 ):
-    new_user = create_user(username, password, name)
+    new_user: User = create_user(username, password, name)
     token = get_access_token(new_user)
     return token
 

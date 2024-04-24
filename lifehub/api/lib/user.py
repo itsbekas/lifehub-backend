@@ -62,11 +62,11 @@ def create_access_token(user: User) -> UserToken:
         created_at=created_at,
         expires_at=expires_at,
     )
-    return UserTokenDBClient(user_id=user.id).add(token)
+    return UserTokenDBClient(user=user).add(token)
 
 
 def get_access_token(user: User) -> UserToken:
-    db_client = UserTokenDBClient(user_id=user.id)
+    db_client = UserTokenDBClient(user)
     token = db_client.get_one_or_none()
     if token and token.expires_at > dt.datetime.now():
         return token
