@@ -12,7 +12,6 @@ from lifehub.api.routers import (  # noqa: E402
     finance_router,
     provider_router,
     server_router,
-    tasks_router,
 )
 
 #### Config ####
@@ -42,7 +41,6 @@ app.add_middleware(
 api = APIRouter()
 api.include_router(auth_router)
 api.include_router(finance_router)
-api.include_router(tasks_router)
 api.include_router(server_router)
 api.include_router(provider_router)
 
