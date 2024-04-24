@@ -7,8 +7,8 @@ from lifehub.models.util import FetchUpdate, Module
 
 
 class FetchUpdateDBClient(BaseDBClient[FetchUpdate]):
-    def __init__(self):
-        super().__init__(FetchUpdate)
+    def __init__(self, session=None):
+        super().__init__(FetchUpdate, session)
 
     def get(self, module: Module) -> FetchUpdate:
         stmt = select(FetchUpdate).where(FetchUpdate.module_id == module.id)

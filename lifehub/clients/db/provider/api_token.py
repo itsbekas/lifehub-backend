@@ -9,10 +9,9 @@ class APITokenDBClient(BaseDBClient[APIToken]):
     def __init__(self):
         super().__init__(APIToken)
 
-    def get(self, user: User, provider: Provider) -> APIToken:
+    def get(self, user: User, provider: Provider) -> APIToken | None:
         with self.session as session:
             stmt = select(APIToken).where(
                 APIToken.user_id == user.id, APIToken.provider_id == provider.id
             )
-            result = session.exec(stmt)
-            return result.one()
+            return session.exec(stmt).scalar_one_or_none()

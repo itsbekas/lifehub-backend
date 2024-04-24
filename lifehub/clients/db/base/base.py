@@ -8,9 +8,9 @@ BaseModel = TypeVar("BaseModel", bound=SQLModel)
 
 
 class BaseDBClient(Generic[BaseModel]):
-    def __init__(self, model: Type[BaseModel]):
+    def __init__(self, model: Type[BaseModel], session: Session = None):
         self.model: Type[BaseModel] = model
-        self.session: Session = DatabaseService().get_session()
+        self.session = session or DatabaseService().get_session()
 
     def add(self, obj: BaseModel) -> BaseModel:
         with self.session as session:

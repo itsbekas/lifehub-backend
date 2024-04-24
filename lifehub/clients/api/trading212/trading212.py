@@ -1,14 +1,17 @@
 from lifehub.clients.api.base import APIClient, APIException
+from lifehub.clients.db.provider import APITokenDBClient
+from lifehub.models.user import User
 
 from .models import AccountCash, AccountMetadata, Order, Transaction
 
 
 class Trading212APIClient(APIClient):
+    provider_name = "trading212"
     base_url = "https://live.trading212.com/api/v0"
 
-    def __init__(self):
+    def __init__(self, user: User):
         super().__init__()
-        self.token = self._load_env_token("T212_TOKEN")
+        self.token = APITokenDBClient().get(user, self.provider).token
 
     def _get(self, endpoint: str, params: dict = {}):
         return self._get_with_token(endpoint, params=params)

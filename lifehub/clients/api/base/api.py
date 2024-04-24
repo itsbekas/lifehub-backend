@@ -2,6 +2,9 @@ from os import getenv
 
 import requests
 
+from lifehub.clients.db.provider import ProviderDBClient
+from lifehub.models.provider import Provider
+
 
 class APIException(Exception):
     def __init__(self, api: str, url: str, status_code: int, msg: str):
@@ -15,12 +18,8 @@ class APIException(Exception):
 
 
 class APIClient:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+    def __init__(self):
+        self.provider: Provider = ProviderDBClient().get_by_name(self.provider_name)
 
     def _get_basic(self, endpoint: str, params: dict = {}):
         """
