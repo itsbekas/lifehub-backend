@@ -34,6 +34,11 @@ class InvalidTokenException(HTTPException):
         super().__init__(401, "Invalid token")
 
 
+class NoTokenException(HTTPException):
+    def __init__(self):
+        super().__init__(404, "No token found")
+
+
 def verify_provider(
     provider_name: str,
     session: SessionDep,
@@ -112,7 +117,7 @@ async def oauth_token(
 
 
 @router.post("/{provider_name}/token")
-async def token_login(
+async def add_token(
     provider: VerifyTokenProviderDep,
     user: UserDep,
     session: SessionDep,
@@ -132,8 +137,24 @@ async def token_login(
     session.commit()
 
 
+@router.put("/{provider_name}/token")
+async def modify_token(
+    provider: VerifyTokenProviderDep,
+    user: UserDep,
+    session: SessionDep,
+    token: str,
+):
+    api_token = APITokenDBClient(session).get(user, provider)
+    if api_token is None:
+        raise NoTokenException()
+    api_token.token = token
+    api_token.created_at = dt.datetime.now()
+    session.add(api_token)
+    session.commit()
+
+
 @router.delete("/{provider_name}/token")
-async def token_logout(
+async def remove_token(
     provider: VerifyTokenProviderDep,
     user: UserDep,
     session: SessionDep,
@@ -155,7 +176,7 @@ async def basic_login(
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
-        token=f"{username}:{password}:{url}",
+        token=f"{username}:{password};{url}",
         created_at=None,
         expires_at=None,
     )
@@ -169,6 +190,10 @@ async def basic_login(
 @router.get("/{provider_name}/test")
 async def test_connection(provider: VerifyProviderDep, user: UserDep):
     APIClient = api_clients.get(provider.name)
-    client = APIClient(user)
+    try:
+        client = APIClient(user)
+    except AttributeError:
+        raise NoTokenException()
+
     if not client.test_connection():
         raise InvalidTokenException()
