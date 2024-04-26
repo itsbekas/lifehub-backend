@@ -32,25 +32,17 @@ class YNABAPIClient(APIClient):
         return self._get(f"budgets/{budget}/settings")
 
     def get_accounts(self, budget: str = "last-used"):
-        try:
-            res = self._get(f"budgets/{budget}/accounts")
-            data = res.get("data", {}).get("accounts", [])
-            return [Account.from_response(a) for a in data]
-        except Exception as e:
-            print(e)
-            return []
+        res = self._get(f"budgets/{budget}/accounts")
+        data = res.get("data", {}).get("accounts", [])
+        return [Account.from_response(a) for a in data]
 
     def get_account(self, account: str):
         return self._get(f"budgets/{self.budget}/accounts/{account}")
 
     def get_categories(self):
-        try:
-            res = self._get(f"budgets/{self.budget}/categories")
-            data = res.get("data", {}).get("category_groups", [])
-            return [CategoryGroup.from_response(c) for c in data]
-        except Exception as e:
-            print(e)
-            return []
+        res = self._get(f"budgets/{self.budget}/categories")
+        data = res.get("data", {}).get("category_groups", [])
+        return [CategoryGroup.from_response(c) for c in data]
 
     def get_category(self, category: str):
         return self._get(f"budgets/{self.budget}/categories/{category}")

@@ -11,6 +11,7 @@ from lifehub.api.exceptions.provider import (
 from lifehub.api.routers.dependencies import SessionDep, UserDep, get_user
 from lifehub.clients.api import api_clients
 from lifehub.clients.db.provider import (
+    APITokenDBClient,
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
@@ -30,7 +31,7 @@ class OAuthTokenRequestFailedException(HTTPException):
 
 class InvalidTokenException(HTTPException):
     def __init__(self):
-        super().__init(401, "Invalid token")
+        super().__init__(401, "Invalid token")
 
 
 def verify_provider(
@@ -131,6 +132,17 @@ async def token_login(
     session.commit()
 
 
+@router.delete("/{provider_name}/token")
+async def token_logout(
+    provider: VerifyTokenProviderDep,
+    user: UserDep,
+    session: SessionDep,
+):
+    api_token = APITokenDBClient(session).get(user, provider)
+    session.delete(api_token)
+    session.commit()
+
+
 @router.post("/{provider_name}/login")
 async def basic_login(
     provider: VerifyBasicProviderDep,
@@ -155,10 +167,7 @@ async def basic_login(
 
 
 @router.get("/{provider_name}/test")
-async def test_connection(
-    provider: VerifyProviderDep,
-    user=UserDep,
-):
+async def test_connection(provider: VerifyProviderDep, user: UserDep):
     APIClient = api_clients.get(provider.name)
     client = APIClient(user)
     if not client.test_connection():

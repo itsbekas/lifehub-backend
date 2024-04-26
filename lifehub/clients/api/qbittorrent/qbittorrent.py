@@ -24,12 +24,8 @@ class QBittorrentAPIClient(APIClient):
         return self._get_with_cookies(endpoint)
 
     def get_main_data(self) -> MainData | None:
-        try:
-            res = self._get("sync/maindata")
-            return MainData.from_response(res)
-        except Exception as e:
-            print(e)
-            return None
+        res = self._get("sync/maindata")
+        return MainData.from_response(res)
 
     def _error_msg(self, res: Response):
         return res.text
