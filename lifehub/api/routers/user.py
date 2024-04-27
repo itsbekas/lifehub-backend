@@ -1,6 +1,7 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi import APIRouter, Depends, Form, HTTPException
+from sqlalchemy import exc as sa_exc
 
 from lifehub.api.lib.user import (
     authenticate_user,
@@ -9,6 +10,7 @@ from lifehub.api.lib.user import (
 )
 from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.util import ModuleDBClient
+from lifehub.models.provider.provider import Provider
 from lifehub.models.user import User, UserToken
 from lifehub.models.util import Module
 
@@ -18,26 +20,10 @@ router = APIRouter(
 )
 
 
-class ModuleDoesNotExistException(HTTPException):
-    def __init__(self, module: str):
-        super().__init__(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Module {module} does not exist",
-        )
-
-
-class UserDoesNotHaveProvidersException(HTTPException):
-    def __init__(self, providers: list[str]):
-        super().__init__(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"User does not have providers: {', '.join(providers)}",
-        )
-
-
 def verify_module(module_name: str, session: SessionDep) -> Module:
     module = ModuleDBClient(session).get_by_name(module_name)
     if not module:
-        raise ModuleDoesNotExistException(module_name)
+        raise HTTPException(404, f"Module {module_name} does not exist")
     return module
 
 
@@ -78,8 +64,29 @@ async def add_module(
             missed_providers.append(provider.name)
 
     if missed_providers:
-        raise UserDoesNotHaveProvidersException(missed_providers)
+        raise HTTPException(
+            403, f"User is missing providers: {', '.join(missed_providers)}"
+        )
 
     user.modules.append(module)
     session.add(user)
-    session.commit()
+
+    try:
+        session.commit()
+    except sa_exc.IntegrityError as e:
+        session.rollback()
+        match e.orig.errno:
+            case 1062:
+                raise HTTPException(409, f"User already has module {module.name}")
+            case _:
+                raise e
+
+
+@router.get("/providers", response_model=list[Provider])
+async def get_user_providers(user: UserDep):
+    return user.providers
+
+
+@router.get("/modules", response_model=list[Module])
+async def get_user_modules(user: UserDep):
+    return user.modules
