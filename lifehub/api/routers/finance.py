@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from lifehub.api.exceptions.user import NoDataForUserException
+from lifehub.api.exceptions import NoUserDataForModuleException
 from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.models.finance import Networth
@@ -20,6 +20,6 @@ async def networth(
     networth = db_client.get_latest()
 
     if networth is None:
-        raise NoDataForUserException()
+        raise NoUserDataForModuleException(user.username, "networth")
 
     return networth

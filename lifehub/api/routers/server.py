@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from lifehub.api.exceptions.user import NoDataForUserException
+from lifehub.api.exceptions import NoUserDataForModuleException
 from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.server import QBittorrentStatsDBClient
 from lifehub.models.server import QBittorrentStats
@@ -17,6 +17,6 @@ async def stats(user: UserDep, session: SessionDep) -> QBittorrentStats:
     stats = db_client.get_latest()
 
     if stats is None:
-        raise NoDataForUserException()
+        raise NoUserDataForModuleException(user.username, "qbit-stats")
 
     return stats

@@ -11,7 +11,7 @@ class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):
     def __init__(self, model: Type[BaseModel], user: User, session: Session):
         super().__init__(model, user, session)
 
-    def get_latest(self) -> BaseModel:
+    def get_latest(self) -> BaseModel | None:
         statement = (
             select(self.model)
             .where(self.model.user_id == self.user.id)

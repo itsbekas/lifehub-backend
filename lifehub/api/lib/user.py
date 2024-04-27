@@ -6,11 +6,10 @@ from argon2 import PasswordHasher
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
+from lifehub.api.exceptions import CredentialsException, UserExistsException
 from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient, UserTokenDBClient
 from lifehub.models.user import User, UserToken
-
-from ..exceptions.user import CredentialsException, UserExistsException
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]

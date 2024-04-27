@@ -4,7 +4,7 @@ from typing import Annotated
 import requests
 from fastapi import APIRouter, Depends, Form, HTTPException
 
-from lifehub.api.exceptions.provider import (
+from lifehub.api.exceptions import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
