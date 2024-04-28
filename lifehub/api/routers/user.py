@@ -1,7 +1,10 @@
+import datetime as dt
+import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy import exc as sa_exc
+from sqlmodel import SQLModel
 
 from lifehub.api.lib.user import (
     authenticate_user,
@@ -20,6 +23,13 @@ router = APIRouter(
 )
 
 
+class UserLogin(SQLModel):
+    user_id: uuid.UUID
+    name: str
+    access_token: str
+    expires_at: dt.datetime
+
+
 def verify_module(module_name: str, session: SessionDep) -> Module:
     module = ModuleDBClient(session).get_by_name(module_name)
     if not module:
@@ -27,14 +37,20 @@ def verify_module(module_name: str, session: SessionDep) -> Module:
     return module
 
 
-@router.post("/login", response_model=UserToken)
+@router.post("/login", response_model=UserLogin)
 async def login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
 ):
     user = authenticate_user(username, password)
     token = get_access_token(user)
-    return token
+    login = UserLogin(
+        user_id=user.id,
+        name=user.name,
+        access_token=token.access_token,
+        expires_at=token.expires_at,
+    )
+    return login
 
 
 @router.post("/signup", response_model=UserToken)
@@ -45,7 +61,13 @@ async def signup(
 ):
     new_user: User = create_user(username, password, name)
     token = get_access_token(new_user)
-    return token
+    login = UserLogin(
+        user_id=new_user.id,
+        name=new_user.name,
+        access_token=token.access_token,
+        expires_at=token.expires_at,
+    )
+    return login
 
 
 @router.post("/module")
