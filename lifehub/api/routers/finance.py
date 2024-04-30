@@ -5,10 +5,7 @@ from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.models.finance import Networth
 
-router = APIRouter(
-    prefix="/finance",
-    tags=["finance"],
-)
+router = APIRouter()
 
 
 @router.get("/networth", response_model=Networth)

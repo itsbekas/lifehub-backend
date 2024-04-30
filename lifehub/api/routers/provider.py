@@ -18,8 +18,6 @@ from lifehub.clients.db.provider import (
 from lifehub.models.provider import APIToken, Provider
 
 router = APIRouter(
-    prefix="/provider",
-    tags=["provider"],
     dependencies=[Depends(get_user)],
 )
 

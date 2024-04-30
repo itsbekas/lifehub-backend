@@ -17,10 +17,7 @@ from lifehub.models.provider.provider import Provider, ProviderType
 from lifehub.models.user import User, UserToken
 from lifehub.models.util import Module
 
-router = APIRouter(
-    prefix="/user",
-    tags=["user"],
-)
+router = APIRouter()
 
 
 class UserLogin(SQLModel):

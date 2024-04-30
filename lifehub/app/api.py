@@ -8,10 +8,10 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 from lifehub.api.routers import (  # noqa: E402
-    auth_router,
     finance_router,
     provider_router,
     server_router,
+    user_router,
 )
 
 #### Config ####
@@ -39,10 +39,10 @@ app.add_middleware(
 
 #### Routers ####
 api = APIRouter()
-api.include_router(auth_router)
-api.include_router(finance_router)
-api.include_router(server_router)
-api.include_router(provider_router)
+api.include_router(user_router, prefix="/user", tags=["user"])
+api.include_router(finance_router, prefix="/finance", tags=["finance"])
+api.include_router(server_router, prefix="/server", tags=["server"])
+api.include_router(provider_router, prefix="/provider", tags=["provider"])
 
 # TODO: Eventually replace this with a reverse proxy
 app.include_router(api, prefix="/api/v0")

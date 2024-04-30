@@ -5,10 +5,7 @@ from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.server import QBittorrentStatsDBClient
 from lifehub.models.server import QBittorrentStats
 
-router = APIRouter(
-    prefix="/server",
-    tags=["server"],
-)
+router = APIRouter()
 
 
 @router.get("/qbit-stats", response_model=QBittorrentStats)
