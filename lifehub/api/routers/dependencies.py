@@ -1,10 +1,13 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
 from sqlmodel import Session
 
-from lifehub.api.exceptions import ProviderDoesNotExistException
+from lifehub.api.exceptions import (
+    ProviderDoesNotExistException,
+    ProviderTypeInvalidException,
+)
 from lifehub.api.lib.user import (
     AUTH_ALGORITHM,
     AUTH_SECRET_KEY,
@@ -14,8 +17,10 @@ from lifehub.api.lib.user import (
 from lifehub.clients.db.provider.provider import ProviderDBClient
 from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient
+from lifehub.clients.db.util.module import ModuleDBClient
 from lifehub.models.provider.provider import Provider
 from lifehub.models.user import User
+from lifehub.models.util.module import Module
 
 
 def yield_session():
@@ -56,3 +61,36 @@ def get_provider(
 
 
 ProviderDep = Annotated[Provider, Depends(get_provider)]
+
+
+def get_oauth_provider(provider: ProviderDep) -> Provider:
+    if provider.type != "oauth":
+        raise ProviderTypeInvalidException("OAuth")
+    return provider
+
+
+def get_token_provider(provider: ProviderDep) -> Provider:
+    if provider.type != "token":
+        raise ProviderTypeInvalidException("Token")
+    return provider
+
+
+def get_basic_provider(provider: ProviderDep) -> Provider:
+    if provider.type != "basic":
+        raise ProviderTypeInvalidException("Basic")
+    return provider
+
+
+OAuthProviderDep = Annotated[str, Depends(get_oauth_provider)]
+TokenProviderDep = Annotated[str, Depends(get_token_provider)]
+BasicProviderDep = Annotated[str, Depends(get_basic_provider)]
+
+
+def get_module(module_id: int, session: SessionDep):
+    module = ModuleDBClient(session).get_by_id(module_id)
+    if not module:
+        raise HTTPException(404, f"Module with ID {module_id} does not exist")
+    return module
+
+
+ModuleDep = Annotated[Module, Depends(get_module)]
