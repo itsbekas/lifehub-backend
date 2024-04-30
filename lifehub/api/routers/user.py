@@ -13,7 +13,7 @@ from lifehub.api.lib.user import (
 )
 from lifehub.api.routers.dependencies import SessionDep, UserDep
 from lifehub.clients.db.util import ModuleDBClient
-from lifehub.models.provider.provider import Provider
+from lifehub.models.provider.provider import Provider, ProviderType
 from lifehub.models.user import User, UserToken
 from lifehub.models.util import Module
 
@@ -104,11 +104,24 @@ async def add_module(
                 raise e
 
 
-@router.get("/providers", response_model=list[Provider])
+class ProviderWithModules(SQLModel):
+    id: int
+    name: str
+    type: ProviderType
+    modules: list[Module]
+
+
+@router.get("/providers", response_model=list[ProviderWithModules])
 async def get_user_providers(user: UserDep):
     return user.providers
 
 
-@router.get("/modules", response_model=list[Module])
+class ModuleWithProviders(SQLModel):
+    id: int
+    name: str
+    providers: list[Provider]
+
+
+@router.get("/modules", response_model=list[ModuleWithProviders])
 async def get_user_modules(user: UserDep):
     return user.modules
