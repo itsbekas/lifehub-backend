@@ -11,7 +11,8 @@ from lifehub.api.lib.user import (
     create_user,
     get_access_token,
 )
-from lifehub.api.routers.dependencies import SessionDep, UserDep
+from lifehub.api.routers.dependencies import ProviderDep, SessionDep, UserDep
+from lifehub.clients.db.provider.api_token import APITokenDBClient
 from lifehub.clients.db.util import ModuleDBClient
 from lifehub.models.provider.provider import Provider, ProviderType
 from lifehub.models.user import User, UserToken
@@ -111,6 +112,30 @@ class ProviderWithModules(SQLModel):
 @router.get("/providers", response_model=list[ProviderWithModules])
 async def get_user_providers(user: UserDep):
     return user.providers
+
+
+@router.delete("/providers/{provider_id}")
+async def remove_user_provider(
+    user: UserDep,
+    session: SessionDep,
+    provider: ProviderDep,
+):
+    user = session.merge(user)
+    provider = session.merge(provider)
+
+    if provider not in user.providers:
+        raise HTTPException(404, f"User does not have provider {provider.name}")
+
+    # Remove Provider from User
+    user.providers.remove(provider)
+    # Remove Modules that require Provider from User
+    user.modules = [module for module in user.modules if module not in provider.modules]
+    # Remove APITokens for Provider from User
+    token = APITokenDBClient(session).get(user, provider)
+    session.delete(token)
+
+    session.add(user)
+    session.commit()
 
 
 class ModuleWithProviders(SQLModel):
