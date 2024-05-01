@@ -10,7 +10,8 @@ from lifehub.api.lib.user import (
     create_user,
     get_access_token,
 )
-from lifehub.models.user import User, UserToken
+from lifehub.api.routers.dependencies import SessionDep, UserDep
+from lifehub.models.user import User
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ class UserLogin(SQLModel):
 
 
 @router.post("/login", response_model=UserLogin)
-async def login(
+async def user_login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
 ):
@@ -38,8 +39,8 @@ async def login(
     return login
 
 
-@router.post("/signup", response_model=UserToken)
-async def signup(
+@router.post("/signup", response_model=UserLogin)
+async def user_signup(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
@@ -53,3 +54,10 @@ async def signup(
         expires_at=token.expires_at,
     )
     return login
+
+
+@router.delete("/me")
+async def delete_user(user: UserDep, session: SessionDep):
+    user = session.merge(user)
+    session.delete(user)
+    session.commit()

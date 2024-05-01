@@ -1,7 +1,11 @@
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from lifehub.models.user.user import User
 
 
 class UserToken(SQLModel, table=True):
@@ -10,3 +14,5 @@ class UserToken(SQLModel, table=True):
     token_type: str = Field(max_length=16, nullable=False)
     created_at: datetime = Field(default_factory=datetime.now)
     expires_at: datetime = Field()
+
+    user: "User" = Relationship(back_populates="token")

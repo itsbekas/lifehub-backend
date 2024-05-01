@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from lifehub.models.user import UserModule
+from lifehub.models.user.user import UserModuleLink
 from lifehub.models.util.module_provider import ModuleProvider
 
 if TYPE_CHECKING:
@@ -20,4 +20,6 @@ class Module(SQLModel, table=True):
         sa_relationship_kwargs={"lazy": "subquery"},
     )
 
-    users: list["User"] = Relationship(back_populates="modules", link_model=UserModule)
+    users: list["User"] = Relationship(
+        back_populates="modules", link_model=UserModuleLink
+    )
