@@ -8,8 +8,8 @@ from jose import jwt
 
 from lifehub.api.exceptions import CredentialsException, UserExistsException
 from lifehub.clients.db.service import get_session
-from lifehub.clients.db.user import UserDBClient, UserTokenDBClient
-from lifehub.models.user import User, UserToken
+from lifehub.clients.db.user import UserDBClient
+from lifehub.models.user import User, UserTokenResponse
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
 AUTH_ALGORITHM = os.environ["AUTH_ALGORITHM"]
@@ -61,33 +61,16 @@ def create_user(username: str, password: str, name: str) -> User:
     return add_user(new_user)
 
 
-def create_access_token(user: User) -> UserToken:
-    created_at = dt.datetime.now()
-    expires_at = created_at + dt.timedelta(days=30)
+def create_access_token(user: User) -> UserTokenResponse:
+    expires_at = dt.datetime.now() + dt.timedelta(days=30)
     jwtoken = jwt.encode(
         {"sub": user.username, "exp": expires_at},
         AUTH_SECRET_KEY,
         algorithm=AUTH_ALGORITHM,
     )
-    token = UserToken(
-        user_id=user.id,
+    token = UserTokenResponse(
+        user_id=user.name,
         access_token=jwtoken,
-        token_type="bearer",
-        created_at=created_at,
         expires_at=expires_at,
     )
-    with get_session() as session:
-        db_client = UserTokenDBClient(user, session)
-        db_client.add(token)
-        db_client.commit()
-        db_client.refresh(token)
     return token
-
-
-def get_access_token(user: User) -> UserToken:
-    with get_session() as session:
-        db_client = UserTokenDBClient(user, session)
-        token = db_client.get_one_or_none()
-    if token and token.expires_at > dt.datetime.now():
-        return token
-    return create_access_token(user)

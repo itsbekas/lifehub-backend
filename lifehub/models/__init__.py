@@ -1,7 +1,7 @@
 from .finance import Networth, T212Order, T212Transaction
 from .provider import APIToken, OAuthProviderConfig, Provider
 from .server import QBittorrentStats
-from .user import User, UserToken
+from .user import User
 from .util import FetchUpdate, Module, ModuleProvider
 
 __all__ = [
@@ -14,7 +14,6 @@ __all__ = [
     "Module",
     "Provider",
     "User",
-    "UserToken",
     "OAuthProviderConfig",
     "ModuleProvider",
 ]

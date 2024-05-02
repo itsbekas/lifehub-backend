@@ -1,10 +1,8 @@
 import datetime as dt
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
-
-from lifehub.models.user.user_token import UserToken
 
 if TYPE_CHECKING:
     from lifehub.models.provider import APIToken, Provider
@@ -37,6 +35,11 @@ class User(SQLModel, table=True):
     api_tokens: list["APIToken"] = Relationship(
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
     )
-    token: UserToken = Relationship(
-        back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
-    )
+
+
+class UserTokenResponse(SQLModel):
+    name: str
+    access_token: str
+    refresh_token: Optional[str] = None
+    token_type: str = "bearer"
+    expires_in: dt.timedelta = dt.timedelta(days=30)

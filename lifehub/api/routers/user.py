@@ -7,11 +7,11 @@ from sqlmodel import SQLModel
 
 from lifehub.api.lib.user import (
     authenticate_user,
+    create_access_token,
     create_user,
-    get_access_token,
 )
 from lifehub.api.routers.dependencies import SessionDep, UserDep
-from lifehub.models.user import User
+from lifehub.models.user import User, UserTokenResponse
 
 router = APIRouter()
 
@@ -23,37 +23,23 @@ class UserLogin(SQLModel):
     expires_at: dt.datetime
 
 
-@router.post("/login", response_model=UserLogin)
+@router.post("/login", response_model=UserTokenResponse)
 async def user_login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
 ):
     user = authenticate_user(username, password)
-    token = get_access_token(user)
-    login = UserLogin(
-        user_id=user.id,
-        name=user.name,
-        access_token=token.access_token,
-        expires_at=token.expires_at,
-    )
-    return login
+    return create_access_token(user)
 
 
-@router.post("/signup", response_model=UserLogin)
+@router.post("/signup", response_model=UserTokenResponse)
 async def user_signup(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
 ):
-    new_user: User = create_user(username, password, name)
-    token = get_access_token(new_user)
-    login = UserLogin(
-        user_id=new_user.id,
-        name=new_user.name,
-        access_token=token.access_token,
-        expires_at=token.expires_at,
-    )
-    return login
+    user: User = create_user(username, password, name)
+    return create_access_token(user)
 
 
 @router.delete("/me")

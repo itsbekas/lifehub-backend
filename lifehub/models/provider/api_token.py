@@ -3,7 +3,7 @@ import uuid
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from lifehub.models.user.user import User
+from lifehub.models.user import User
 
 
 class APIToken(SQLModel, table=True):

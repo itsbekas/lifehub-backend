@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from lifehub.models.user.user import UserProviderLink
+from lifehub.models.user import UserProviderLink
 from lifehub.models.util.module_provider import ModuleProvider
 
 if TYPE_CHECKING:
