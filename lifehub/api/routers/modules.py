@@ -7,7 +7,7 @@ from lifehub.models.util.module import Module
 router = APIRouter()
 
 
-@router.get("/", response_model=list[Module])
+@router.get("", response_model=list[Module])
 async def get_modules(
     session: SessionDep,
 ):

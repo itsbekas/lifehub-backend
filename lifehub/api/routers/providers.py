@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[Provider])
+@router.get("", response_model=list[Provider])
 async def get_providers(session: SessionDep):
     return ProviderDBClient(session).get_all()
 

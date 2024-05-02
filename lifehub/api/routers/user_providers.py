@@ -47,7 +47,7 @@ class ProviderWithModules(SQLModel):
     modules: list[Module]
 
 
-@router.get("/", response_model=list[ProviderWithModules])
+@router.get("", response_model=list[ProviderWithModules])
 async def get_user_providers(user: UserDep):
     return user.providers
 
