@@ -69,7 +69,7 @@ def create_access_token(user: User) -> UserTokenResponse:
         algorithm=AUTH_ALGORITHM,
     )
     token = UserTokenResponse(
-        user_id=user.name,
+        name=user.name,
         access_token=jwtoken,
         expires_at=expires_at,
     )
