@@ -5,10 +5,6 @@ from lifehub.models.provider import OAuthProviderConfig, Provider, ProviderType
 from lifehub.models.util import FetchUpdate, Module
 
 
-def oauth_redirect_uri(provider_name: str) -> str:
-    return getenv("REDIRECT_URI_BASE") + f"/provider/{provider_name}/callback"
-
-
 def setup_providers():
     providers = {
         "trading212": Provider(name="trading212", type=ProviderType.token),
@@ -31,7 +27,6 @@ def setup_providers():
             client_id=getenv("YNAB_CLIENT_ID"),
             client_secret=getenv("YNAB_CLIENT_SECRET"),
             scope="read-only",
-            redirect_uri=oauth_redirect_uri("ynab"),
         ),
     }
 
@@ -46,14 +41,14 @@ def setup_providers():
             providers=[providers["trading212"], providers["ynab"]],
             users=[],
         ),
-        "server": Module(
-            name="server",
-            providers=[providers["qbittorrent"]],
-            users=[],
-        ),
         "t212history": Module(
             name="t212history",
             providers=[providers["trading212"]],
+            users=[],
+        ),
+        "server": Module(
+            name="server",
+            providers=[providers["qbittorrent"]],
             users=[],
         ),
     }
