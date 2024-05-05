@@ -14,6 +14,4 @@ class APIToken(SQLModel, table=True):
     created_at: dt.datetime = Field(default_factory=dt.datetime.now)
     expires_at: dt.datetime = Field(default=dt.datetime.max)
 
-    user: User = Relationship(
-        back_populates="api_tokens", sa_relationship_kwargs={"cascade": "all, delete"}
-    )
+    user: User = Relationship(back_populates="api_tokens")
