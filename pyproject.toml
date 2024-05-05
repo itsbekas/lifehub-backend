@@ -7,6 +7,12 @@ name = "lifehub-backend"
 version = "0.0.1"
 dependencies = [
     "requests",
+    "fastapi",
+    "sqlmodel@git+https://github.com/itsbekas/sqlmodel",
+    "mariadb",
+    "python-dotenv",
+    "python-jose",
+    "argon2-cffi",
 ]
 
 [tool.setuptools.packages]
