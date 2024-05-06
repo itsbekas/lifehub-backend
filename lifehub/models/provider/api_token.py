@@ -1,5 +1,6 @@
 import datetime as dt
 import uuid
+from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -15,3 +16,16 @@ class APIToken(SQLModel, table=True):
     expires_at: dt.datetime = Field(default=dt.datetime.max)
 
     user: User = Relationship(back_populates="api_tokens")
+
+
+class BaseAPITokenRequest(SQLModel):
+    custom_url: Optional[str] = None
+
+
+class APITokenTokenRequest(BaseAPITokenRequest):
+    token: str
+
+
+class APITokenBasicRequest(BaseAPITokenRequest):
+    username: str
+    password: str

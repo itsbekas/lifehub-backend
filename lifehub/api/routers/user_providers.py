@@ -1,8 +1,7 @@
 import datetime as dt
-from typing import Annotated
 
 import requests
-from fastapi import APIRouter, Form, HTTPException
+from fastapi import APIRouter, HTTPException
 from sqlmodel import SQLModel
 
 from lifehub.api.routers.dependencies import (
@@ -18,7 +17,11 @@ from lifehub.clients.db.provider.api_token import APITokenDBClient
 from lifehub.clients.db.provider.oauth_provider_config import (
     OAuthProviderConfigDBClient,
 )
-from lifehub.models.provider.api_token import APIToken
+from lifehub.models.provider.api_token import (
+    APIToken,
+    APITokenBasicRequest,
+    APITokenTokenRequest,
+)
 from lifehub.models.provider.provider import ProviderType
 from lifehub.models.util.module import Module
 
@@ -112,7 +115,7 @@ async def create_basic_token(
     provider: TokenProviderDep,
     user: UserDep,
     session: SessionDep,
-    token: str,
+    req: APITokenTokenRequest,
 ):
     api_token = APITokenDBClient(session).get(user, provider)
 
@@ -122,7 +125,7 @@ async def create_basic_token(
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
-        token=token,
+        token=req.token,
         created_at=None,
         expires_at=None,
     )
@@ -138,12 +141,12 @@ async def update_basic_token(
     provider: TokenProviderDep,
     user: UserDep,
     session: SessionDep,
-    token: str,
+    req: APITokenTokenRequest,
 ):
     api_token = APITokenDBClient(session).get(user, provider)
     if api_token is None:
         raise NoTokenException()
-    api_token.token = token
+    api_token.token = req.token
     session.add(api_token)
     session.commit()
 
@@ -153,9 +156,7 @@ async def create_basic_login(
     provider: BasicProviderDep,
     user: UserDep,
     session: SessionDep,
-    username: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    url: Annotated[str, Form()],
+    req: APITokenBasicRequest,
 ):
     api_token = APITokenDBClient(session).get(user, provider)
 
@@ -165,7 +166,7 @@ async def create_basic_login(
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
-        token=f"{username}:{password};{url}",
+        token=f"{req.username}:{req.password}",
         created_at=None,
         expires_at=None,
     )
@@ -181,14 +182,12 @@ async def update_basic_login(
     provider: BasicProviderDep,
     user: UserDep,
     session: SessionDep,
-    username: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    url: Annotated[str, Form()],
+    req: APITokenBasicRequest,
 ):
     api_token = APITokenDBClient(session).get(user, provider)
     if api_token is None:
         raise NoTokenException()
-    api_token.token = f"{username}:{password};{url}"
+    api_token.token = f"{req.username}:{req.password}"
     session.add(api_token)
     session.commit()
 
