@@ -122,9 +122,14 @@ async def create_basic_token(
     if api_token is not None:
         raise HTTPException(409, "Token already exists")
 
+    custom_url = None
+    if req.custom_url is not None:
+        custom_url = req.custom_url
+
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
+        custom_url=custom_url,
         token=req.token,
         created_at=None,
         expires_at=None,
@@ -163,9 +168,14 @@ async def create_basic_login(
     if api_token is not None:
         raise HTTPException(409, "Token already exists")
 
+    custom_url = None
+    if req.custom_url is not None:
+        custom_url = req.custom_url
+
     api_token = APIToken(
         user_id=user.id,
         provider_id=provider.id,
+        custom_url=custom_url,
         token=f"{req.username}:{req.password}",
         created_at=None,
         expires_at=None,

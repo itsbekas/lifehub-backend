@@ -1,7 +1,8 @@
 from os import getenv
 
 from lifehub.clients.db.service import get_session
-from lifehub.models.provider import OAuthProviderConfig, Provider, ProviderType
+from lifehub.models.provider import Provider, ProviderType
+from lifehub.models.provider.provider_config import OAuthProviderConfig
 from lifehub.models.util import FetchUpdate, Module
 
 

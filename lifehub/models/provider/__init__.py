@@ -1,6 +1,6 @@
 from .api_token import APIToken
-from .oauth_provider_config import OAuthProviderConfig
 from .provider import Provider, ProviderType
+from .provider_config import OAuthProviderConfig
 
 __all__ = [
     "APIToken",

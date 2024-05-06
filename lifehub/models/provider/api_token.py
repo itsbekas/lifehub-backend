@@ -1,6 +1,5 @@
 import datetime as dt
 import uuid
-from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -10,6 +9,7 @@ from lifehub.models.user import User
 class APIToken(SQLModel, table=True):
     user_id: uuid.UUID = Field(primary_key=True, foreign_key="user.id")
     provider_id: int = Field(primary_key=True, foreign_key="provider.id")
+    custom_url: str | None = Field(max_length=128, nullable=True)
     token: str = Field(max_length=128, nullable=False)
     refresh_token: str = Field(max_length=128, nullable=True)
     created_at: dt.datetime = Field(default_factory=dt.datetime.now)
@@ -19,7 +19,7 @@ class APIToken(SQLModel, table=True):
 
 
 class BaseAPITokenRequest(SQLModel):
-    custom_url: Optional[str] = None
+    custom_url: str | None = None
 
 
 class APITokenTokenRequest(BaseAPITokenRequest):
