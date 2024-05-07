@@ -2,7 +2,11 @@ from os import getenv
 
 from lifehub.clients.db.service import get_session
 from lifehub.models.provider import Provider, ProviderType
-from lifehub.models.provider.provider_config import OAuthProviderConfig
+from lifehub.models.provider.provider_config import (
+    BasicProviderConfig,
+    OAuthProviderConfig,
+    TokenProviderConfig,
+)
 from lifehub.models.util import FetchUpdate, Module
 
 
@@ -21,6 +25,7 @@ def setup_providers():
             session.refresh(providers[name])
 
     oauth_provider_configs = {
+        "trading212": TokenProviderConfig(provider_id=providers["trading212"].id),
         "ynab": OAuthProviderConfig(
             provider_id=providers["ynab"].id,
             auth_url="https://app.ynab.com/oauth/authorize",
@@ -28,6 +33,10 @@ def setup_providers():
             client_id=getenv("YNAB_CLIENT_ID"),
             client_secret=getenv("YNAB_CLIENT_SECRET"),
             scope="read-only",
+        ),
+        "qbittorrent": BasicProviderConfig(
+            provider_id=providers["qbittorrent"].id,
+            allow_custom_url=True,
         ),
     }
 
