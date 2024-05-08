@@ -1,14 +1,16 @@
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from sqlmodel import Field, Relationship, SQLModel
-
-from lifehub.models.user import UserProviderLink
-from lifehub.models.util.module_provider import ModuleProvider
-
 if TYPE_CHECKING:
     from lifehub.models.user import User
     from lifehub.models.util import Module
+
+from typing import List
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from lifehub.models.base import BaseModel
 
 
 class ProviderType(str, Enum):
@@ -17,14 +19,13 @@ class ProviderType(str, Enum):
     oauth = "oauth"
 
 
-class Provider(SQLModel, table=True):
-    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
-    name: str = Field(max_length=32, unique=True, nullable=False)
-    type: ProviderType
+class Provider(BaseModel):
+    __tablename__ = "provider"
 
-    modules: list["Module"] = Relationship(
-        back_populates="providers", link_model=ModuleProvider
-    )
-    users: list["User"] = Relationship(
-        back_populates="providers", link_model=UserProviderLink
-    )
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(32), unique=True)
+    type: Mapped[ProviderType] = mapped_column(String(16))
+
+    modules: Mapped[List["Module"]] = relationship(back_populates="providers")
+
+    users: Mapped[List["User"]] = relationship(back_populates="providers")

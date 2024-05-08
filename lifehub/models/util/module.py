@@ -1,25 +1,20 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.models.user import UserModuleLink
-from lifehub.models.util.module_provider import ModuleProvider
+from lifehub.models.base import BaseModel
 
 if TYPE_CHECKING:
     from lifehub.models.provider.provider import Provider
-    from lifehub.models.user import User
 
 
-class Module(SQLModel, table=True):
-    id: int = Field(primary_key=True, sa_column_kwargs={"autoincrement": True})
-    name: str = Field(max_length=32, unique=True, nullable=False)
+class Module(BaseModel):
+    __tablename__ = "modules"
 
-    providers: list["Provider"] = Relationship(
-        back_populates="modules",
-        link_model=ModuleProvider,
-        sa_relationship_kwargs={"lazy": "subquery"},
-    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(32), unique=True)
 
-    users: list["User"] = Relationship(
-        back_populates="modules", link_model=UserModuleLink
-    )
+    providers: Mapped[List["Provider"]] = relationship(back_populates="provider")
+
+    users = relationship("User", secondary="user_module_link")
