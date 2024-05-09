@@ -28,7 +28,7 @@ class Module(BaseModel):
     last_update: Mapped[dt.datetime] = mapped_column(insert_default=dt.datetime.min)
 
     providers: Mapped[List["Provider"]] = relationship(
-        secondary=module_provider, back_populates="provider"
+        secondary=module_provider, back_populates="modules"
     )
 
     users: Mapped[List["User"]] = relationship(
