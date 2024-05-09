@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from sqlmodel import MetaData, SQLModel, create_engine
 
 import lifehub.models  # noqa: F401
-from lifehub.models.user import User
+from lifehub.models.user_old import User
 
 # Load the environment
 load_dotenv("test.env")

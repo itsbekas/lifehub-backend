@@ -1,9 +1,10 @@
 import os
 
 from dotenv import load_dotenv
-from sqlmodel import SQLModel, create_engine
+from sqlalchemy import create_engine
 
 import lifehub.models  # noqa: F401
+from lifehub.models.base import BaseModel
 
 
 def run():
@@ -17,9 +18,9 @@ def run():
 
     load_dotenv()
     db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url)
+    engine = create_engine(db_url, echo=True)
 
-    SQLModel.metadata.drop_all(engine)
+    BaseModel.metadata.drop_all(engine)
 
 
 if __name__ == "__main__":

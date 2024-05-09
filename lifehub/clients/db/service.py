@@ -1,6 +1,7 @@
 import os
 
-from sqlmodel import Session, create_engine
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 
 class DatabaseService:

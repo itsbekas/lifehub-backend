@@ -2,7 +2,7 @@ from sqlmodel import Session
 
 from lifehub.clients.db.base import TimeUserBaseDBClient
 from lifehub.models.finance import T212Order
-from lifehub.models.user import User
+from lifehub.models.user_old import User
 
 
 class T212OrderDBClient(TimeUserBaseDBClient[T212Order]):

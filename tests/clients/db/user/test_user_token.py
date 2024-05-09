@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from lifehub.clients.db.user import UserTokenDBClient
-from lifehub.models.user import UserToken
+from lifehub.models.user_old import UserToken
 
 
 @pytest.fixture(scope="module")

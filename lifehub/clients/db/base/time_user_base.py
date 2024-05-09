@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 
 from lifehub.clients.db.base.base import BaseModel
 from lifehub.clients.db.base.user_base import UserBaseDBClient
-from lifehub.models.user import User
+from lifehub.models.user_old import User
 
 
 class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):

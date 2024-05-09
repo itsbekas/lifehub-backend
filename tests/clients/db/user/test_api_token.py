@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 
 from lifehub.clients.db.user import APITokenDBClient
-from lifehub.models.user import APIToken
+from lifehub.models.user_old import APIToken
 
 
 @pytest.fixture(scope="module")
