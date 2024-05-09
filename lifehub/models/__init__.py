@@ -1,3 +1,4 @@
+from .finance import T212Balance, T212Order, T212Transaction, YNABBalance
 from .module import Module, module_provider
 from .provider import (
     BasicProviderConfig,
@@ -7,6 +8,7 @@ from .provider import (
     ProviderToken,
     TokenProviderConfig,
 )
+from .server import QBittorrentStats
 from .user import User, user_module, user_provider
 
 __all__ = [
@@ -21,4 +23,9 @@ __all__ = [
     "OAuthProviderConfig",
     "TokenProviderConfig",
     "BasicProviderConfig",
+    "T212Transaction",
+    "YNABBalance",
+    "T212Balance",
+    "T212Order",
+    "QBittorrentStats",
 ]
