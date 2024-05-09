@@ -3,8 +3,8 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-import lifehub.models  # noqa: F401
-from lifehub.models.base import BaseModel
+import lifehub.core.models  # noqa: F401
+from lifehub.core.models.base import BaseModel
 
 
 def run():

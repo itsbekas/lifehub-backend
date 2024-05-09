@@ -5,7 +5,7 @@ from decimal import Decimal
 from sqlalchemy import DECIMAL, BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from lifehub.models.base import BaseModel
+from lifehub.core.models.base import BaseModel
 
 
 class T212Transaction(BaseModel):

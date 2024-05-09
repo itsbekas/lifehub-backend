@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 from sqlalchemy import UUID, Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.models.base import BaseModel
+from lifehub.core.models.base import BaseModel
 
 if TYPE_CHECKING:
-    from lifehub.models.module import Module
-    from lifehub.models.provider import Provider, ProviderToken
+    from lifehub.core.module.models import Module
+    from lifehub.core.provider.models import Provider, ProviderToken
 
 
 user_provider = Table(

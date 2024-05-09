@@ -3,9 +3,13 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-import lifehub.models  # noqa: F401
 from lifehub.config.providers import setup_providers
-from lifehub.models.base import BaseModel
+from lifehub.core.models.base import BaseModel
+from lifehub.core.module.models import *  # noqa: F401,F403
+from lifehub.core.provider.models import *  # noqa: F401,F403
+from lifehub.core.user.models import *  # noqa: F401,F403
+from lifehub.modules.finance.models import *  # noqa: F401,F403
+from lifehub.modules.server.models import *  # noqa: F401,F403
 
 
 def run():

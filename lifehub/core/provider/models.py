@@ -9,13 +9,13 @@ from typing import TYPE_CHECKING, List
 from sqlalchemy import UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.models.base import BaseModel
-from lifehub.models.module import module_provider
-from lifehub.models.user import user_provider
+from lifehub.core.models.base import BaseModel
+from lifehub.core.module.models import module_provider
+from lifehub.core.user.models import user_provider
 
 if TYPE_CHECKING:
-    from lifehub.models.module import Module
-    from lifehub.models.user import User
+    from lifehub.core.module.models import Module
+    from lifehub.core.user.models import User
 
 
 def oauth_redirect_uri() -> str:

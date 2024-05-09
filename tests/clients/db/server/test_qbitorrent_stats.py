@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from lifehub.clients.db.server import QBittorrentStatsDBClient
-from lifehub.models.server import QBittorrentStats
+from lifehub.modules.server.models import QBittorrentStats
 
 
 @pytest.fixture(scope="module")

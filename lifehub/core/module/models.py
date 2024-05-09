@@ -4,12 +4,12 @@ from typing import TYPE_CHECKING, List
 from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.models.base import BaseModel
-from lifehub.models.user import user_module
+from lifehub.core.models.base import BaseModel
+from lifehub.core.user.models import user_module
 
 if TYPE_CHECKING:
-    from lifehub.models.provider import Provider
-    from lifehub.models.user import User
+    from lifehub.core.provider.models import Provider
+    from lifehub.core.user.models import User
 
 
 module_provider = Table(

@@ -4,7 +4,7 @@ import pytest
 from dotenv import load_dotenv
 from sqlmodel import MetaData, SQLModel, create_engine
 
-import lifehub.models  # noqa: F401
+import lifehub.core.models  # noqa: F401
 from lifehub.models.user_old import User
 
 # Load the environment
