@@ -1,5 +1,5 @@
 from lifehub.clients.api import Trading212APIClient
-from lifehub.fetch.base import BaseFetcher
+from lifehub.core.base_fetcher import BaseFetcher
 from lifehub.modules.finance.schema import T212Order, T212Transaction
 
 
