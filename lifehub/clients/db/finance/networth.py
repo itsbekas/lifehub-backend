@@ -1,8 +1,8 @@
 from sqlmodel import Session
 
 from lifehub.clients.db.base import TimeUserBaseDBClient
-from lifehub.core.user.models import User
-from lifehub.modules.finance.models import Networth
+from lifehub.core.user.schema import User
+from lifehub.modules.finance.schema import Networth
 
 
 class NetworthDBClient(TimeUserBaseDBClient[Networth]):

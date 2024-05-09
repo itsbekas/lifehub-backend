@@ -5,8 +5,8 @@ import requests
 
 from lifehub.clients.db.provider import ProviderDBClient, ProviderTokenDBClient
 from lifehub.core.database_service import get_session
-from lifehub.core.provider.models import Provider, ProviderToken
-from lifehub.core.user.models import User
+from lifehub.core.provider.schema import Provider, ProviderToken
+from lifehub.core.user.schema import User
 
 
 class APIException(Exception):

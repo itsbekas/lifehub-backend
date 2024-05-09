@@ -1,8 +1,8 @@
 from os import getenv
 
 from lifehub.core.database_service import get_session
-from lifehub.core.module.models import Module
-from lifehub.core.provider.models import (
+from lifehub.core.module.schema import Module
+from lifehub.core.provider.schema import (
     BasicProviderConfig,
     OAuthProviderConfig,
     Provider,

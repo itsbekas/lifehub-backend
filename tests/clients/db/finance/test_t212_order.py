@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from lifehub.clients.db.finance import T212OrderDBClient
-from lifehub.modules.finance.models import T212Order
+from lifehub.modules.finance.schema import T212Order
 
 
 @pytest.fixture(scope="module")

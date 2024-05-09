@@ -4,7 +4,12 @@ import requests
 from fastapi import APIRouter, HTTPException
 from sqlmodel import SQLModel
 
-from lifehub.api.routers.dependencies import (
+from lifehub.clients.api import api_clients
+from lifehub.clients.db.provider.oauth_provider_config import (
+    OAuthProviderConfigDBClient,
+)
+from lifehub.clients.db.provider.provider_token import APITokenDBClient
+from lifehub.core.api_dependencies import (
     BasicProviderDep,
     OAuthProviderDep,
     ProviderDep,
@@ -12,11 +17,6 @@ from lifehub.api.routers.dependencies import (
     TokenProviderDep,
     UserDep,
 )
-from lifehub.clients.api import api_clients
-from lifehub.clients.db.provider.oauth_provider_config import (
-    OAuthProviderConfigDBClient,
-)
-from lifehub.clients.db.provider.provider_token import APITokenDBClient
 from lifehub.models.provider_old.api_token import (
     APIToken,
     APITokenBasicRequest,

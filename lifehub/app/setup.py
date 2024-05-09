@@ -5,11 +5,11 @@ from sqlalchemy import create_engine
 
 from lifehub.config.providers import setup_providers
 from lifehub.core.base_model import BaseModel
-from lifehub.core.module.models import *  # noqa: F401,F403
-from lifehub.core.provider.models import *  # noqa: F401,F403
-from lifehub.core.user.models import *  # noqa: F401,F403
-from lifehub.modules.finance.models import *  # noqa: F401,F403
-from lifehub.modules.server.models import *  # noqa: F401,F403
+from lifehub.core.module.schema import *  # noqa: F401,F403
+from lifehub.core.provider.schema import *  # noqa: F401,F403
+from lifehub.core.user.schema import *  # noqa: F401,F403
+from lifehub.modules.finance.schema import *  # noqa: F401,F403
+from lifehub.modules.server.schema import *  # noqa: F401,F403
 
 
 def setup():

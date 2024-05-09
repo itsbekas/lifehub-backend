@@ -10,12 +10,12 @@ from sqlalchemy import UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lifehub.core.base_model import BaseModel
-from lifehub.core.module.models import module_provider
-from lifehub.core.user.models import user_provider
+from lifehub.core.module.schema import module_provider
+from lifehub.core.user.schema import user_provider
 
 if TYPE_CHECKING:
-    from lifehub.core.module.models import Module
-    from lifehub.core.user.models import User
+    from lifehub.core.module.schema import Module
+    from lifehub.core.user.schema import User
 
 
 def oauth_redirect_uri() -> str:

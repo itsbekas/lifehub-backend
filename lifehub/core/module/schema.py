@@ -5,11 +5,11 @@ from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lifehub.core.base_model import BaseModel
-from lifehub.core.user.models import user_module
+from lifehub.core.user.schema import user_module
 
 if TYPE_CHECKING:
-    from lifehub.core.provider.models import Provider
-    from lifehub.core.user.models import User
+    from lifehub.core.provider.schema import Provider
+    from lifehub.core.user.schema import User
 
 
 module_provider = Table(

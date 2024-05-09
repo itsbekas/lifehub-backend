@@ -4,20 +4,20 @@ from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
 from sqlmodel import Session
 
-from lifehub.api.exceptions import (
+from lifehub.clients.db.provider.provider import ProviderDBClient
+from lifehub.clients.db.user import UserDBClient
+from lifehub.clients.db.util.module import ModuleDBClient
+from lifehub.core.api_exceptions import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
-from lifehub.api.lib.user import (
+from lifehub.core.database_service import get_session
+from lifehub.core.user.service import (
     AUTH_ALGORITHM,
     AUTH_SECRET_KEY,
     CredentialsException,
     oauth2_scheme,
 )
-from lifehub.clients.db.provider.provider import ProviderDBClient
-from lifehub.clients.db.user import UserDBClient
-from lifehub.clients.db.util.module import ModuleDBClient
-from lifehub.core.database_service import get_session
 from lifehub.models.provider_old.provider import Provider
 from lifehub.models.user_old import User
 from lifehub.models.util.module import Module

@@ -1,6 +1,6 @@
 from lifehub.clients.api import Trading212APIClient
 from lifehub.fetch.base import BaseFetcher
-from lifehub.modules.finance.models import T212Order, T212Transaction
+from lifehub.modules.finance.schema import T212Order, T212Transaction
 
 
 class T212HistoryFetcher(BaseFetcher):

@@ -8,8 +8,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from lifehub.core.base_model import BaseModel
 
 if TYPE_CHECKING:
-    from lifehub.core.module.models import Module
-    from lifehub.core.provider.models import Provider, ProviderToken
+    from lifehub.core.module.schema import Module
+    from lifehub.core.provider.schema import Provider, ProviderToken
 
 
 user_provider = Table(

@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 
-from lifehub.api.routers.dependencies import OAuthProviderDep, SessionDep, get_user
 from lifehub.clients.db.provider import (
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
-from lifehub.models.provider_old import Provider
+from lifehub.core.api_dependencies import OAuthProviderDep, SessionDep, get_user
+from lifehub.core.provider.schema import Provider
 
 router = APIRouter(
     dependencies=[Depends(get_user)],
