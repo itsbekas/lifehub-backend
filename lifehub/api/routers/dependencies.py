@@ -18,8 +18,8 @@ from lifehub.clients.db.provider.provider import ProviderDBClient
 from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient
 from lifehub.clients.db.util.module import ModuleDBClient
-from lifehub.models.provider.provider import Provider
-from lifehub.models.user import User
+from lifehub.models.provider_old.provider import Provider
+from lifehub.models.user_old import User
 from lifehub.models.util.module import Module
 
 

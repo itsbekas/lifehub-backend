@@ -1,45 +1,48 @@
 import datetime as dt
 import uuid
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy import UUID, Column, ForeignKey, String, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from lifehub.models.base import BaseModel
 
 if TYPE_CHECKING:
-    from lifehub.models.provider import APIToken, Provider
-    from lifehub.models.util import Module
+    from lifehub.models.module import Module
+    from lifehub.models.provider import Provider, ProviderToken
 
 
-class UserProviderLink(SQLModel, table=True):
-    user_id: uuid.UUID = Field(foreign_key="user.id", primary_key=True)
-    provider_id: int = Field(foreign_key="provider.id", primary_key=True)
+user_provider = Table(
+    "user_provider",
+    BaseModel.metadata,
+    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("provider_id", ForeignKey("provider.id"), primary_key=True),
+)
 
 
-class UserModuleLink(SQLModel, table=True):
-    user_id: uuid.UUID = Field(primary_key=True, foreign_key="user.id")
-    module_id: int = Field(primary_key=True, foreign_key="module.id")
+user_module = Table(
+    "user_module",
+    BaseModel.metadata,
+    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("module_id", ForeignKey("module.id"), primary_key=True),
+)
 
 
-class User(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    username: str = Field(max_length=32, unique=True, nullable=False)
-    password: str = Field(max_length=128, nullable=False)
-    name: str = Field(max_length=64, nullable=False)
-    created_at: dt.datetime = Field(default_factory=dt.datetime.now)
+class User(BaseModel):
+    __tablename__ = "user"
 
-    modules: list["Module"] = Relationship(
-        back_populates="users", link_model=UserModuleLink
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    providers: list["Provider"] = Relationship(
-        back_populates="users", link_model=UserProviderLink
-    )
-    api_tokens: list["APIToken"] = Relationship(
-        back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
-    )
+    username: Mapped[str] = mapped_column(String(32), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[dt.datetime] = mapped_column(default=dt.datetime.now)
 
-
-class UserTokenResponse(SQLModel):
-    name: str
-    access_token: str
-    refresh_token: Optional[str] = None
-    token_type: str = "bearer"
-    expires_in: dt.timedelta = dt.timedelta(days=30)
+    modules: Mapped[list["Module"]] = relationship(
+        secondary=user_module, back_populates="users"
+    )
+    providers: Mapped[list["Provider"]] = relationship(
+        secondary=user_provider, back_populates="users"
+    )
+    api_tokens: Mapped[list["ProviderToken"]] = relationship(back_populates="user")

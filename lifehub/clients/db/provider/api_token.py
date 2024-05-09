@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
 
 from lifehub.clients.db.base import BaseDBClient
-from lifehub.models.provider import APIToken, Provider
-from lifehub.models.user import User
+from lifehub.models.provider_old import APIToken, Provider
+from lifehub.models.user_old import User
 
 
 class APITokenDBClient(BaseDBClient[APIToken]):

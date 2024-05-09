@@ -17,12 +17,12 @@ from lifehub.clients.db.provider.api_token import APITokenDBClient
 from lifehub.clients.db.provider.oauth_provider_config import (
     OAuthProviderConfigDBClient,
 )
-from lifehub.models.provider.api_token import (
+from lifehub.models.provider_old.api_token import (
     APIToken,
     APITokenBasicRequest,
     APITokenTokenRequest,
 )
-from lifehub.models.provider.provider import ProviderType
+from lifehub.models.provider_old.provider import ProviderType
 from lifehub.models.util.module import Module
 
 router = APIRouter()

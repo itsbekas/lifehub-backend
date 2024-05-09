@@ -11,7 +11,7 @@ from lifehub.api.lib.user import (
     create_user,
 )
 from lifehub.api.routers.dependencies import SessionDep, UserDep
-from lifehub.models.user import User, UserTokenResponse
+from lifehub.models.user_old import User, UserTokenResponse
 
 router = APIRouter()
 

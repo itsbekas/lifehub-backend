@@ -1,7 +1,7 @@
 import pytest
 
 from lifehub.clients.db.user import UserDBClient
-from lifehub.models.user import User
+from lifehub.models.user_old import User
 
 
 @pytest.fixture(scope="function")

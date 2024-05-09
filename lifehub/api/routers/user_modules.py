@@ -3,7 +3,7 @@ from sqlalchemy import exc as sa_exc
 from sqlmodel import SQLModel
 
 from lifehub.api.routers.dependencies import ModuleDep, SessionDep, UserDep
-from lifehub.models.provider.provider import Provider
+from lifehub.models.provider_old.provider import Provider
 
 router = APIRouter()
 

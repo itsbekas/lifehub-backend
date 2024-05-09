@@ -4,8 +4,8 @@ import requests
 
 from lifehub.clients.db.provider import APITokenDBClient, ProviderDBClient
 from lifehub.clients.db.service import get_session
-from lifehub.models.provider import Provider
-from lifehub.models.user import User
+from lifehub.models.provider_old import Provider
+from lifehub.models.user_old import User
 
 
 class APIException(Exception):

@@ -1,24 +1,22 @@
 import os
 
 from dotenv import load_dotenv
-from sqlmodel import SQLModel, create_engine
+from sqlalchemy import create_engine
 
 import lifehub.models  # noqa: F401
-from lifehub.config.providers import setup_providers
+
+# from lifehub.config.providers import setup_providers
+from lifehub.models.base import BaseModel
 
 
 def run():
     load_dotenv()
 
     db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url)
+    engine = create_engine(db_url, echo=True)
 
-    try:
-        SQLModel.metadata.create_all(engine)
-    except Exception as e:
-        print("Error creating database tables: ", e)
-
-    setup_providers()
+    # setup_providers()
+    BaseModel.metadata.create_all(engine)
 
 
 if __name__ == "__main__":

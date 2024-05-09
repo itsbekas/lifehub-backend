@@ -5,7 +5,7 @@ from lifehub.clients.db.provider import (
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
-from lifehub.models.provider import Provider
+from lifehub.models.provider_old import Provider
 
 router = APIRouter(
     dependencies=[Depends(get_user)],
