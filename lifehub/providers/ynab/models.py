@@ -26,9 +26,9 @@ class Account:
         self.on_budget: bool = on_budget
         self.closed: bool = closed
         self.note: str | None = note
-        self.balance: int = balance / 1000
-        self.cleared_balance: int = cleared_balance / 1000
-        self.uncleared_balance: int = uncleared_balance / 1000
+        self.balance: int = balance // 1000
+        self.cleared_balance: int = cleared_balance // 1000
+        self.uncleared_balance: int = uncleared_balance // 1000
         self.transfer_payee_id: str | None = transfer_payee_id
         self.direct_import_linked: bool | None = direct_import_linked
         self.direct_import_in_error: bool | None = direct_import_in_error
@@ -80,9 +80,9 @@ class Category:
         self.name: str = name
         self.hidden: bool = hidden
         self.note: str | None = note
-        self.budgeted: int = budgeted / 1000
-        self.activity: int = activity / 1000
-        self.balance: int = balance / 1000
+        self.budgeted: int = budgeted // 1000
+        self.activity: int = activity // 1000
+        self.balance: int = balance // 1000
         self.goal_type: str | None = goal_type
         self.goal_day: int | None = goal_day
         self.goal_cadence: int | None = goal_cadence

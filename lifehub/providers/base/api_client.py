@@ -1,11 +1,12 @@
 from os import getenv
+from typing import Optional
 
 import requests
 
-from lifehub.clients.db.provider import APITokenDBClient, ProviderDBClient
-from lifehub.clients.db.service import get_session
-from lifehub.models.provider_old import Provider
-from lifehub.models.user_old import User
+from lifehub.clients.db.provider import ProviderDBClient, ProviderTokenDBClient
+from lifehub.core.database_service import get_session
+from lifehub.core.provider.models import Provider, ProviderToken
+from lifehub.core.user.models import User
 
 
 class APIException(Exception):
@@ -20,12 +21,30 @@ class APIException(Exception):
 
 
 class APIClient:
+    provider_name: str
+    base_url: str
+    headers: Optional[dict]
+    cookies: Optional[dict[str, str]]
+
     def __init__(self, user: User):
         with get_session() as session:
-            self.provider: Provider = ProviderDBClient(session).get_by_name(
+            self.provider: Provider | None = ProviderDBClient(session).get_by_name(
                 self.provider_name
             )
-            self.token = APITokenDBClient(session).get(user, self.provider).token
+
+            if self.provider is None:
+                raise Exception(
+                    f"Provider {self.provider_name} not found in the database"
+                )
+
+            api_token: ProviderToken | None = ProviderTokenDBClient(session).get(
+                user, self.provider
+            )
+
+            if api_token is None:
+                raise Exception(f"Token not found for {self.provider_name} provider")
+
+            self.token = api_token.token
 
     def _get(self, endpoint: str):
         """

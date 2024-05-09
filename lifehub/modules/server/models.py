@@ -5,7 +5,7 @@ from decimal import Decimal
 from sqlalchemy import DECIMAL, BigInteger, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from lifehub.core.models.base import BaseModel
+from lifehub.core.base_model import BaseModel
 
 
 class QBittorrentStats(BaseModel):

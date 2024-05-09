@@ -7,8 +7,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
 from lifehub.api.exceptions import CredentialsException, UserExistsException
-from lifehub.clients.db.service import get_session
 from lifehub.clients.db.user import UserDBClient
+from lifehub.core.database_service import get_session
 from lifehub.models.user_old import User, UserTokenResponse
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]

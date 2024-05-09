@@ -1,5 +1,5 @@
-from lifehub.clients.db.service import get_session
 from lifehub.clients.db.util import FetchUpdateDBClient, ModuleDBClient
+from lifehub.core.database_service import get_session
 from lifehub.models.user_old import User
 from lifehub.models.util import Module
 

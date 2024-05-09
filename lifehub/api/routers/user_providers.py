@@ -13,10 +13,10 @@ from lifehub.api.routers.dependencies import (
     UserDep,
 )
 from lifehub.clients.api import api_clients
-from lifehub.clients.db.provider.api_token import APITokenDBClient
 from lifehub.clients.db.provider.oauth_provider_config import (
     OAuthProviderConfigDBClient,
 )
+from lifehub.clients.db.provider.provider_token import APITokenDBClient
 from lifehub.models.provider_old.api_token import (
     APIToken,
     APITokenBasicRequest,

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List
 from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.core.models.base import BaseModel
+from lifehub.core.base_model import BaseModel
 from lifehub.core.user.models import user_module
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from requests import Response
 
-from lifehub.clients.api.base import APIClient
+from lifehub.providers.base.api_client import APIClient
 
 from .models import MainData
 
@@ -18,7 +18,7 @@ class QBittorrentAPIClient(APIClient):
         headers = {"Referer": "https://qb.b21.tech/"}
         auth_data = {"username": username, "password": password}
         res = post(f"{self.base_url}/auth/login", headers=headers, data=auth_data)
-        self.cookies = res.cookies.get_dict()
+        self.cookies: dict[str, str] = res.cookies.get_dict()
 
     def _get(self, endpoint: str):
         return self._get_with_cookies(endpoint)

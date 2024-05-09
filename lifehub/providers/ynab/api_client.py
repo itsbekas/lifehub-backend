@@ -1,6 +1,6 @@
 import re
 
-from lifehub.clients.api.base import APIClient
+from lifehub.providers.base.api_client import APIClient
 
 from .models import Account, CategoryGroup
 
