@@ -4,14 +4,14 @@ from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
 from sqlalchemy import Session
 
-from lifehub.clients.db.provider.provider import ProviderDBClient
+from lifehub.clients.db.repository.provider import ProviderDBClient
 from lifehub.clients.db.user import UserDBClient
-from lifehub.clients.db.util.module import ModuleDBClient
 from lifehub.core.common.api.exceptions import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
 from lifehub.core.common.database_service import get_session
+from lifehub.core.module.repository import ModuleDBClient
 from lifehub.core.module.schema import Module
 from lifehub.core.provider.schema import Provider
 from lifehub.core.user.schema import User

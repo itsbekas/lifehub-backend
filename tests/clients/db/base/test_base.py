@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.base import BaseDBClient
+from lifehub.clients.db.db import BaseDBClient
 
 
 # Test model

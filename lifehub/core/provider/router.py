@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from lifehub.clients.db.provider import (
+from lifehub.clients.db.repository import (
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )

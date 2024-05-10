@@ -2,7 +2,7 @@ from typing import Type
 
 from sqlalchemy import Session, select
 
-from lifehub.clients.db.base.base import BaseDBClient, BaseModelType
+from lifehub.clients.db.db.base import BaseDBClient, BaseModelType
 from lifehub.core.user.schema import User
 
 

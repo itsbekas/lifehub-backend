@@ -2,8 +2,8 @@ from typing import Type
 
 from sqlalchemy import Session, select
 
-from lifehub.clients.db.base.base import BaseModelType
-from lifehub.clients.db.base.user_base import UserBaseDBClient
+from lifehub.clients.db.db.base import BaseModelType
+from lifehub.clients.db.db.user_base import UserBaseDBClient
 from lifehub.core.user.schema import User
 
 

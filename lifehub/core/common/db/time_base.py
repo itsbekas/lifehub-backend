@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from lifehub.clients.db.base.base import BaseDBClient, BaseModel
+from lifehub.clients.db.db.base import BaseDBClient, BaseModel
 
 
 class TimeBaseDBClient(BaseDBClient[BaseModel]):

@@ -3,7 +3,7 @@ import uuid
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.base import UserBaseDBClient
+from lifehub.clients.db.db import UserBaseDBClient
 
 
 # Test model

@@ -1,6 +1,6 @@
 from sqlalchemy import Session
 
-from lifehub.clients.db.base import TimeUserBaseDBClient
+from lifehub.clients.db.db import TimeUserBaseDBClient
 from lifehub.core.user.schema import User
 from lifehub.providers.trading212.schema import T212Order
 

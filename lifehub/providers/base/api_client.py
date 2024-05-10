@@ -3,7 +3,7 @@ from typing import Optional
 
 import requests
 
-from lifehub.clients.db.provider import ProviderDBClient, ProviderTokenDBClient
+from lifehub.clients.db.repository import ProviderDBClient, ProviderTokenDBClient
 from lifehub.core.common.database_service import get_session
 from lifehub.core.provider.schema import Provider, ProviderToken
 from lifehub.core.user.schema import User
