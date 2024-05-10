@@ -1,9 +1,23 @@
 import datetime as dt
 
-from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
 
-class UserTokenResponse(BaseModel):
+@dataclass
+class UserLoginRequest:
+    username: str
+    password: str
+
+
+@dataclass
+class UserCreateRequest:
+    username: str
+    password: str
+    name: str
+
+
+@dataclass
+class UserTokenResponse:
     name: str
     access_token: str
     expires_at: dt.datetime

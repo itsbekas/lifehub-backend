@@ -2,14 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Form
 
-from lifehub.core.common.api.dependencies import SessionDep, UserDep
+from lifehub.core.user.api.dependencies import UserDep, UserServiceDep
 from lifehub.core.user.models import UserTokenResponse
-from lifehub.core.user.schema import User
-from lifehub.core.user.service import (
-    authenticate_user,
-    create_access_token,
-    create_user,
-)
+from lifehub.core.user.service.user import UserService
 
 router = APIRouter()
 
@@ -18,9 +13,15 @@ router = APIRouter()
 async def user_login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
+    user_service: UserServiceDep,
 ):
-    user = authenticate_user(username, password)
-    return create_access_token(user)
+    try:
+        user = user_service.login_user(username, password)
+        user_token = user_service.create_access_token(user)
+    except Exception as e:
+        # TODO: API Exception (#28)
+        raise e
+    return user_token
 
 
 @router.post("/signup", response_model=UserTokenResponse)
@@ -28,13 +29,18 @@ async def user_signup(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
+    user_service: UserServiceDep,
 ):
-    user: User = create_user(username, password, name)
-    return create_access_token(user)
+    user_service = UserService()
+    try:
+        user = user_service.create_user(username, password, name)
+        user_token = user_service.create_access_token(user)
+    except Exception as e:
+        # TODO: API Exception (#28)
+        raise e
+    return user_token
 
 
 @router.delete("/me")
-async def delete_user(user: UserDep, session: SessionDep):
-    user = session.merge(user)
-    session.delete(user)
-    session.commit()
+async def delete_user(user: UserDep, user_service: UserServiceDep):
+    user_service.delete_user(user)

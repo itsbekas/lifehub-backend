@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from lifehub.core.common.api.dependencies import SessionDep
 from lifehub.core.module.repository.module import ModuleRepository
 from lifehub.core.module.schema import Module
+from lifehub.core.user.api.dependencies import SessionDep
 
 router = APIRouter()
 

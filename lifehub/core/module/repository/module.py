@@ -1,6 +1,7 @@
-from sqlalchemy import Session, select
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from lifehub.core.common.repository import BaseRepository
+from lifehub.core.common.repository.base import BaseRepository
 from lifehub.core.module.schema import Module
 
 

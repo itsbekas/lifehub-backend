@@ -1,6 +1,7 @@
 from typing import Generic, List, Type
 
-from sqlalchemy import Session, select
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from lifehub.core.common.repository import BaseModelType
 
@@ -15,7 +16,7 @@ class BaseRepository(Generic[BaseModelType]):
 
     def get_all(self) -> List[BaseModelType]:
         statement = select(self.model)
-        result = self.session.exec(statement)
+        result = self.session.execute(statement)
         return result.all()
 
     def update(self, obj: BaseModelType) -> None:
@@ -32,3 +33,6 @@ class BaseRepository(Generic[BaseModelType]):
 
     def rollback(self):
         self.session.rollback()
+
+    def close(self):
+        self.session.close()

@@ -4,8 +4,8 @@ from lifehub.clients.db.repository import (
     OAuthProviderConfigRepository,
     ProviderRepository,
 )
-from lifehub.core.common.api.dependencies import OAuthProviderDep, SessionDep, get_user
 from lifehub.core.provider.schema import Provider
+from lifehub.core.user.api.dependencies import OAuthProviderDep, SessionDep, get_user
 
 router = APIRouter(
     dependencies=[Depends(get_user)],

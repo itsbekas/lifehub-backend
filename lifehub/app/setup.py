@@ -3,13 +3,9 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
+from lifehub.app.util.schemas import *  # noqa: F401,F403
 from lifehub.config.providers import setup_providers
 from lifehub.core.common.base_model import BaseModel
-from lifehub.core.module.schema import *  # noqa: F401,F403
-from lifehub.core.provider.schema import *  # noqa: F401,F403
-from lifehub.core.user.schema import *  # noqa: F401,F403
-from lifehub.providers.qbittorrent.schema import *  # noqa: F401,F403
-from lifehub.providers.ynab.schema import *  # noqa: F401,F403
 
 
 def setup():
