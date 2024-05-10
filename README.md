@@ -18,7 +18,8 @@ Lifehub empowers individuals to gain a comprehensive view of their daily lives t
 
 - Python: Core programming language
 - FastAPI: High-performance web framework for API development.
-- SQLModel: Combines the object-relational mapping (ORM) capabilities of SQLAlchemy with the type-hinting advantages of Pydantic.
+- SQLAlchemy: The foundation for this stack's database interactions, offering flexibility and robust ORM features.
+- Pydantic: Used for data modeling, validation, and parsing, ensuring the consistency of data exchanged with your API.
 - Requests: Library for building API clients to interact with external services.
 - Pytest: Framework for streamlined unit testing.
 - MariaDB: Relational database for data storage, with secure multi-user support.
