@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from lifehub.clients.db.server import QBittorrentStatsDBClient
 from lifehub.core.api_dependencies import SessionDep, UserDep
 from lifehub.core.api_exceptions import NoUserDataForModuleException
-from lifehub.modules.server.schema import QBittorrentStats
+from lifehub.providers.qbittorrent.schema import QBittorrentStats
 
 router = APIRouter()
 

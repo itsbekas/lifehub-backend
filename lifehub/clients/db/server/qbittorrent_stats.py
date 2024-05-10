@@ -2,7 +2,7 @@ from sqlmodel import Session
 
 from lifehub.clients.db.base import TimeUserBaseDBClient
 from lifehub.models.user_old import User
-from lifehub.modules.server.schema import QBittorrentStats
+from lifehub.providers.qbittorrent.schema import QBittorrentStats
 
 
 class QBittorrentStatsDBClient(TimeUserBaseDBClient[QBittorrentStats]):

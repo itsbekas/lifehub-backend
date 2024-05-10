@@ -2,7 +2,7 @@ from sqlmodel import Session
 
 from lifehub.clients.db.base import TimeUserBaseDBClient
 from lifehub.core.user.schema import User
-from lifehub.modules.finance.schema import Networth
+from lifehub.providers.ynab.schema import Networth
 
 
 class NetworthDBClient(TimeUserBaseDBClient[Networth]):

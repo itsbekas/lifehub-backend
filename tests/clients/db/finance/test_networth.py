@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from lifehub.clients.db.finance import NetworthDBClient
-from lifehub.modules.finance.schema import Networth
+from lifehub.providers.ynab.schema import Networth
 
 
 @pytest.fixture(scope="module")

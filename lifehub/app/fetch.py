@@ -13,23 +13,23 @@ def run():
 
     match fetch_script:
         case "t212history":
-            from lifehub.modules.t212history.fetcher import T212HistoryFetcher
+            from lifehub.providers.trading212.fetcher import T212HistoryFetcher
 
             T212HistoryFetcher().fetch()
         case "networth":
-            from lifehub.modules.finance.fetcher import NetworthFetcher
+            from lifehub.providers.ynab.fetcher import NetworthFetcher
 
             NetworthFetcher().fetch()
         case "qbitstats":
-            from lifehub.modules.server.fetcher import (
+            from lifehub.providers.qbittorrent.fetcher import (
                 QBittorrentStatsFetcher,
             )
 
             QBittorrentStatsFetcher().fetch()
         case "all":
-            from lifehub.modules.finance.fetcher import NetworthFetcher
-            from lifehub.modules.server.fetcher import QBittorrentStatsFetcher
-            from lifehub.modules.t212history.fetcher import T212HistoryFetcher
+            from lifehub.providers.qbittorrent.fetcher import QBittorrentStatsFetcher
+            from lifehub.providers.trading212.fetcher import T212HistoryFetcher
+            from lifehub.providers.ynab.fetcher import NetworthFetcher
 
             T212HistoryFetcher().fetch()
             NetworthFetcher().fetch()

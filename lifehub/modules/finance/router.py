@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.core.api_dependencies import SessionDep, UserDep
 from lifehub.core.api_exceptions import NoUserDataForModuleException
-from lifehub.modules.finance.schema import Networth
+from lifehub.providers.ynab.schema import Networth
 
 router = APIRouter()
 

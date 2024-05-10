@@ -7,20 +7,20 @@ from sqlmodel import Session
 from lifehub.clients.db.provider.provider import ProviderDBClient
 from lifehub.clients.db.user import UserDBClient
 from lifehub.clients.db.util.module import ModuleDBClient
-from lifehub.core.api_exceptions import (
+from lifehub.core.common.api.exceptions import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
-from lifehub.core.database_service import get_session
+from lifehub.core.common.database_service import get_session
+from lifehub.core.module.schema import Module
+from lifehub.core.provider.schema import Provider
+from lifehub.core.user.schema import User
 from lifehub.core.user.service import (
     AUTH_ALGORITHM,
     AUTH_SECRET_KEY,
     CredentialsException,
     oauth2_scheme,
 )
-from lifehub.models.provider_old.provider import Provider
-from lifehub.models.user_old import User
-from lifehub.models.util.module import Module
 
 
 def yield_session():

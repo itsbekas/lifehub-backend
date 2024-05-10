@@ -1,7 +1,7 @@
 from lifehub.clients.api import Trading212APIClient, YNABAPIClient
 from lifehub.clients.db.finance import NetworthDBClient
 from lifehub.core.base_fetcher import BaseFetcher
-from lifehub.modules.finance.schema import Networth
+from lifehub.providers.ynab.schema import Networth
 
 
 class NetworthFetcher(BaseFetcher):

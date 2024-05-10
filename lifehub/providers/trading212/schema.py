@@ -5,7 +5,7 @@ from decimal import Decimal
 from sqlalchemy import DECIMAL, BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from lifehub.core.base_model import BaseModel
+from lifehub.core.common.base_model import BaseModel
 
 
 class T212Transaction(BaseModel):
@@ -26,3 +26,15 @@ class T212Order(BaseModel):
     quantity: Mapped[Decimal] = mapped_column(DECIMAL(15, 7))
     price: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
     timestamp: Mapped[dt.datetime] = mapped_column(index=True)
+
+
+class T212Balance(BaseModel):
+    __tablename__ = "t212_balance"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), primary_key=True)
+    timestamp: Mapped[dt.datetime] = mapped_column(
+        default=dt.datetime.now, primary_key=True
+    )
+    free: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
+    invested: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
+    result: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
