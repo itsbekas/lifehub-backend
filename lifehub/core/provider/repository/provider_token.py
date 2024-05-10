@@ -13,4 +13,4 @@ class ProviderTokenRepository(BaseRepository[ProviderToken]):
         stmt = select(ProviderToken).where(
             ProviderToken.user_id == user.id, ProviderToken.provider_id == provider.id
         )
-        return self.session.exec(stmt).one_or_none()
+        return self.session.execute(stmt).scalar_one_or_none()

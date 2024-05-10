@@ -1,4 +1,4 @@
-from typing import Generic, List, Type
+from typing import Generic, Sequence, Type
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,10 +14,10 @@ class BaseRepository(Generic[BaseModelType]):
     def add(self, obj: BaseModelType) -> None:
         self.session.add(obj)
 
-    def get_all(self) -> List[BaseModelType]:
+    def get_all(self) -> Sequence[BaseModelType]:
         statement = select(self.model)
         result = self.session.execute(statement)
-        return result.all()
+        return result.scalars().all()
 
     def update(self, obj: BaseModelType) -> None:
         self.session.add(obj)
