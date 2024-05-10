@@ -1,5 +1,6 @@
 from lifehub.core.common.base_service import BaseService
-from lifehub.core.provider.models import ProviderResponse
+from lifehub.core.module.models import ModuleResponse
+from lifehub.core.provider.models import ProviderResponse, ProviderWithModulesResponse
 from lifehub.core.provider.repository.provider import ProviderRepository
 from lifehub.core.provider.schema import Provider
 
@@ -16,6 +17,24 @@ class ProviderService(BaseService):
             ProviderResponse(
                 id=provider.id,
                 name=provider.name,
+            )
+            for provider in providers
+        ]
+
+    def get_providers_with_modules(self) -> list[ProviderWithModulesResponse]:
+        providers = self.provider_repository.get_all()
+
+        return [
+            ProviderWithModulesResponse(
+                id=provider.id,
+                name=provider.name,
+                modules=[
+                    ModuleResponse(
+                        id=module.id,
+                        name=module.name,
+                    )
+                    for module in provider.modules
+                ],
             )
             for provider in providers
         ]

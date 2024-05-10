@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic.dataclasses import dataclass
 
 
@@ -5,4 +7,13 @@ from pydantic.dataclasses import dataclass
 class ProviderResponse:
     id: int
     name: str
-    # modules: List[ModuleResponse]
+
+
+from lifehub.core.module.models import ModuleResponse  # noqa: E402
+
+
+@dataclass
+class ProviderWithModulesResponse:
+    id: int
+    name: str
+    modules: List[ModuleResponse]

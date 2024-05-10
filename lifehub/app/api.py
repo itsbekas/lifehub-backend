@@ -6,8 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import lifehub.app.util.load  # noqa: F401
 from lifehub.app.util.schemas import *  # noqa: F401,F403
-
-# from lifehub.core.module.router import router as modules_router
+from lifehub.core.module.api.router import router as modules_router
 from lifehub.core.provider.api.router import router as providers_router
 
 # from lifehub.core.user.modules.router import router as user_modules_router
@@ -48,7 +47,7 @@ api.include_router(user_router, prefix="/user", tags=["user"])
 # )
 # api.include_router(user_modules_router, prefix="/user/modules", tags=["user/modules"])
 api.include_router(providers_router, prefix="/providers", tags=["providers"])
-# api.include_router(modules_router, prefix="/modules", tags=["modules"])
+api.include_router(modules_router, prefix="/modules", tags=["modules"])
 # api.include_router(finance_router, prefix="/finance", tags=["finance"])
 # api.include_router(server_router, prefix="/server", tags=["server"])
 
