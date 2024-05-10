@@ -67,19 +67,19 @@ ProviderDep = Annotated[Provider, Depends(get_provider)]
 
 
 def get_oauth_provider(provider: ProviderDep) -> Provider:
-    if provider.type != "oauth":
+    if provider.config.auth_type != "oauth":
         raise ProviderTypeInvalidException("OAuth")
     return provider
 
 
 def get_token_provider(provider: ProviderDep) -> Provider:
-    if provider.type != "token":
+    if provider.config.auth_type != "token":
         raise ProviderTypeInvalidException("Token")
     return provider
 
 
 def get_basic_provider(provider: ProviderDep) -> Provider:
-    if provider.type != "basic":
+    if provider.config.auth_type != "basic":
         raise ProviderTypeInvalidException("Basic")
     return provider
 

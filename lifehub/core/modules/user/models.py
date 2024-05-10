@@ -1,2 +1,0 @@
-class UserTokenResponse:
-    pass

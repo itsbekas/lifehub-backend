@@ -1,12 +1,9 @@
-import datetime as dt
-import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, Form
-from sqlmodel import SQLModel
 
 from lifehub.core.common.api.dependencies import SessionDep, UserDep
-from lifehub.core.modules.user.models import UserTokenResponse
+from lifehub.core.user.models import UserTokenResponse
 from lifehub.core.user.schema import User
 from lifehub.core.user.service import (
     authenticate_user,
@@ -15,13 +12,6 @@ from lifehub.core.user.service import (
 )
 
 router = APIRouter()
-
-
-class UserLogin(SQLModel):
-    user_id: uuid.UUID
-    name: str
-    access_token: str
-    expires_at: dt.datetime
 
 
 @router.post("/login", response_model=UserTokenResponse)

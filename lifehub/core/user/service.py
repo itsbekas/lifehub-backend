@@ -9,7 +9,7 @@ from jose import jwt
 from lifehub.clients.db.user import UserDBClient
 from lifehub.core.common.api.exceptions import CredentialsException, UserExistsException
 from lifehub.core.common.database_service import get_session
-from lifehub.core.modules.user.models import UserTokenResponse
+from lifehub.core.user.models import UserTokenResponse
 from lifehub.core.user.schema import User
 
 AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]

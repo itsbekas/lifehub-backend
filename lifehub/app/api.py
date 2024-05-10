@@ -7,9 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from lifehub.core.module.router import router as modules_router
 from lifehub.core.provider.router import router as providers_router
+from lifehub.core.user.modules.router import router as user_modules_router
+from lifehub.core.user.providers.router import router as user_providers_router
 from lifehub.core.user.router import router as user_router
-from lifehub.core.user_module.router import router as user_modules_router
-from lifehub.core.user_provider.router import router as user_providers_router
 from lifehub.modules.finance.router import router as finance_router
 from lifehub.modules.server.router import router as server_router
 

@@ -73,7 +73,7 @@ class ProviderConfig(BaseModel):
     provider_id: Mapped[int] = mapped_column(
         ForeignKey("provider.id"), primary_key=True
     )
-    auth_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    auth_type: Mapped[str] = mapped_column(String(8), nullable=False)
     allow_custom_url: Mapped[bool] = mapped_column(default=False)
 
     provider: Mapped[Provider] = relationship(
@@ -107,7 +107,7 @@ class OAuthProviderConfig(ProviderConfig):
     def build_refresh_token_url(self, refresh_token: str) -> str:
         return f"{self.token_url}?client_id={self.client_id}&redirect_uri={oauth_redirect_uri()}&scope={self.scope}&grant_type=refresh_token&client_secret={self.client_secret}&refresh_token={refresh_token}"
 
-    __mapper_args__ = {"polymorphic_identity": "oauth_provider_config"}
+    __mapper_args__ = {"polymorphic_identity": "oauth"}
 
 
 class TokenProviderConfig(ProviderConfig):
@@ -117,7 +117,7 @@ class TokenProviderConfig(ProviderConfig):
         ForeignKey("provider_config.provider_id"), primary_key=True
     )
 
-    __mapper_args__ = {"polymorphic_identity": "token_provider_config"}
+    __mapper_args__ = {"polymorphic_identity": "token"}
 
 
 class BasicProviderConfig(ProviderConfig):
@@ -127,4 +127,4 @@ class BasicProviderConfig(ProviderConfig):
         ForeignKey("provider_config.provider_id"), primary_key=True
     )
 
-    __mapper_args__ = {"polymorphic_identity": "basic_provider_config"}
+    __mapper_args__ = {"polymorphic_identity": "basic"}
