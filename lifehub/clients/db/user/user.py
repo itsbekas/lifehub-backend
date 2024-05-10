@@ -1,8 +1,8 @@
-from sqlmodel import Session, select
+from sqlalchemy import Session, select
 
 from lifehub.clients.db.base import BaseDBClient
-from lifehub.models.provider_old.provider import Provider
-from lifehub.models.user_old import User
+from lifehub.core.provider.schema import Provider
+from lifehub.core.user.schema import User
 
 
 class UserDBClient(BaseDBClient[User]):

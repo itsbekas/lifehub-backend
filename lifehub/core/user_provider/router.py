@@ -9,7 +9,7 @@ from lifehub.clients.db.provider.oauth_provider_config import (
     OAuthProviderConfigDBClient,
 )
 from lifehub.clients.db.provider.provider_token import APITokenDBClient
-from lifehub.core.api_dependencies import (
+from lifehub.core.common.api.dependencies import (
     BasicProviderDep,
     OAuthProviderDep,
     ProviderDep,

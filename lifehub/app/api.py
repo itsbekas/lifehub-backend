@@ -5,17 +5,15 @@ from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-load_dotenv()
+from lifehub.core.module.router import router as modules_router
+from lifehub.core.provider.router import router as providers_router
+from lifehub.core.user.router import router as user_router
+from lifehub.core.user_module.router import router as user_modules_router
+from lifehub.core.user_provider.router import router as user_providers_router
+from lifehub.modules.finance.router import router as finance_router
+from lifehub.modules.server.router import router as server_router
 
-from lifehub.api.routers import (  # noqa: E402
-    finance_router,
-    modules_router,
-    providers_router,
-    server_router,
-    user_modules_router,
-    user_providers_router,
-    user_router,
-)
+load_dotenv()
 
 #### Config ####
 app = FastAPI(

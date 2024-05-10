@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
 from lifehub.config.providers import setup_providers
-from lifehub.core.base_model import BaseModel
+from lifehub.core.common.base_model import BaseModel
 from lifehub.core.module.schema import *  # noqa: F401,F403
 from lifehub.core.provider.schema import *  # noqa: F401,F403
 from lifehub.core.user.schema import *  # noqa: F401,F403

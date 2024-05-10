@@ -1,33 +1,35 @@
 from typing import Generic, List, Type, TypeVar
 
-from sqlmodel import Session, SQLModel, select
+from sqlalchemy import Session, select
 
-BaseModel = TypeVar("BaseModel", bound=SQLModel)
+from lifehub.core.common.base_model import BaseModel
+
+BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
 
 
-class BaseDBClient(Generic[BaseModel]):
-    def __init__(self, model: Type[BaseModel], session: Session):
-        self.model: Type[BaseModel] = model
+class BaseDBClient(Generic[BaseModelType]):
+    def __init__(self, model: Type[BaseModelType], session: Session):
+        self.model: Type[BaseModelType] = model
         self.session = session
 
-    def add(self, obj: BaseModel) -> None:
+    def add(self, obj: BaseModelType) -> None:
         self.session.add(obj)
 
-    def get_all(self) -> List[BaseModel]:
+    def get_all(self) -> List[BaseModelType]:
         statement = select(self.model)
         result = self.session.exec(statement)
         return result.all()
 
-    def update(self, obj: BaseModel) -> None:
+    def update(self, obj: BaseModelType) -> None:
         self.session.add(obj)
 
-    def delete(self, obj: BaseModel) -> None:
+    def delete(self, obj: BaseModelType) -> None:
         self.session.delete(obj)
 
     def commit(self):
         self.session.commit()
 
-    def refresh(self, obj: BaseModel):
+    def refresh(self, obj: BaseModelType):
         self.session.refresh(obj)
 
     def rollback(self):

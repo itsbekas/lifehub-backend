@@ -10,10 +10,10 @@ class ProviderExistsException(HTTPException):
 
 
 class ProviderDoesNotExistException(HTTPException):
-    def __init__(self, provider_name: str):
+    def __init__(self, provider_id: int):
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Provider {provider_name} does not exist",
+            detail=f"Provider with ID {provider_id} does not exist",
         )
 
 

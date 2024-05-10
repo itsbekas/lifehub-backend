@@ -1,8 +1,8 @@
-from sqlmodel import Session
+from sqlalchemy import Session
 
 from lifehub.clients.db.base import TimeUserBaseDBClient
-from lifehub.models.user_old import User
-from lifehub.providers.ynab.schema import T212Transaction
+from lifehub.core.user.schema import User
+from lifehub.providers.trading212.schema import T212Transaction
 
 
 class T212TransactionDBClient(TimeUserBaseDBClient[T212Transaction]):

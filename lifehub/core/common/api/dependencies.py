@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
-from sqlmodel import Session
+from sqlalchemy import Session
 
 from lifehub.clients.db.provider.provider import ProviderDBClient
 from lifehub.clients.db.user import UserDBClient
@@ -41,7 +41,10 @@ def get_user(
         raise CredentialsException()
 
     db_client = UserDBClient(session)
-    user = db_client.get_by_username(payload.get("sub"))
+
+    username: str = payload.get("sub")  # type: ignore
+
+    user = db_client.get_by_username(username)
     if user is None:
         raise CredentialsException()
     return user
@@ -81,9 +84,9 @@ def get_basic_provider(provider: ProviderDep) -> Provider:
     return provider
 
 
-OAuthProviderDep = Annotated[str, Depends(get_oauth_provider)]
-TokenProviderDep = Annotated[str, Depends(get_token_provider)]
-BasicProviderDep = Annotated[str, Depends(get_basic_provider)]
+OAuthProviderDep = Annotated[Provider, Depends(get_oauth_provider)]
+TokenProviderDep = Annotated[Provider, Depends(get_token_provider)]
+BasicProviderDep = Annotated[Provider, Depends(get_basic_provider)]
 
 
 def get_module(module_id: int, session: SessionDep):

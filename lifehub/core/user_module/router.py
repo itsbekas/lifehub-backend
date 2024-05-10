@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import exc as sa_exc
 from sqlmodel import SQLModel
 
-from lifehub.core.api_dependencies import ModuleDep, SessionDep, UserDep
-from lifehub.models.provider_old.provider import Provider
+from lifehub.core.common.api.dependencies import ModuleDep, SessionDep, UserDep
+from lifehub.models.provider.provider import Provider
 
 router = APIRouter()
 

@@ -5,13 +5,14 @@ from typing import Annotated
 from fastapi import APIRouter, Form
 from sqlmodel import SQLModel
 
-from lifehub.core.api_dependencies import SessionDep, UserDep
+from lifehub.core.common.api.dependencies import SessionDep, UserDep
+from lifehub.core.modules.user.models import UserTokenResponse
+from lifehub.core.user.schema import User
 from lifehub.core.user.service import (
     authenticate_user,
     create_access_token,
     create_user,
 )
-from lifehub.models.user_old import User, UserTokenResponse
 
 router = APIRouter()
 

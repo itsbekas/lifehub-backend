@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, List
 from sqlalchemy import UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.core.base_model import BaseModel
+from lifehub.core.common.base_model import BaseModel
 from lifehub.core.module.schema import module_provider
 from lifehub.core.user.schema import user_provider
 
@@ -19,7 +19,10 @@ if TYPE_CHECKING:
 
 
 def oauth_redirect_uri() -> str:
-    return getenv("REDIRECT_URI_BASE") + "/account/oauth_token"
+    uri_base: str | None = getenv("REDIRECT_URI_BASE")
+    if uri_base is None:
+        raise ValueError("REDIRECT_URI_BASE is not set")
+    return uri_base + "/account/oauth_token"
 
 
 class ProviderType(str, Enum):

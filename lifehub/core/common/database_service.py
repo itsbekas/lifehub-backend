@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 
 class DatabaseService:
-    _instance = None
+    _instance: "DatabaseService" | None = None
 
     def __new__(cls):
         if cls._instance is None:

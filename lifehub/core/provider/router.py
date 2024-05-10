@@ -4,7 +4,7 @@ from lifehub.clients.db.provider import (
     OAuthProviderConfigDBClient,
     ProviderDBClient,
 )
-from lifehub.core.api_dependencies import OAuthProviderDep, SessionDep, get_user
+from lifehub.core.common.api.dependencies import OAuthProviderDep, SessionDep, get_user
 from lifehub.core.provider.schema import Provider
 
 router = APIRouter(
@@ -24,4 +24,8 @@ async def oauth_authorization_url(
 ):
     db_client = OAuthProviderConfigDBClient(session)
     config = db_client.get(provider.id)
+
+    if config is None:
+        raise Exception("Provider is not configured")
+
     return config.build_auth_url()

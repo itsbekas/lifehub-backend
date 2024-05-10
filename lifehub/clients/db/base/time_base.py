@@ -1,4 +1,4 @@
-from sqlmodel import select
+from sqlalchemy import select
 
 from lifehub.clients.db.base.base import BaseDBClient, BaseModel
 

@@ -1,5 +1,5 @@
 from lifehub.core.common.base_fetcher import BaseFetcher
-from lifehub.providers.qbittorrent import QBittorrentAPIClient
+from lifehub.providers.qbittorrent.api_client import QBittorrentAPIClient
 from lifehub.providers.qbittorrent.schema import QBittorrentStats
 
 

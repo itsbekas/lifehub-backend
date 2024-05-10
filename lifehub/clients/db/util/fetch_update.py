@@ -1,6 +1,6 @@
 import datetime as dt
 
-from sqlmodel import Session, select
+from sqlalchemy import Session, select
 
 from lifehub.clients.db.base import BaseDBClient
 from lifehub.models.util import FetchUpdate, Module

@@ -1,7 +1,7 @@
 from lifehub.clients.db.util import FetchUpdateDBClient, ModuleDBClient
-from lifehub.core.database_service import get_session
-from lifehub.models.user_old import User
-from lifehub.models.util import Module
+from lifehub.core.common.database_service import get_session
+from lifehub.core.module.schema import Module
+from lifehub.core.user.schema import User
 
 
 class BaseFetcher:

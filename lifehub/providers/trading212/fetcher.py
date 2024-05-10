@@ -1,6 +1,6 @@
-from lifehub.clients.api import Trading212APIClient
-from lifehub.core.base_fetcher import BaseFetcher
-from lifehub.providers.ynab.schema import T212Order, T212Transaction
+from lifehub.core.common.base_fetcher import BaseFetcher
+from lifehub.providers.trading212.api_client import Trading212APIClient
+from lifehub.providers.trading212.schema import T212Order, T212Transaction
 
 
 class T212HistoryFetcher(BaseFetcher):

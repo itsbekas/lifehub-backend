@@ -1,17 +1,17 @@
 from typing import Type
 
-from sqlmodel import Session, select
+from sqlalchemy import Session, select
 
-from lifehub.clients.db.base.base import BaseModel
+from lifehub.clients.db.base.base import BaseModelType
 from lifehub.clients.db.base.user_base import UserBaseDBClient
-from lifehub.models.user_old import User
+from lifehub.core.user.schema import User
 
 
-class TimeUserBaseDBClient(UserBaseDBClient[BaseModel]):
-    def __init__(self, model: Type[BaseModel], user: User, session: Session):
+class TimeUserBaseDBClient(UserBaseDBClient[BaseModelType]):
+    def __init__(self, model: Type[BaseModelType], user: User, session: Session):
         super().__init__(model, user, session)
 
-    def get_latest(self) -> BaseModel | None:
+    def get_latest(self) -> BaseModelType | None:
         statement = (
             select(self.model)
             .where(self.model.user_id == self.user.id)
