@@ -3,7 +3,7 @@ import uuid
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.db import UserBaseDBClient
+from lifehub.clients.db.db import UserBaseRepository
 
 
 # Test model
@@ -26,7 +26,7 @@ def user_id2():
 @pytest.fixture(scope="function")
 def db_client(engine, user_id1):
     UserBaseTestModel.metadata.create_all(bind=engine)
-    yield UserBaseDBClient(UserBaseTestModel, user_id1)
+    yield UserBaseRepository(UserBaseTestModel, user_id1)
     UserBaseTestModel.metadata.drop_all(bind=engine)
 
 
@@ -52,7 +52,7 @@ def obj2_user2(user_id2):
 
 def test_creation(db_client):
     """
-    Test creating a UserBaseDBClient object
+    Test creating a UserBaseRepository object
     Expected: Object is created
     """
     assert db_client
@@ -60,11 +60,11 @@ def test_creation(db_client):
 
 def test_creation_without_user_id():
     """
-    Test creating a UserBaseDBClient object without a user ID
+    Test creating a UserBaseRepository object without a user ID
     Expected: TypeError is raised
     """
     with pytest.raises(TypeError):
-        UserBaseDBClient(UserBaseTestModel)
+        UserBaseRepository(UserBaseTestModel)
 
 
 class TestAdd:
@@ -107,7 +107,7 @@ class TestGetAll:
         Test getting all objects when none have the correct user ID
         Expected: No objects are returned
         """
-        user2_db_client = UserBaseDBClient(UserBaseTestModel, user_id2)
+        user2_db_client = UserBaseRepository(UserBaseTestModel, user_id2)
         user2_db_client.add(obj1_user2)
         assert db_client.get_all() == []
 

@@ -4,7 +4,7 @@ import uuid
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.db import TimeUserBaseDBClient
+from lifehub.clients.db.db import TimeUserBaseRepository
 
 
 # Test model
@@ -37,7 +37,7 @@ def user_id2():
 @pytest.fixture(scope="function")
 def db_client(engine, user_id1):
     TimeUserBaseTestModel.metadata.create_all(bind=engine)
-    yield TimeUserBaseDBClient(TimeUserBaseTestModel, user_id1)
+    yield TimeUserBaseRepository(TimeUserBaseTestModel, user_id1)
     TimeUserBaseTestModel.metadata.drop_all(bind=engine)
 
 
@@ -71,7 +71,7 @@ def obj_latest_user2(user_id2, date_latest):
 
 def test_creation(db_client):
     """
-    Test creating a TimeUserBaseDBClient object
+    Test creating a TimeUserBaseRepository object
     Expected: Object is created
     """
     assert db_client
@@ -98,7 +98,7 @@ class TestGetLatest:
         Test getting the latest object from the database with a single object
         Expected: None is returned
         """
-        user2_db_client = TimeUserBaseDBClient(
+        user2_db_client = TimeUserBaseRepository(
             TimeUserBaseTestModel, obj_latest_user2.user_id
         )
         user2_db_client.add(obj_latest_user2)
@@ -121,7 +121,7 @@ class TestGetLatest:
         Expected: Correct user's latest object is returned
         """
         db_client.add(obj_oldest_user1)
-        user2_db_client = TimeUserBaseDBClient(
+        user2_db_client = TimeUserBaseRepository(
             TimeUserBaseTestModel, obj_latest_user2.user_id
         )
         user2_db_client.add(obj_latest_user2)

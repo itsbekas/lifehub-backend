@@ -2,12 +2,12 @@ from typing import Type
 
 from sqlalchemy import Session, select
 
-from lifehub.clients.db.db.base import BaseModelType
-from lifehub.clients.db.db.user_base import UserBaseDBClient
+from lifehub.core.common.repository import BaseModelType
+from lifehub.core.common.repository.user_base import UserBaseRepository
 from lifehub.core.user.schema import User
 
 
-class TimeUserBaseDBClient(UserBaseDBClient[BaseModelType]):
+class TimeUserBaseRepository(UserBaseRepository[BaseModelType]):
     def __init__(self, model: Type[BaseModelType], user: User, session: Session):
         super().__init__(model, user, session)
 

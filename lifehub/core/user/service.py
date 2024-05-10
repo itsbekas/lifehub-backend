@@ -6,7 +6,7 @@ from argon2 import PasswordHasher
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
-from lifehub.clients.db.user import UserDBClient
+from lifehub.clients.db.user import UserRepository
 from lifehub.core.common.api.exceptions import CredentialsException, UserExistsException
 from lifehub.core.common.database_service import get_session
 from lifehub.core.user.models import UserTokenResponse
@@ -33,13 +33,13 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 def get_user(username: str) -> User | None:
     with get_session() as session:
-        db_client = UserDBClient(session)
+        db_client = UserRepository(session)
         return db_client.get_by_username(username)
 
 
 def add_user(user: User) -> User:
     with get_session() as session:
-        db_client = UserDBClient(session)
+        db_client = UserRepository(session)
         db_client.add(user)
         db_client.commit()
         db_client.refresh(user)

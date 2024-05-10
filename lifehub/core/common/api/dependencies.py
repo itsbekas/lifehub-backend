@@ -4,14 +4,14 @@ from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
 from sqlalchemy import Session
 
-from lifehub.clients.db.repository.provider import ProviderDBClient
-from lifehub.clients.db.user import UserDBClient
+from lifehub.clients.db.repository.provider import ProviderRepository
+from lifehub.clients.db.user import UserRepository
 from lifehub.core.common.api.exceptions import (
     ProviderDoesNotExistException,
     ProviderTypeInvalidException,
 )
 from lifehub.core.common.database_service import get_session
-from lifehub.core.module.repository import ModuleDBClient
+from lifehub.core.module.repository.module import ModuleRepository
 from lifehub.core.module.schema import Module
 from lifehub.core.provider.schema import Provider
 from lifehub.core.user.schema import User
@@ -40,7 +40,7 @@ def get_user(
     except JWTError:
         raise CredentialsException()
 
-    db_client = UserDBClient(session)
+    db_client = UserRepository(session)
 
     username: str = payload.get("sub")  # type: ignore
 
@@ -57,7 +57,7 @@ def get_provider(
     provider_id: int,
     session: SessionDep,
 ) -> Provider:
-    provider = ProviderDBClient(session).get_by_id(provider_id)
+    provider = ProviderRepository(session).get_by_id(provider_id)
     if not provider:
         raise ProviderDoesNotExistException(provider_id)
     return provider
@@ -90,7 +90,7 @@ BasicProviderDep = Annotated[Provider, Depends(get_basic_provider)]
 
 
 def get_module(module_id: int, session: SessionDep):
-    module = ModuleDBClient(session).get_by_id(module_id)
+    module = ModuleRepository(session).get_by_id(module_id)
     if not module:
         raise HTTPException(404, f"Module with ID {module_id} does not exist")
     return module

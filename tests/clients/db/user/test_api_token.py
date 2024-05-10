@@ -2,7 +2,7 @@ import datetime as dt
 
 import pytest
 
-from lifehub.clients.db.user import APITokenDBClient
+from lifehub.clients.db.user import APITokenRepository
 from lifehub.models.user_old import APIToken
 
 
@@ -59,16 +59,16 @@ def api_token2_user2(user2, token_id2):
 @pytest.fixture(scope="function")
 def db_client(engine):
     APIToken.metadata.create_all(bind=engine)
-    yield APITokenDBClient()
+    yield APITokenRepository()
     APIToken.metadata.drop_all(bind=engine)
 
 
 def test_creation():
     """
-    Test creating an APITokenDBClient object
+    Test creating an APITokenRepository object
     Expected: Object is created
     """
-    assert APITokenDBClient()
+    assert APITokenRepository()
 
 
 class TestGetUserIDsWithTokens:

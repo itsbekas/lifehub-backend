@@ -3,7 +3,7 @@ from typing import Optional
 
 import requests
 
-from lifehub.clients.db.repository import ProviderDBClient, ProviderTokenDBClient
+from lifehub.clients.db.repository import ProviderRepository, ProviderTokenRepository
 from lifehub.core.common.database_service import get_session
 from lifehub.core.provider.schema import Provider, ProviderToken
 from lifehub.core.user.schema import User
@@ -28,7 +28,7 @@ class APIClient:
 
     def __init__(self, user: User):
         with get_session() as session:
-            self.provider: Provider | None = ProviderDBClient(session).get_by_name(
+            self.provider: Provider | None = ProviderRepository(session).get_by_name(
                 self.provider_name
             )
 
@@ -37,7 +37,7 @@ class APIClient:
                     f"Provider {self.provider_name} not found in the database"
                 )
 
-            api_token: ProviderToken | None = ProviderTokenDBClient(session).get(
+            api_token: ProviderToken | None = ProviderTokenRepository(session).get(
                 user, self.provider
             )
 

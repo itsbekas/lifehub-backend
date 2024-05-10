@@ -6,9 +6,9 @@ from sqlmodel import SQLModel
 
 from lifehub.clients.api import api_clients
 from lifehub.clients.db.repository.oauth_provider_config import (
-    OAuthProviderConfigDBClient,
+    OAuthProviderConfigRepository,
 )
-from lifehub.clients.db.repository.provider_token import APITokenDBClient
+from lifehub.clients.db.repository.provider_token import APITokenRepository
 from lifehub.core.common.api.dependencies import (
     BasicProviderDep,
     OAuthProviderDep,
@@ -72,7 +72,7 @@ async def remove_user_provider(
     # Remove Modules that require Provider from User
     user.modules = [module for module in user.modules if module not in provider.modules]
     # Remove APITokens for Provider from User
-    token = APITokenDBClient(session).get(user, provider)
+    token = APITokenRepository(session).get(user, provider)
     session.delete(token)
 
     session.add(user)
@@ -86,7 +86,7 @@ async def oauth_token(
     session: SessionDep,
     code: str,
 ):
-    url = OAuthProviderConfigDBClient(session).get(provider.id).build_token_url(code)
+    url = OAuthProviderConfigRepository(session).get(provider.id).build_token_url(code)
     res = requests.post(url)
     if res.status_code != 200:
         raise OAuthTokenRequestFailedException(res)
@@ -117,7 +117,7 @@ async def create_basic_token(
     session: SessionDep,
     req: APITokenTokenRequest,
 ):
-    api_token = APITokenDBClient(session).get(user, provider)
+    api_token = APITokenRepository(session).get(user, provider)
 
     if api_token is not None:
         raise HTTPException(409, "Token already exists")
@@ -148,7 +148,7 @@ async def update_basic_token(
     session: SessionDep,
     req: APITokenTokenRequest,
 ):
-    api_token = APITokenDBClient(session).get(user, provider)
+    api_token = APITokenRepository(session).get(user, provider)
     if api_token is None:
         raise NoTokenException()
     api_token.token = req.token
@@ -163,7 +163,7 @@ async def create_basic_login(
     session: SessionDep,
     req: APITokenBasicRequest,
 ):
-    api_token = APITokenDBClient(session).get(user, provider)
+    api_token = APITokenRepository(session).get(user, provider)
 
     if api_token is not None:
         raise HTTPException(409, "Token already exists")
@@ -194,7 +194,7 @@ async def update_basic_login(
     session: SessionDep,
     req: APITokenBasicRequest,
 ):
-    api_token = APITokenDBClient(session).get(user, provider)
+    api_token = APITokenRepository(session).get(user, provider)
     if api_token is None:
         raise NoTokenException()
     api_token.token = f"{req.username}:{req.password}"

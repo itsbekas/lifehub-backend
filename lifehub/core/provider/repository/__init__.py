@@ -1,5 +1,9 @@
-from .oauth_provider_config import OAuthProviderConfigDBClient
-from .provider import ProviderDBClient
-from .provider_token import ProviderTokenDBClient
+from .oauth_provider_config import OAuthProviderConfigRepository
+from .provider import ProviderRepository
+from .provider_token import ProviderTokenRepository
 
-__all__ = ["ProviderDBClient", "OAuthProviderConfigDBClient", "ProviderTokenDBClient"]
+__all__ = [
+    "ProviderRepository",
+    "OAuthProviderConfigRepository",
+    "ProviderTokenRepository",
+]

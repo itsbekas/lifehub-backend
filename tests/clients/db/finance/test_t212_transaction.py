@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from lifehub.clients.db.finance import T212TransactionDBClient
+from lifehub.clients.db.finance import T212TransactionRepository
 from lifehub.providers.ynab.schema import T212Transaction
 
 
@@ -14,13 +14,13 @@ def user_id():
 @pytest.fixture(scope="function")
 def db_client(engine, user_id):
     T212Transaction.metadata.create_all(bind=engine)
-    yield T212TransactionDBClient(user_id)
+    yield T212TransactionRepository(user_id)
     T212Transaction.metadata.drop_all(bind=engine)
 
 
 def test_creation(db_client):
     """
-    Test creating a T212TransactionDBClient object
+    Test creating a T212TransactionRepository object
     Expected: Object is created
     """
     assert db_client

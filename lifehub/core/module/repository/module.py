@@ -1,10 +1,10 @@
 from sqlalchemy import Session, select
 
-from lifehub.clients.db.db import BaseDBClient
-from lifehub.models.util import Module
+from lifehub.core.common.repository import BaseRepository
+from lifehub.core.module.schema import Module
 
 
-class ModuleDBClient(BaseDBClient[Module]):
+class ModuleRepository(BaseRepository[Module]):
     def __init__(self, session: Session):
         super().__init__(Module, session=session)
 

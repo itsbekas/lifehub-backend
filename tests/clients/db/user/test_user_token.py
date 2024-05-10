@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from lifehub.clients.db.user import UserTokenDBClient
+from lifehub.clients.db.user import UserTokenRepository
 from lifehub.models.user_old import UserToken
 
 
@@ -14,13 +14,13 @@ def user_id():
 @pytest.fixture(scope="function")
 def db_client(engine, user_id):
     UserToken.metadata.create_all(bind=engine)
-    yield UserTokenDBClient(user_id)
+    yield UserTokenRepository(user_id)
     UserToken.metadata.drop_all(bind=engine)
 
 
 def test_creation(db_client):
     """
-    Test creating a UserTokenDBClient object
+    Test creating a UserTokenRepository object
     Expected: Object is created
     """
     assert db_client

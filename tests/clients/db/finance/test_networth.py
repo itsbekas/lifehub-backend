@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from lifehub.clients.db.finance import NetworthDBClient
+from lifehub.clients.db.finance import NetworthRepository
 from lifehub.providers.ynab.schema import Networth
 
 
@@ -14,13 +14,13 @@ def user_id():
 @pytest.fixture(scope="function")
 def db_client(engine, user_id):
     Networth.metadata.create_all(bind=engine)
-    yield NetworthDBClient(user_id)
+    yield NetworthRepository(user_id)
     Networth.metadata.drop_all(bind=engine)
 
 
 def test_creation(db_client):
     """
-    Test creating a NetworthDBClient object
+    Test creating a NetworthRepository object
     Expected: Object is created
     """
     assert db_client

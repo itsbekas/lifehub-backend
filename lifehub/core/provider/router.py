@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from lifehub.clients.db.repository import (
-    OAuthProviderConfigDBClient,
-    ProviderDBClient,
+    OAuthProviderConfigRepository,
+    ProviderRepository,
 )
 from lifehub.core.common.api.dependencies import OAuthProviderDep, SessionDep, get_user
 from lifehub.core.provider.schema import Provider
@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.get("", response_model=list[Provider])
 async def get_providers(session: SessionDep):
-    return ProviderDBClient(session).get_all()
+    return ProviderRepository(session).get_all()
 
 
 @router.get("/{provider_id}/oauth_url", response_model=str)
@@ -22,7 +22,7 @@ async def oauth_authorization_url(
     provider: OAuthProviderDep,
     session: SessionDep,
 ):
-    db_client = OAuthProviderConfigDBClient(session)
+    db_client = OAuthProviderConfigRepository(session)
     config = db_client.get(provider.id)
 
     if config is None:

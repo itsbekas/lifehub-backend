@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.db import TimeBaseDBClient
+from lifehub.clients.db.db import TimeBaseRepository
 
 
 # Test model
@@ -25,7 +25,7 @@ def date_latest():
 @pytest.fixture(scope="function")
 def db_client(engine):
     TimeBaseTestModel.metadata.create_all(bind=engine)
-    yield TimeBaseDBClient(TimeBaseTestModel)
+    yield TimeBaseRepository(TimeBaseTestModel)
     TimeBaseTestModel.metadata.drop_all(bind=engine)
 
 
@@ -41,7 +41,7 @@ def obj_latest(date_latest):
 
 def test_creation(db_client):
     """
-    Test creating a TimeBaseDBClient object
+    Test creating a TimeBaseRepository object
     Expected: Object is created
     """
     assert db_client

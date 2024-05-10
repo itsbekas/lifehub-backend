@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from sqlmodel import Field, SQLModel
 
-from lifehub.clients.db.db import BaseDBClient
+from lifehub.clients.db.db import BaseRepository
 
 
 # Test model
@@ -16,7 +16,7 @@ class BaseTestModel(SQLModel, table=True):
 @pytest.fixture(scope="function")
 def db_client(engine):
     BaseTestModel.metadata.create_all(bind=engine)
-    yield BaseDBClient(BaseTestModel)
+    yield BaseRepository(BaseTestModel)
     BaseTestModel.metadata.drop_all(bind=engine)
 
 
@@ -32,7 +32,7 @@ def obj2():
 
 def test_creation(db_client):
     """
-    Test creating a BaseDBClient object
+    Test creating a BaseRepository object
     Expected: Object is created
     """
     assert db_client

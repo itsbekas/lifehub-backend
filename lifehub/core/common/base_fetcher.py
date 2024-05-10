@@ -1,5 +1,5 @@
-from lifehub.clients.db.util import FetchUpdateDBClient, ModuleDBClient
 from lifehub.core.common.database_service import get_session
+from lifehub.core.module.repository.module import ModuleRepository
 from lifehub.core.module.schema import Module
 from lifehub.core.user.schema import User
 
@@ -9,7 +9,7 @@ class BaseFetcher:
 
     def __init__(self):
         with get_session() as session:
-            self.module: Module = ModuleDBClient(session=session).get_by_name(
+            self.module: Module = ModuleRepository(session=session).get_by_name(
                 self.module_name, retrieve_users=True
             )
 
@@ -27,6 +27,5 @@ class BaseFetcher:
         raise NotImplementedError("fetch_data must be implemented in the subclass")
 
     def _update_fetch_timestamp(self):
-        db_client = FetchUpdateDBClient(self.session)
-        self.prev_timestamp = db_client.get(self.module).last_update
-        db_client.update(self.module)
+        # TODO
+        pass

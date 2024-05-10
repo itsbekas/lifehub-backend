@@ -1,13 +1,11 @@
-from typing import Generic, List, Type, TypeVar
+from typing import Generic, List, Type
 
 from sqlalchemy import Session, select
 
-from lifehub.core.common.base_model import BaseModel
-
-BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
+from lifehub.core.common.repository import BaseModelType
 
 
-class BaseDBClient(Generic[BaseModelType]):
+class BaseRepository(Generic[BaseModelType]):
     def __init__(self, model: Type[BaseModelType], session: Session):
         self.model: Type[BaseModelType] = model
         self.session = session
