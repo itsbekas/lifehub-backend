@@ -43,7 +43,7 @@ async def remove_user_provider(
 
 
 @router.post("/{provider_id}/oauth_token")
-async def oauth_token(
+async def add_oauth_provider(
     provider: OAuthProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
@@ -69,7 +69,7 @@ async def oauth_token(
 
 
 @router.post("/{provider_id}/basic_token")
-async def create_basic_token(
+async def add_token_provider(
     provider: TokenProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
@@ -89,7 +89,7 @@ async def update_basic_token(
 
 
 @router.post("/{provider_id}/basic_login")
-async def create_basic_login(
+async def add_basic_provider(
     provider: BasicProviderDep,
     user: UserDep,
     user_service: UserServiceDep,

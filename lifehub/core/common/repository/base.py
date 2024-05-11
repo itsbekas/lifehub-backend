@@ -25,6 +25,9 @@ class BaseRepository(Generic[BaseModelType]):
     def delete(self, obj: BaseModelType) -> None:
         self.session.delete(obj)
 
+    def merge(self, obj: BaseModelType) -> BaseModelType:
+        return self.session.merge(obj)
+
     def commit(self):
         self.session.commit()
 

@@ -5,6 +5,7 @@ from jose import JWTError
 
 from lifehub.core.common.base_service import BaseService
 from lifehub.core.module.models import ModuleResponse
+from lifehub.core.module.schema import Module
 from lifehub.core.provider.models import ProviderResponse, ProviderWithModulesResponse
 from lifehub.core.provider.repository.provider_token import ProviderTokenRepository
 from lifehub.core.provider.schema import Provider, ProviderToken
@@ -130,12 +131,47 @@ class UserService(BaseService):
             expires_at=expires_at,
         )
         self.provider_token_repository.add(provider_token)
-        self.provider_token_repository.commit()
+        user = self.session.merge(user)
+        provider = self.session.merge(provider)
+        user.providers.append(provider)
+        self.user_repository.add(user)
+        self.session.commit()
 
     def update_provider_token(self, user: User, provider: Provider, token: str) -> None:
         provider_token = self.provider_token_repository.get(user, provider)
         provider_token.token = token
         self.provider_token_repository.commit()
+
+    def get_user_modules(self, user: User) -> list[ModuleResponse]:
+        return [
+            ModuleResponse(id=module.id, name=module.name) for module in user.modules
+        ]
+
+    def add_module_to_user(self, user: User, module: Module) -> None:
+        if module in user.modules:
+            raise Exception(f"User already has module {module.name}")
+
+        missed_providers = []
+
+        module = self.session.merge(module)
+        user = self.session.merge(user)
+
+        for provider in module.providers:
+            if provider not in user.providers:
+                missed_providers.append(provider.name)
+
+        if missed_providers:
+            raise Exception(f"User is missing providers: {', '.join(missed_providers)}")
+
+        user.modules.append(module)
+        self.user_repository.commit()
+
+    def remove_module_from_user(self, user: User, module: Module) -> None:
+        if module not in user.modules:
+            raise Exception(f"User does not have module {module.name}")
+
+        user.modules.remove(module)
+        self.user_repository.commit()
 
     def __del__(self):
         self.user_repository.close()

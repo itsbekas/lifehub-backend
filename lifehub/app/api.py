@@ -9,8 +9,7 @@ from lifehub.app.util.schemas import *  # noqa: F401,F403
 from lifehub.core.module.api.router import router as modules_router
 from lifehub.core.provider.api.router import router as providers_router
 from lifehub.core.user.api.router import router as user_router
-
-# from lifehub.core.user.modules.router import router as user_modules_router
+from lifehub.core.user.api.user_modules.router import router as user_modules_router
 from lifehub.core.user.api.user_providers.router import router as user_providers_router
 
 # from lifehub.modules.finance.router import router as finance_router
@@ -45,7 +44,7 @@ api.include_router(user_router, prefix="/user", tags=["user"])
 api.include_router(
     user_providers_router, prefix="/user/providers", tags=["user/providers"]
 )
-# api.include_router(user_modules_router, prefix="/user/modules", tags=["user/modules"])
+api.include_router(user_modules_router, prefix="/user/modules", tags=["user/modules"])
 api.include_router(providers_router, prefix="/providers", tags=["providers"])
 api.include_router(modules_router, prefix="/modules", tags=["modules"])
 # api.include_router(finance_router, prefix="/finance", tags=["finance"])
