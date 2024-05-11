@@ -64,7 +64,7 @@ class ProviderToken(BaseModel):
     created_at: Mapped[dt.datetime] = mapped_column(default=dt.datetime.now)
     expires_at: Mapped[dt.datetime] = mapped_column(default=dt.datetime.max)
 
-    user: Mapped[User] = relationship(back_populates="api_tokens")
+    user: Mapped[User] = relationship(back_populates="provider_tokens")
 
 
 class ProviderConfig(BaseModel):

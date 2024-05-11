@@ -45,4 +45,4 @@ class User(BaseModel):
     providers: Mapped[List["Provider"]] = relationship(
         secondary=user_provider, back_populates="users"
     )
-    api_tokens: Mapped[List["ProviderToken"]] = relationship(back_populates="user")
+    provider_tokens: Mapped[List["ProviderToken"]] = relationship(back_populates="user")

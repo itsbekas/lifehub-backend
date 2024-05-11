@@ -17,3 +17,14 @@ class ProviderWithModulesResponse:
     id: int
     name: str
     modules: List[ModuleResponse]
+
+
+@dataclass
+class ProviderTokenTokenRequest:
+    token: str
+
+
+@dataclass
+class ProviderTokenBasicRequest:
+    username: str
+    password: str
