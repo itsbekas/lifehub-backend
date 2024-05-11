@@ -28,6 +28,7 @@ class ProviderService(BaseService):
             ProviderWithModulesResponse(
                 id=provider.id,
                 name=provider.name,
+                type=provider.config.auth_type,
                 modules=[
                     ModuleResponse(
                         id=module.id,

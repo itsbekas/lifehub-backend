@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from lifehub.core.module.api.dependencies import ModuleDep
-from lifehub.core.module.models import ModuleResponse
+from lifehub.core.module.models import ModuleWithProvidersResponse
 from lifehub.core.user.api.dependencies import (
     UserDep,
     UserServiceDep,
@@ -13,9 +13,9 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[ModuleResponse])
+@router.get("", response_model=list[ModuleWithProvidersResponse])
 async def get_user_modules(user: UserDep, user_service: UserServiceDep):
-    return user_service.get_user_modules(user)
+    return user_service.get_user_modules_with_providers(user)
 
 
 @router.post("/{module_id}")

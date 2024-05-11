@@ -16,6 +16,7 @@ from lifehub.core.module.models import ModuleResponse  # noqa: E402
 class ProviderWithModulesResponse:
     id: int
     name: str
+    type: str
     modules: List[ModuleResponse]
 
 

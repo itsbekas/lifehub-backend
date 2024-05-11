@@ -10,9 +10,9 @@ from lifehub.core.provider.api.dependencies import (
     TokenProviderDep,
 )
 from lifehub.core.provider.models import (
-    ProviderResponse,
     ProviderTokenBasicRequest,
     ProviderTokenTokenRequest,
+    ProviderWithModulesResponse,
 )
 from lifehub.core.user.api.dependencies import (
     UserDep,
@@ -28,9 +28,9 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[ProviderResponse])
+@router.get("", response_model=list[ProviderWithModulesResponse])
 async def get_user_providers(user: UserDep, user_service: UserServiceDep):
-    return user_service.get_user_providers(user)
+    return user_service.get_user_providers_with_modules(user)
 
 
 @router.delete("/{provider_id}")

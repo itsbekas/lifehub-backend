@@ -4,7 +4,7 @@ import argon2
 from jose import JWTError
 
 from lifehub.core.common.base_service import BaseService
-from lifehub.core.module.models import ModuleResponse
+from lifehub.core.module.models import ModuleResponse, ModuleWithProvidersResponse
 from lifehub.core.module.schema import Module
 from lifehub.core.provider.models import ProviderResponse, ProviderWithModulesResponse
 from lifehub.core.provider.repository.provider_token import ProviderTokenRepository
@@ -95,6 +95,7 @@ class UserService(BaseService):
             ProviderWithModulesResponse(
                 id=provider.id,
                 name=provider.name,
+                type=provider.config.auth_type,
                 modules=[
                     ModuleResponse(id=module.id, name=module.name)
                     for module in provider.modules
@@ -145,6 +146,21 @@ class UserService(BaseService):
     def get_user_modules(self, user: User) -> list[ModuleResponse]:
         return [
             ModuleResponse(id=module.id, name=module.name) for module in user.modules
+        ]
+
+    def get_user_modules_with_providers(
+        self, user: User
+    ) -> list[ModuleWithProvidersResponse]:
+        return [
+            ModuleWithProvidersResponse(
+                id=module.id,
+                name=module.name,
+                providers=[
+                    ProviderResponse(id=provider.id, name=provider.name)
+                    for provider in module.providers
+                ],
+            )
+            for module in user.modules
         ]
 
     def add_module_to_user(self, user: User, module: Module) -> None:
