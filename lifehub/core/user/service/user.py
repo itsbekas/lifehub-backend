@@ -183,6 +183,9 @@ class UserService(BaseService):
         self.user_repository.commit()
 
     def remove_module_from_user(self, user: User, module: Module) -> None:
+        user = self.session.merge(user)
+        module = self.session.merge(module)
+
         if module not in user.modules:
             raise Exception(f"User does not have module {module.name}")
 
