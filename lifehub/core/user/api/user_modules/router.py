@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from lifehub.core.module.api.dependencies import ModuleDep
 from lifehub.core.module.models import ModuleWithProvidersResponse
@@ -7,6 +7,7 @@ from lifehub.core.user.api.dependencies import (
     UserServiceDep,
     user_is_authenticated,
 )
+from lifehub.core.user.service.user import UserServiceException
 
 router = APIRouter(
     dependencies=[Depends(user_is_authenticated)],
@@ -26,9 +27,8 @@ async def add_user_module(
 ):
     try:
         user_service.add_module_to_user(user, module)
-    except Exception as e:
-        # TODO: API exception (#28)
-        raise e
+    except UserServiceException as e:
+        raise HTTPException(status_code=403, detail=str(e))
 
 
 @router.delete("/{module_id}")
@@ -39,6 +39,5 @@ async def remove_user_module(
 ):
     try:
         user_service.remove_module_from_user(user, module)
-    except Exception as e:
-        # TODO: API exception (#28)
-        raise e
+    except UserServiceException as e:
+        raise HTTPException(status_code=403, detail=str(e))

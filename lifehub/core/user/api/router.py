@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 
 from lifehub.core.user.api.dependencies import UserDep, UserServiceDep
 from lifehub.core.user.models import UserTokenResponse
-from lifehub.core.user.service.user import UserService
+from lifehub.core.user.service.user import UserService, UserServiceException
 
 router = APIRouter()
 
@@ -17,10 +17,9 @@ async def user_login(
 ):
     try:
         user = user_service.login_user(username, password)
-        user_token = user_service.create_access_token(user)
-    except Exception as e:
-        # TODO: API Exception (#28)
-        raise e
+    except UserServiceException as e:
+        raise HTTPException(status_code=401, detail=str(e))
+    user_token = user_service.create_access_token(user)
     return user_token
 
 
@@ -34,10 +33,9 @@ async def user_signup(
     user_service = UserService()
     try:
         user = user_service.create_user(username, password, name)
-        user_token = user_service.create_access_token(user)
-    except Exception as e:
-        # TODO: API Exception (#28)
-        raise e
+    except UserServiceException as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    user_token = user_service.create_access_token(user)
     return user_token
 
 

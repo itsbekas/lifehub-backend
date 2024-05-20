@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
 from lifehub.core.user.schema import User
-from lifehub.core.user.service.user import UserService
+from lifehub.core.user.service.user import UserService, UserServiceException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
@@ -17,8 +17,8 @@ def get_user(
 ) -> User:
     try:
         user = user_service.authenticate_user(token)
-    except Exception:
-        raise HTTPException(401, "Invalid token")
+    except UserServiceException as e:
+        raise HTTPException(401, str(e))
 
     return user
 

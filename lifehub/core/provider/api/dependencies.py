@@ -12,9 +12,9 @@ def get_provider(
     provider_id: int,
     provider_service: ProviderServiceDep,
 ) -> Provider:
-    try:
-        provider = provider_service.get_provider_by_id(provider_id)
-    except Exception:
+    provider = provider_service.get_provider_by_id(provider_id)
+
+    if provider is None:
         raise HTTPException(404, "Provider not found")
 
     return provider

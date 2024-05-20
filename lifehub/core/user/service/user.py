@@ -4,6 +4,7 @@ import argon2
 from jose import JWTError
 
 from lifehub.core.common.base_service import BaseService
+from lifehub.core.common.exceptions import ServiceException
 from lifehub.core.module.models import ModuleResponse, ModuleWithProvidersResponse
 from lifehub.core.module.schema import Module
 from lifehub.core.provider.models import ProviderResponse, ProviderWithModulesResponse
@@ -20,6 +21,11 @@ from lifehub.core.utils.auth import (
 )
 
 
+class UserServiceException(ServiceException):
+    def __init__(self, model: str, message: str):
+        super().__init__("User", message)
+
+
 class UserService(BaseService):
     def __init__(self):
         super().__init__()
@@ -31,8 +37,7 @@ class UserService(BaseService):
         user = self.user_repository.get_by_username(username)
 
         if user is not None:
-            # TODO: Service exception (#27)
-            raise Exception("User already exists")
+            raise UserServiceException("User already exists")
 
         hashed_password = hash_password(password)
 
@@ -56,8 +61,7 @@ class UserService(BaseService):
         user: User | None = self.user_repository.get_by_username(username)
 
         if user is None or not verify_password(password, user.password):
-            # TODO: Service exception (#27)
-            raise Exception("Invalid credentials")
+            raise UserServiceException("Invalid credentials")
 
         return user
 
@@ -65,16 +69,14 @@ class UserService(BaseService):
         try:
             payload = decode_jwt_token(token)
         except JWTError:
-            # TODO: Service exception (#27)
-            raise Exception("Invalid token")
+            raise UserServiceException("Invalid token")
 
         username: str = payload.get("sub")  # type: ignore
 
         user: User | None = self.user_repository.get_by_username(username)
 
         if user is None:
-            # TODO: Service exception (#27)
-            raise Exception("User not found")
+            raise UserServiceException("User not found")
 
         return user
 
@@ -165,7 +167,7 @@ class UserService(BaseService):
 
     def add_module_to_user(self, user: User, module: Module) -> None:
         if module in user.modules:
-            raise Exception(f"User already has module {module.name}")
+            raise UserServiceException(f"User already has module {module.name}")
 
         missed_providers = []
 
@@ -177,7 +179,9 @@ class UserService(BaseService):
                 missed_providers.append(provider.name)
 
         if missed_providers:
-            raise Exception(f"User is missing providers: {', '.join(missed_providers)}")
+            raise UserServiceException(
+                f"User is missing providers: {', '.join(missed_providers)}"
+            )
 
         user.modules.append(module)
         self.user_repository.commit()
@@ -187,7 +191,7 @@ class UserService(BaseService):
         module = self.session.merge(module)
 
         if module not in user.modules:
-            raise Exception(f"User does not have module {module.name}")
+            raise UserServiceException(f"User does not have module {module.name}")
 
         user.modules.remove(module)
         self.user_repository.commit()

@@ -10,6 +10,9 @@ class ProviderService(BaseService):
         super().__init__()
         self.provider_repository = ProviderRepository(self.session)
 
+    def get_provider_by_id(self, provider_id: int) -> Provider:
+        return self.provider_repository.get_by_id(provider_id)
+
     def get_providers(self) -> list[ProviderResponse]:
         providers = self.provider_repository.get_all()
 
@@ -39,6 +42,3 @@ class ProviderService(BaseService):
             )
             for provider in providers
         ]
-
-    def get_provider_by_id(self, provider_id: int) -> Provider:
-        return self.provider_repository.get_by_id(provider_id)
