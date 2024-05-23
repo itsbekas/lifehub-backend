@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 from enum import Enum
-from os import getenv
 from typing import TYPE_CHECKING, List
 
 from sqlalchemy import UUID, ForeignKey, String
@@ -17,12 +16,11 @@ if TYPE_CHECKING:
     from lifehub.core.module.schema import Module
     from lifehub.core.user.schema import User
 
+from lifehub.config.constants import REDIRECT_URI_BASE
+
 
 def oauth_redirect_uri() -> str:
-    uri_base: str | None = getenv("REDIRECT_URI_BASE")
-    if uri_base is None:
-        raise ValueError("REDIRECT_URI_BASE is not set")
-    return uri_base + "/account/oauth_token"
+    return REDIRECT_URI_BASE + "/account/oauth_token"
 
 
 class ProviderType(str, Enum):

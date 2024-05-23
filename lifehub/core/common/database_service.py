@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+
+from lifehub.config.constants import DATABASE_URL
 
 
 class DatabaseService:
@@ -12,8 +12,7 @@ class DatabaseService:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            db_url = os.getenv("DATABASE_URL")
-            cls._instance.engine = create_engine(db_url)
+            cls._instance.engine = create_engine(DATABASE_URL)
         return cls._instance
 
     def get_session(self):

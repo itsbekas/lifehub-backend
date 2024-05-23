@@ -1,11 +1,9 @@
-from os import getenv
-
 import uvicorn
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import lifehub.app.util.load  # noqa: F401
 from lifehub.app.util.schemas import *  # noqa: F401,F403
+from lifehub.config.constants import UVICORN_HOST
 from lifehub.core.module.api.router import router as modules_router
 from lifehub.core.provider.api.router import router as providers_router
 from lifehub.core.user.api.router import router as user_router
@@ -55,8 +53,7 @@ app.include_router(api, prefix="/api/v0")
 
 
 def run():
-    host = getenv("UVICORN_HOST", "localhost")
-    uvicorn.run("lifehub.app.api:app", host=host, port=8000, reload=True)
+    uvicorn.run("lifehub.app.api:app", host=UVICORN_HOST, port=8000, reload=True)
 
 
 if __name__ == "__main__":

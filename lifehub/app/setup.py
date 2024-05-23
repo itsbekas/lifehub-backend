@@ -1,18 +1,13 @@
-import os
-
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
 from lifehub.app.util.schemas import *  # noqa: F401,F403
+from lifehub.config.constants import DATABASE_URL
 from lifehub.config.providers import setup_providers
 from lifehub.core.common.base_model import BaseModel
 
 
 def setup():
-    load_dotenv()
-
-    db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url, echo=True)
+    engine = create_engine(DATABASE_URL, echo=True)
 
     BaseModel.metadata.create_all(engine)
 
@@ -28,8 +23,6 @@ def clean():
         "This will drop all tables in the database. Press Enter to continue or Ctrl+C to exit"
     )
 
-    load_dotenv()
-    db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url, echo=True)
+    engine = create_engine(DATABASE_URL, echo=True)
 
     BaseModel.metadata.drop_all(engine)
