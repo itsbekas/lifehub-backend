@@ -52,7 +52,7 @@ api.include_router(modules_router, prefix="/modules", tags=["modules"])
 app.include_router(api, prefix="/api/v0")
 
 
-def run():
+def run() -> None:
     uvicorn.run("lifehub.app.api:app", host=UVICORN_HOST, port=8000, reload=True)
 
 

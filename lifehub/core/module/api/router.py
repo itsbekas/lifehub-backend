@@ -10,5 +10,7 @@ router = APIRouter(
 
 
 @router.get("", response_model=list[ModuleWithProvidersResponse])
-async def get_modules(module_service: ModuleServiceDep):
+async def get_modules(
+    module_service: ModuleServiceDep,
+) -> list[ModuleWithProvidersResponse]:
     return module_service.get_modules_with_providers()

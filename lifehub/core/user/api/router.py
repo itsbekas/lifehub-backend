@@ -9,12 +9,12 @@ from lifehub.core.user.service.user import UserService, UserServiceException
 router = APIRouter()
 
 
-@router.post("/login", response_model=UserTokenResponse)
+@router.post("/login")
 async def user_login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     user_service: UserServiceDep,
-):
+) -> UserTokenResponse:
     try:
         user = user_service.login_user(username, password)
     except UserServiceException as e:
@@ -23,13 +23,13 @@ async def user_login(
     return user_token
 
 
-@router.post("/signup", response_model=UserTokenResponse)
+@router.post("/signup")
 async def user_signup(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
     user_service: UserServiceDep,
-):
+) -> UserTokenResponse:
     user_service = UserService()
     try:
         user = user_service.create_user(username, password, name)
@@ -40,5 +40,5 @@ async def user_signup(
 
 
 @router.delete("/me")
-async def delete_user(user: UserDep, user_service: UserServiceDep):
+async def delete_user(user: UserDep, user_service: UserServiceDep) -> None:
     user_service.delete_user(user)

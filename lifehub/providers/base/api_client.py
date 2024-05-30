@@ -1,5 +1,5 @@
 from os import getenv
-from typing import Optional
+from typing import Any, Optional
 
 import requests
 
@@ -12,13 +12,13 @@ from lifehub.core.user.schema import User
 
 
 class APIException(Exception):
-    def __init__(self, api: str, url: str, status_code: int, msg: str):
+    def __init__(self, api: str, url: str, status_code: int, msg: str) -> None:
         self.api = api
         self.url = url
         self.status_code = status_code
         self.msg = msg
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.api} API: Error accessing {self.url} - HTTP {self.status_code}: {self.msg}"
 
 
@@ -28,7 +28,7 @@ class APIClient:
     headers: Optional[dict]
     cookies: Optional[dict[str, str]]
 
-    def __init__(self, user: User, repository: BaseRepository):
+    def __init__(self, user: User, repository: BaseRepository) -> None:
         with get_session() as session:
             self.provider: Provider | None = ProviderRepository(session).get_by_name(
                 self.provider_name
@@ -48,13 +48,13 @@ class APIClient:
 
             self.token = api_token.token
 
-    def _get(self, endpoint: str):
+    def _get(self, endpoint: str) -> dict[str, Any]:
         """
         GET request to the API
         """
         raise NotImplementedError
 
-    def _get_basic(self, endpoint: str, params: dict = {}):
+    def _get_basic(self, endpoint: str, params: dict[str, Any] = {}) -> dict[str, Any]:
         """
         Basic GET request to the API
         """
@@ -66,7 +66,9 @@ class APIClient:
             )
         return res.json()
 
-    def _get_with_token(self, endpoint: str, params: dict = {}):
+    def _get_with_token(
+        self, endpoint: str, params: dict[str, Any] = {}
+    ) -> dict[str, Any]:
         """
         GET request to the API with token in the header
         """
@@ -79,7 +81,9 @@ class APIClient:
             )
         return res.json()
 
-    def _get_with_token_bearer(self, endpoint: str, params: dict = {}):
+    def _get_with_token_bearer(
+        self, endpoint: str, params: dict[str, Any] = {}
+    ) -> dict[str, Any]:
         """
         GET request to the API with token bearer in the header
         """
@@ -92,7 +96,9 @@ class APIClient:
             )
         return res.json()
 
-    def _get_with_headers(self, endpoint: str, params: dict = {}):
+    def _get_with_headers(
+        self, endpoint: str, params: dict[str, Any] = {}
+    ) -> dict[str, Any]:
         """
         GET request to the API with custom headers
         """
@@ -104,7 +110,9 @@ class APIClient:
             )
         return res.json()
 
-    def _get_with_cookies(self, endpoint: str, params: dict = {}):
+    def _get_with_cookies(
+        self, endpoint: str, params: dict[str, Any] = {}
+    ) -> dict[str, Any]:
         """
         GET request to the API with cookies
         """
@@ -116,26 +124,26 @@ class APIClient:
             )
         return res.json()
 
-    def _error_msg(self, res: requests.Response):
+    def _error_msg(self, res: requests.Response) -> str:
         """
         Get the error message from the response
         """
         raise NotImplementedError
 
-    def _load_env_token(self, env_var: str):
+    def _load_env_token(self, env_var: str) -> str | None:
         """
         Load token from environment variable
         """
 
         return getenv(env_var)
 
-    def _test(self):
+    def _test(self) -> None:
         """
         Test connection to the API
         """
         raise NotImplementedError
 
-    def test_connection(self):
+    def test_connection(self) -> bool:
         """
         Test connection to the API
         """

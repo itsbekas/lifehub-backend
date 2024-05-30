@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 from enum import Enum
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, TypeGuard
 
 from sqlalchemy import UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -17,6 +17,18 @@ if TYPE_CHECKING:
     from lifehub.core.user.schema import User
 
 from lifehub.config.constants import REDIRECT_URI_BASE
+
+
+def is_basic_config(config: ProviderConfig) -> TypeGuard[BasicProviderConfig]:
+    return config.auth_type == ProviderType.basic
+
+
+def is_token_config(config: ProviderConfig) -> TypeGuard[TokenProviderConfig]:
+    return config.auth_type == ProviderType.token
+
+
+def is_oauth_config(config: ProviderConfig) -> TypeGuard[OAuthProviderConfig]:
+    return config.auth_type == ProviderType.oauth
 
 
 def oauth_redirect_uri() -> str:

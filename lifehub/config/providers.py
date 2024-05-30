@@ -7,6 +7,7 @@ from lifehub.core.provider.schema import (
     BasicProviderConfig,
     OAuthProviderConfig,
     Provider,
+    ProviderConfig,
     TokenProviderConfig,
 )
 
@@ -52,6 +53,9 @@ def setup_providers() -> None:
         providers_dict[name] = provider
 
         config = provider_configs[name]
+
+        provider_config: ProviderConfig
+
         if config["auth_type"] == "oauth":
             provider_config = OAuthProviderConfig(
                 provider_id=provider.id,

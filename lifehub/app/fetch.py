@@ -3,7 +3,7 @@ import sys
 from dotenv import load_dotenv
 
 
-def run():
+def run() -> None:
     if len(sys.argv) < 2:
         raise ValueError("Please provide a fetch script to run")
 
@@ -17,9 +17,9 @@ def run():
 
             T212HistoryFetcher().fetch()
         case "networth":
-            from lifehub.providers.ynab.fetcher import NetworthFetcher
+            from lifehub.providers.ynab.fetcher import YNABFetcher
 
-            NetworthFetcher().fetch()
+            YNABFetcher().fetch()
         case "qbitstats":
             from lifehub.providers.qbittorrent.fetcher import (
                 QBittorrentStatsFetcher,
@@ -29,10 +29,10 @@ def run():
         case "all":
             from lifehub.providers.qbittorrent.fetcher import QBittorrentStatsFetcher
             from lifehub.providers.trading212.fetcher import T212HistoryFetcher
-            from lifehub.providers.ynab.fetcher import NetworthFetcher
+            from lifehub.providers.ynab.fetcher import YNABFetcher
 
             T212HistoryFetcher().fetch()
-            NetworthFetcher().fetch()
+            YNABFetcher().fetch()
             QBittorrentStatsFetcher().fetch()
         case _:
             raise ValueError(f"Fetch script {fetch_script} not found")

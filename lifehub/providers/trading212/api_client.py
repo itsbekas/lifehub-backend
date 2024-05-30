@@ -10,7 +10,7 @@ class Trading212APIClient(APIClient):
     def _get(self, endpoint: str, params: dict = {}):
         return self._get_with_token(endpoint, params=params)
 
-    def _test(self):
+    def _test(self) -> None:
         self.get_account_metadata()
 
     def get_account_cash(self) -> AccountCash | None:
@@ -21,7 +21,7 @@ class Trading212APIClient(APIClient):
         res = self._get("equity/account/info")
         return AccountMetadata.from_response(res)
 
-    def get_order_history(self):
+    def get_order_history(self) -> list[Order]:
         res = self._get("equity/history/orders")
         data = res.get("items", [])
         return [Order.from_response(o) for o in data]

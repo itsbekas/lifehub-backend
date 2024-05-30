@@ -31,7 +31,7 @@ class YNABAPIClient(APIClient):
     def get_budget_settings(self, budget: str = "last-used"):
         return self._get(f"budgets/{budget}/settings")
 
-    def get_accounts(self, budget: str = "last-used"):
+    def get_accounts(self, budget: str = "last-used") -> list[Account]:
         res = self._get(f"budgets/{budget}/accounts")
         data = res.get("data", {}).get("accounts", [])
         return [Account.from_response(a) for a in data]
@@ -39,7 +39,7 @@ class YNABAPIClient(APIClient):
     def get_account(self, account: str):
         return self._get(f"budgets/{self.budget}/accounts/{account}")
 
-    def get_categories(self):
+    def get_categories(self) -> list[CategoryGroup]:
         res = self._get(f"budgets/{self.budget}/categories")
         data = res.get("data", {}).get("category_groups", [])
         return [CategoryGroup.from_response(c) for c in data]

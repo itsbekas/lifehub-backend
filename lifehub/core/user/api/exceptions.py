@@ -51,7 +51,7 @@ class UserExistsException(HTTPException):
 
 
 class NoUserDataForModuleException(HTTPException):
-    def __init__(self, user, module) -> None:
+    def __init__(self, user: str, module: str) -> None:
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No data for user {user} in module {module}",

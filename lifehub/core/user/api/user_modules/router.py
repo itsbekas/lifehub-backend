@@ -14,8 +14,10 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[ModuleWithProvidersResponse])
-async def get_user_modules(user: UserDep, user_service: UserServiceDep):
+@router.get("")
+async def get_user_modules(
+    user: UserDep, user_service: UserServiceDep
+) -> list[ModuleWithProvidersResponse]:
     return user_service.get_user_modules_with_providers(user)
 
 
@@ -24,7 +26,7 @@ async def add_user_module(
     user: UserDep,
     module: ModuleDep,
     user_service: UserServiceDep,
-):
+) -> None:
     try:
         user_service.add_module_to_user(user, module)
     except UserServiceException as e:
@@ -36,7 +38,7 @@ async def remove_user_module(
     user: UserDep,
     module: ModuleDep,
     user_service: UserServiceDep,
-):
+) -> None:
     try:
         user_service.remove_module_from_user(user, module)
     except UserServiceException as e:

@@ -22,12 +22,12 @@ from lifehub.core.utils.auth import (
 
 
 class UserServiceException(ServiceException):
-    def __init__(self, model: str, message: str):
+    def __init__(self, message: str):
         super().__init__("User", message)
 
 
 class UserService(BaseService):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.user_repository = UserRepository(self.session)
         self.provider_token_repository = ProviderTokenRepository(self.session)

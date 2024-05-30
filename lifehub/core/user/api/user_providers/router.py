@@ -1,18 +1,20 @@
 import datetime as dt
 
 import requests
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from lifehub.core.provider.api.dependencies import (
-    BasicProviderDep,
-    OAuthProviderDep,
     ProviderDep,
-    TokenProviderDep,
 )
 from lifehub.core.provider.models import (
     ProviderTokenBasicRequest,
     ProviderTokenTokenRequest,
     ProviderWithModulesResponse,
+)
+from lifehub.core.provider.schema import (
+    is_basic_config,
+    is_oauth_config,
+    is_token_config,
 )
 from lifehub.core.user.api.dependencies import (
     UserDep,
@@ -28,8 +30,10 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[ProviderWithModulesResponse])
-async def get_user_providers(user: UserDep, user_service: UserServiceDep):
+@router.get("")
+async def get_user_providers(
+    user: UserDep, user_service: UserServiceDep
+) -> list[ProviderWithModulesResponse]:
     return user_service.get_user_providers_with_modules(user)
 
 
@@ -38,17 +42,19 @@ async def remove_user_provider(
     user: UserDep,
     provider: ProviderDep,
     user_service: UserServiceDep,
-):
+) -> None:
     user_service.remove_provider_from_user(user, provider)
 
 
 @router.post("/{provider_id}/oauth_token")
 async def add_oauth_provider(
-    provider: OAuthProviderDep,
+    provider: ProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
     code: str,
-):
+) -> None:
+    if not is_oauth_config(provider.config):
+        raise HTTPException(404, "Provider must be an OAuth provider")
     url = provider.config.build_token_url(code)
     res = requests.post(url)
     if res.status_code != 200:
@@ -70,31 +76,37 @@ async def add_oauth_provider(
 
 @router.post("/{provider_id}/basic_token")
 async def add_token_provider(
-    provider: TokenProviderDep,
+    provider: ProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
     req: ProviderTokenTokenRequest,
-):
+) -> None:
+    if not is_token_config(provider.config):
+        raise HTTPException(404, "Provider must be a token provider")
     user_service.add_provider_token_to_user(user, provider, req.token, None, None, None)
 
 
 @router.patch("/{provider_id}/basic_token")
 async def update_basic_token(
-    provider: TokenProviderDep,
+    provider: ProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
     req: ProviderTokenTokenRequest,
-):
+) -> None:
+    if not is_token_config(provider.config):
+        raise HTTPException(404, "Provider must be a token provider")
     user_service.update_provider_token(user, provider, req.token)
 
 
 @router.post("/{provider_id}/basic_login")
 async def add_basic_provider(
-    provider: BasicProviderDep,
+    provider: ProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
     req: ProviderTokenBasicRequest,
-):
+) -> None:
+    if not is_basic_config(provider.config):
+        raise HTTPException(404, "Provider must be a basic login provider")
     user_service.add_provider_token_to_user(
         user, provider, f"{req.username}:{req.password}", None, None, None
     )
@@ -102,11 +114,13 @@ async def add_basic_provider(
 
 @router.patch("/{provider_id}/basic_login")
 async def update_basic_login(
-    provider: BasicProviderDep,
+    provider: ProviderDep,
     user: UserDep,
     user_service: UserServiceDep,
     req: ProviderTokenBasicRequest,
-):
+) -> None:
+    if not is_basic_config(provider.config):
+        raise HTTPException(404, "Provider must be a basic login provider")
     user_service.update_provider_token(user, provider, f"{req.username}:{req.password}")
 
 
