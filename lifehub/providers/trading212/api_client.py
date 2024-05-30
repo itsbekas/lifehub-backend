@@ -1,3 +1,5 @@
+from typing import Any
+
 from lifehub.providers.base.api_client import APIClient
 
 from .models import AccountCash, AccountMetadata, Order, Transaction
@@ -7,7 +9,7 @@ class Trading212APIClient(APIClient):
     provider_name = "trading212"
     base_url = "https://live.trading212.com/api/v0"
 
-    def _get(self, endpoint: str, params: dict = {}):
+    def _get(self, endpoint: str, params: dict[str, str] = {}) -> dict[str, Any]:
         return self._get_with_token(endpoint, params=params)
 
     def _test(self) -> None:
@@ -26,13 +28,10 @@ class Trading212APIClient(APIClient):
         data = res.get("items", [])
         return [Order.from_response(o) for o in data]
 
-    def get_paid_out_dividends(self):
-        raise NotImplementedError
-
-    def get_transactions(self):
+    def get_transactions(self) -> list[Transaction]:
         res = self._get("history/transactions")
         data = res.get("items", [])
         return [Transaction.from_response(t) for t in data]
 
-    def _error_msg(self, res):
+    def _error_msg(self, res: Any) -> Any:
         return res.text

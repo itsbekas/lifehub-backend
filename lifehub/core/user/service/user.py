@@ -198,5 +198,5 @@ class UserService(BaseService):
         user.modules.remove(module)
         self.user_repository.commit()
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.user_repository.close()

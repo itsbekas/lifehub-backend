@@ -1,17 +1,26 @@
 from lifehub.core.common.base_service import BaseService
+from lifehub.core.common.exceptions import ServiceException
 from lifehub.core.module.models import ModuleResponse
 from lifehub.core.provider.models import ProviderResponse, ProviderWithModulesResponse
 from lifehub.core.provider.repository.provider import ProviderRepository
 from lifehub.core.provider.schema import Provider
 
 
+class ProviderServiceException(ServiceException):
+    def __init__(self, message: str):
+        super().__init__("Provider", message)
+
+
 class ProviderService(BaseService):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.provider_repository = ProviderRepository(self.session)
 
     def get_provider_by_id(self, provider_id: int) -> Provider:
-        return self.provider_repository.get_by_id(provider_id)
+        provider = self.provider_repository.get_by_id(provider_id)
+        if provider is None:
+            raise ProviderServiceException("Provider not found")
+        return provider
 
     def get_providers(self) -> list[ProviderResponse]:
         providers = self.provider_repository.get_all()

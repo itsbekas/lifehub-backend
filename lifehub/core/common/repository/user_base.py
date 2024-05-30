@@ -12,7 +12,7 @@ class UserBaseRepository(BaseRepository[UserBaseModelType]):
         super().__init__(model, session)
         self.user: User = user
 
-    def add(self, obj: UserBaseModelType):
+    def add(self, obj: UserBaseModelType) -> None:
         if obj.user_id == self.user.id:
             super().add(obj)
         else:

@@ -6,7 +6,7 @@ from lifehub.providers.qbittorrent.schema import QBittorrentStats
 class QBittorrentStatsFetcher(BaseFetcher):
     module_name = "qbittorrent"
 
-    def fetch_data(self):
+    def fetch_data(self) -> None:
         qb = QBittorrentAPIClient.get_instance()
 
         main_data = qb.get_main_data()

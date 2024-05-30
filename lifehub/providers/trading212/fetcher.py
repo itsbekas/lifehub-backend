@@ -6,7 +6,7 @@ from lifehub.providers.trading212.schema import T212Order, T212Transaction
 class T212HistoryFetcher(BaseFetcher):
     module_name = "t212history"
 
-    def fetch_data(self):
+    def fetch_data(self) -> None:
         t212 = Trading212APIClient(self.user)
 
         orders = t212.get_order_history()

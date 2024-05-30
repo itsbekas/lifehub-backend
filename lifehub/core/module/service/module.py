@@ -1,12 +1,18 @@
 from lifehub.core.common.base_service import BaseService
+from lifehub.core.common.exceptions import ServiceException
 from lifehub.core.module.models import ModuleResponse, ModuleWithProvidersResponse
 from lifehub.core.module.repository.module import ModuleRepository
 from lifehub.core.module.schema import Module
 from lifehub.core.provider.models import ProviderResponse
 
 
+class ModuleServiceException(ServiceException):
+    def __init__(self, message: str):
+        super().__init__("Module", message)
+
+
 class ModuleService(BaseService):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.module_repository = ModuleRepository(self.session)
 
@@ -40,4 +46,7 @@ class ModuleService(BaseService):
         ]
 
     def get_module_by_id(self, module_id: int) -> Module:
-        return self.module_repository.get_by_id(module_id)
+        module = self.module_repository.get_by_id(module_id)
+        if module is None:
+            raise ModuleServiceException("Module not found")
+        return module
