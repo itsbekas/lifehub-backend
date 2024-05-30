@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import datetime as dt
-import uuid
 from enum import Enum
 from typing import TYPE_CHECKING, List, TypeGuard
 
-from sqlalchemy import UUID, ForeignKey, String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from lifehub.core.common.base_model import BaseModel
+from lifehub.core.common.base_model import BaseModel, UserBaseModel
 from lifehub.core.module.schema import module_provider
 from lifehub.core.user.schema import user_provider
 
@@ -61,12 +60,9 @@ class Provider(BaseModel):
     )
 
 
-class ProviderToken(BaseModel):
+class ProviderToken(UserBaseModel):
     __tablename__ = "provider_token"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("user.id"), primary_key=True
-    )
     provider_id: Mapped[int] = mapped_column(
         ForeignKey("provider.id"), primary_key=True
     )

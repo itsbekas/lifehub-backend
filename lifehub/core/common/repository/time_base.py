@@ -1,11 +1,11 @@
 from sqlalchemy import select
 
-from lifehub.core.common.repository import BaseModelType
+from lifehub.core.common.repository import TimeBaseModelType
 from lifehub.core.common.repository.base import BaseRepository
 
 
-class TimeBaseRepository(BaseRepository[BaseModelType]):
-    def get_latest(self) -> BaseModelType | None:
-        statement = select(self.model).order_by(self.model.date.desc()).limit(1)
-        result = self.session.exec(statement)
-        return result.one_or_none()
+class TimeBaseRepository(BaseRepository[TimeBaseModelType]):
+    def get_latest(self) -> TimeBaseModelType | None:
+        statement = select(self.model).order_by(self.model.timestamp.desc()).limit(1)
+        result = self.session.execute(statement)
+        return result.scalar_one_or_none()

@@ -142,6 +142,8 @@ class UserService(BaseService):
 
     def update_provider_token(self, user: User, provider: Provider, token: str) -> None:
         provider_token = self.provider_token_repository.get(user, provider)
+        if provider_token is None:
+            raise UserServiceException("Token not found")
         provider_token.token = token
         self.provider_token_repository.commit()
 
