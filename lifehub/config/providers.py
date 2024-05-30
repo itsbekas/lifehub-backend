@@ -1,3 +1,5 @@
+from typing import Any
+
 from lifehub.config.constants import getenv
 from lifehub.core.common.database_service import get_session
 from lifehub.core.module.schema import Module
@@ -9,8 +11,8 @@ from lifehub.core.provider.schema import (
 )
 
 
-def init_setup_data():
-    provider_configs = {
+def init_setup_data() -> tuple[dict[str, dict[str, Any]], dict[str, list[str]]]:
+    provider_configs: dict[str, dict[str, Any]] = {
         "trading212": {
             "auth_type": "token",
         },
@@ -28,7 +30,7 @@ def init_setup_data():
         },
     }
 
-    module_providers = {
+    module_providers: dict[str, list[str]] = {
         "networth": ["trading212", "ynab"],
         "t212history": ["trading212"],
         "server": ["qbittorrent"],
@@ -37,7 +39,7 @@ def init_setup_data():
     return provider_configs, module_providers
 
 
-def setup_providers():
+def setup_providers() -> None:
     provider_configs, module_providers = init_setup_data()
 
     session = get_session()

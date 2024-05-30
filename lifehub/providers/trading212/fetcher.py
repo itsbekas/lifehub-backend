@@ -1,4 +1,4 @@
-from lifehub.core.common.base_fetcher import BaseFetcher
+from lifehub.providers.base.base_fetcher import BaseFetcher
 from lifehub.providers.trading212.api_client import Trading212APIClient
 from lifehub.providers.trading212.schema import T212Order, T212Transaction
 

@@ -23,5 +23,5 @@ def create_jwt_token(username: str, expires_at: dt.datetime) -> str:
     )
 
 
-def decode_jwt_token(token: str) -> dict:
+def decode_jwt_token(token: str) -> dict[str, str]:
     return jwt.decode(token, AUTH_SECRET_KEY, algorithms=[AUTH_ALGORITHM])

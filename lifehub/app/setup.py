@@ -6,7 +6,7 @@ from lifehub.config.providers import setup_providers
 from lifehub.core.common.base_model import BaseModel
 
 
-def setup():
+def setup() -> None:
     engine = create_engine(DATABASE_URL, echo=True)
 
     BaseModel.metadata.create_all(engine)
@@ -14,7 +14,7 @@ def setup():
     setup_providers()
 
 
-def clean():
+def clean() -> None:
     """
     Warning: This function will drop all tables and recreate them
     This is only for development purposes

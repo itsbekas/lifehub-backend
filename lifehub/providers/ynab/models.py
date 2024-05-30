@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from typing import Any
+
+
 class Account:
     def __init__(
         self,
@@ -15,11 +20,11 @@ class Account:
         direct_import_in_error: bool | None,
         last_reconciled_at: str | None,
         debt_original_balance: int | None,
-        debt_interest_rates: dict | None,
-        debt_minimum_payments: dict | None,
-        debt_escrow_amounts: dict | None,
+        debt_interest_rates: dict[str, Any] | None,
+        debt_minimum_payments: dict[str, Any] | None,
+        debt_escrow_amounts: dict[str, Any] | None,
         deleted: bool,
-    ):
+    ) -> None:
         self.id: str = id
         self.name: str = name
         self.type: str = type
@@ -34,16 +39,16 @@ class Account:
         self.direct_import_in_error: bool | None = direct_import_in_error
         self.last_reconciled_at: str | None = last_reconciled_at
         self.debt_original_balance: int | None = debt_original_balance
-        self.debt_interest_rates: dict | None = debt_interest_rates
-        self.debt_minimum_payments: dict | None = debt_minimum_payments
-        self.debt_escrow_amounts: dict | None = debt_escrow_amounts
+        self.debt_interest_rates: dict[str, Any] | None = debt_interest_rates
+        self.debt_minimum_payments: dict[str, Any] | None = debt_minimum_payments
+        self.debt_escrow_amounts: dict[str, Any] | None = debt_escrow_amounts
         self.deleted: bool = deleted
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> Account:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<YNAB Account: {self.name}>"
 
 
@@ -73,7 +78,7 @@ class Category:
         goal_overall_left: int | None,
         deleted: bool,
         original_category_group_id: str | None = None,  # deprecated
-    ):
+    ) -> None:
         self.id: str = id
         self.category_group_id: str = category_group_id
         self.category_group_name: str = category_group_name
@@ -98,17 +103,22 @@ class Category:
         self.deleted: bool = deleted
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> Category:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<YNAB Category: {self.name}>"
 
 
 class CategoryGroup:
     def __init__(
-        self, id: str, name: str, hidden: bool, deleted: bool, categories: list[dict]
-    ):
+        self,
+        id: str,
+        name: str,
+        hidden: bool,
+        deleted: bool,
+        categories: list[dict[str, Any]],
+    ) -> None:
         self.id: str = id
         self.name: str = name
         self.hidden: bool = hidden
@@ -118,10 +128,10 @@ class CategoryGroup:
         ]
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> CategoryGroup:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<YNAB Category Group: {self.name} ({len(self.categories)} categories)>"
 
 

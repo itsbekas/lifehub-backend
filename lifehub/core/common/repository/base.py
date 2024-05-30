@@ -7,7 +7,7 @@ from lifehub.core.common.repository import BaseModelType
 
 
 class BaseRepository(Generic[BaseModelType]):
-    def __init__(self, model: Type[BaseModelType], session: Session):
+    def __init__(self, model: Type[BaseModelType], session: Session) -> None:
         self.model: Type[BaseModelType] = model
         self.session = session
 
@@ -28,14 +28,14 @@ class BaseRepository(Generic[BaseModelType]):
     def merge(self, obj: BaseModelType) -> BaseModelType:
         return self.session.merge(obj)
 
-    def commit(self):
+    def commit(self) -> None:
         self.session.commit()
 
-    def refresh(self, obj: BaseModelType):
+    def refresh(self, obj: BaseModelType) -> None:
         self.session.refresh(obj)
 
-    def rollback(self):
+    def rollback(self) -> None:
         self.session.rollback()
 
-    def close(self):
+    def close(self) -> None:
         self.session.close()

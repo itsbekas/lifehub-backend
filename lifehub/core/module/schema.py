@@ -1,4 +1,3 @@
-import datetime as dt
 from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Column, ForeignKey, String, Table
@@ -25,7 +24,6 @@ class Module(BaseModel):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(32), unique=True)
-    last_update: Mapped[dt.datetime] = mapped_column(insert_default=dt.datetime.min)
 
     providers: Mapped[List["Provider"]] = relationship(
         secondary=module_provider, back_populates="modules"

@@ -20,7 +20,8 @@ from lifehub.config.constants import REDIRECT_URI_BASE
 
 
 def oauth_redirect_uri() -> str:
-    return REDIRECT_URI_BASE + "/account/oauth_token"
+    redirect_uri: str = REDIRECT_URI_BASE + "/account/oauth_token"
+    return redirect_uri
 
 
 class ProviderType(str, Enum):
@@ -34,6 +35,7 @@ class Provider(BaseModel):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(32), unique=True)
+    last_fetch: Mapped[dt.datetime] = mapped_column(insert_default=dt.datetime.min)
 
     config: Mapped[ProviderConfig] = relationship(
         back_populates="provider", uselist=False

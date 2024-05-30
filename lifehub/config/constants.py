@@ -7,7 +7,7 @@ load_dotenv()
 err = NotImplementedError
 
 
-def getenv(key: str):
+def getenv(key: str) -> str:
     if (val := os.getenv(key)) is None:
         raise NotImplementedError(f"{key} is not set")
     return val

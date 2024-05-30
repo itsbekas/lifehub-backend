@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime as dt
+from typing import Any
 
 
 class AccountCash:
@@ -11,7 +14,7 @@ class AccountCash:
         ppl: float,
         result: float,
         total: float,
-    ):
+    ) -> None:
         self.blocked: float = blocked
         self.free: float = free
         self.invested: float = invested
@@ -21,10 +24,10 @@ class AccountCash:
         self.total: float = total
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> AccountCash:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Trading212 AccountCash: {self.total}>"
 
 
@@ -33,15 +36,15 @@ class AccountMetadata:
         self,
         currencyCode: str,
         id: int,
-    ):
+    ) -> None:
         self.currencyCode: str = currencyCode
         self.id: int = id
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> AccountMetadata:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Trading212 AccountMetadata: {self.id}>"
 
 
@@ -67,10 +70,10 @@ class Order:
         fillResult: None,
         fillPrice: float | None,
         fillCost: float | None,
-        taxes: list,
+        taxes: list[Any],
         fillType: str,
         status: str,
-    ):
+    ) -> None:
         self.type: str = type
         self.id: int = id
         self.fill_id: int = fillId
@@ -98,15 +101,15 @@ class Order:
         self.fill_result: None = fillResult
         self.fill_price: float | None = fillPrice
         self.fill_cost: float | None = fillCost
-        self.taxes: list = taxes
+        self.taxes: list[Any] = taxes
         self.fill_type: str = fillType
         self.status: str = status
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> Order:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Trading212 Order: {self.id}>"
 
 
@@ -117,7 +120,7 @@ class Transaction:
         amount: float,
         reference: str,
         dateTime: str,
-    ):
+    ) -> None:
         self.type: str = type
         self.amount: float = amount
         self.reference: str = reference
@@ -126,8 +129,8 @@ class Transaction:
         )
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> Transaction:
         return cls(**data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Trading212 Transaction: {self.reference}>"

@@ -1,25 +1,33 @@
+from __future__ import annotations
+
+from typing import Any
+
+
 class MainData:
     def __init__(
         self,
         rid: int,
         full_update: bool,
-        torrents: dict,
-        categories: dict,
+        torrents: dict[str, Any],
+        categories: dict[str, Any],
         tags: list[str],
-        trackers: dict,
-        server_state: dict,
+        trackers: dict[str, Any],
+        server_state: dict[str, Any],
     ):
         self.rid: int = rid
         self.full_update: bool = full_update
-        self.torrents: dict = torrents
-        self.trackers: dict = trackers
-        self.categories: dict = categories
+        self.torrents: dict[str, Any] = torrents
+        self.trackers: dict[str, Any] = trackers
+        self.categories: dict[str, Any] = categories
         self.tags: list[str] = tags
         self.server_state: ServerState = ServerState.from_response(server_state)
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> MainData:
         return cls(**data)
+
+    def __repr__(self) -> str:
+        return f"<MainData: {self.rid}>"
 
 
 class ServerState:
@@ -76,5 +84,8 @@ class ServerState:
         self.write_cache_overload: float = float(write_cache_overload)
 
     @classmethod
-    def from_response(cls, data: dict):
+    def from_response(cls, data: dict[str, Any]) -> ServerState:
         return cls(**data)
+
+    def __repr__(self) -> str:
+        return f"<ServerState: {self.connection_status}>"
