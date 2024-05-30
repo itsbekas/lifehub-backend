@@ -1,12 +1,9 @@
 import datetime as dt
-from typing import TYPE_CHECKING
 
 from lifehub.core.common.database_service import get_session
 from lifehub.core.provider.repository.provider import ProviderRepository
-
-if TYPE_CHECKING:
-    from lifehub.core.provider.schema import Provider
-    from lifehub.core.user.schema import User
+from lifehub.core.provider.schema import Provider
+from lifehub.core.user.schema import User
 
 
 class BaseFetcher:
@@ -30,9 +27,9 @@ class BaseFetcher:
     def fetch(self) -> None:
         for self.user in self._get_users():
             with get_session() as self.session:
-                self.session.merge(self.provider)
-                self._update_fetch_timestamp()
+                self.provider = self.session.merge(self.provider)
                 self.fetch_data()
+                self._update_fetch_timestamp()
                 self.session.commit()
 
     def fetch_data(self) -> None:

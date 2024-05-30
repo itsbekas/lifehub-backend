@@ -1,16 +1,17 @@
 from lifehub.providers.base.base_fetcher import BaseFetcher
 from lifehub.providers.trading212.api_client import Trading212APIClient
-from lifehub.providers.trading212.schema import T212Order, T212Transaction
+from lifehub.providers.trading212.schema import T212Balance, T212Order, T212Transaction
 
 
-class T212HistoryFetcher(BaseFetcher):
-    module_name = "t212history"
+class Trading212Fetcher(BaseFetcher):
+    provider_name = "trading212"
 
     def fetch_data(self) -> None:
         t212 = Trading212APIClient(self.user)
 
         orders = t212.get_order_history()
         transactions = t212.get_transactions()
+        balance = t212.get_account_cash()
 
         for order in orders:
             if order.date_modified > self.prev_timestamp:
@@ -40,3 +41,12 @@ class T212HistoryFetcher(BaseFetcher):
                     timestamp=transaction.date_time,
                 )
                 self.session.add(new_transaction)
+
+        if balance:
+            new_balance = T212Balance(
+                user_id=self.user.id,
+                free=balance.free,
+                invested=balance.invested,
+                result=balance.result,
+            )
+            self.session.add(new_balance)

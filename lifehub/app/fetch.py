@@ -12,15 +12,15 @@ def run() -> None:
     load_dotenv()
 
     match fetch_script:
-        case "t212history":
-            from lifehub.providers.trading212.fetcher import T212HistoryFetcher
+        case "trading212":
+            from lifehub.providers.trading212.fetcher import Trading212Fetcher
 
-            T212HistoryFetcher().fetch()
-        case "networth":
+            Trading212Fetcher().fetch()
+        case "ynab":
             from lifehub.providers.ynab.fetcher import YNABFetcher
 
             YNABFetcher().fetch()
-        case "qbitstats":
+        case "qbittorrent":
             from lifehub.providers.qbittorrent.fetcher import (
                 QBittorrentStatsFetcher,
             )
@@ -28,10 +28,10 @@ def run() -> None:
             QBittorrentStatsFetcher().fetch()
         case "all":
             from lifehub.providers.qbittorrent.fetcher import QBittorrentStatsFetcher
-            from lifehub.providers.trading212.fetcher import T212HistoryFetcher
+            from lifehub.providers.trading212.fetcher import Trading212Fetcher
             from lifehub.providers.ynab.fetcher import YNABFetcher
 
-            T212HistoryFetcher().fetch()
+            Trading212Fetcher().fetch()
             YNABFetcher().fetch()
             QBittorrentStatsFetcher().fetch()
         case _:
