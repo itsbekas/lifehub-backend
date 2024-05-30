@@ -1,5 +1,8 @@
+from typing import Any
+
 from requests import Response
 
+from lifehub.core.user.schema import User
 from lifehub.providers.base.api_client import APIClient
 
 from .models import MainData
@@ -8,8 +11,8 @@ from .models import MainData
 class QBittorrentAPIClient(APIClient):
     base_url = "https://qb.b21.tech/api/v2"
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, user: User) -> None:
+        super().__init__(user)
 
         from requests import post
 
@@ -20,7 +23,7 @@ class QBittorrentAPIClient(APIClient):
         res = post(f"{self.base_url}/auth/login", headers=headers, data=auth_data)
         self.cookies: dict[str, str] = res.cookies.get_dict()
 
-    def _get(self, endpoint: str) -> dict[str, str]:
+    def _get(self, endpoint: str) -> Any:
         return self._get_with_cookies(endpoint)
 
     def get_main_data(self) -> MainData | None:

@@ -40,3 +40,7 @@ class BaseFetcher:
 
     def _update_fetch_timestamp(self) -> None:
         self.provider.last_fetch = dt.datetime.now()
+
+    @property
+    def prev_timestamp(self) -> dt.datetime:
+        return self.provider.last_fetch

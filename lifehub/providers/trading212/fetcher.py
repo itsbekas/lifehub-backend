@@ -17,6 +17,8 @@ class T212HistoryFetcher(BaseFetcher):
                 quantity = order.filled_quantity
 
                 if quantity is None:
+                    if order.fill_price is None or order.filled_value is None:
+                        continue
                     quantity = order.filled_value / order.fill_price
 
                 new_order = T212Order(

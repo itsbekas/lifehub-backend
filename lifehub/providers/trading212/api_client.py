@@ -9,7 +9,7 @@ class Trading212APIClient(APIClient):
     provider_name = "trading212"
     base_url = "https://live.trading212.com/api/v0"
 
-    def _get(self, endpoint: str, params: dict[str, str] = {}) -> dict[str, Any]:
+    def _get(self, endpoint: str, params: dict[str, str] = {}) -> Any:
         return self._get_with_token(endpoint, params=params)
 
     def _test(self) -> None:
