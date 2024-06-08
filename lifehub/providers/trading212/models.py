@@ -134,3 +134,36 @@ class Transaction:
 
     def __repr__(self) -> str:
         return f"<Trading212 Transaction: {self.reference}>"
+
+
+class Dividend:
+    def __init__(
+        self,
+        ticker: str,
+        reference: str,
+        quantity: float,
+        amount: float,
+        grossAmountPerShare: float,
+        amountInEuro: float,
+        paidOn: str,
+        type: str,
+    ):
+        self.ticker: str = ticker
+        self.reference: str = reference
+        self.quantity: float = quantity
+        self.amount: float = amount
+        self.gross_amount_per_share: float = grossAmountPerShare
+        self.amount_in_euro: float = amountInEuro
+        self.paid_on: dt.datetime = (
+            dt.datetime.strptime(paidOn, "%Y-%m-%dT%H:%M:%S.%f%z")
+            .astimezone(dt.timezone.utc)
+            .replace(tzinfo=None)
+        )
+        self.type: str = type
+
+    @classmethod
+    def from_response(cls, data: dict[str, Any]) -> Dividend:
+        return cls(**data)
+
+    def __repr__(self) -> str:
+        return f"<Trading212 Dividend: {self.reference}>"

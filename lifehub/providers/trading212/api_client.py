@@ -2,7 +2,7 @@ from typing import Any
 
 from lifehub.providers.base.api_client import APIClient
 
-from .models import AccountCash, AccountMetadata, Order, Transaction
+from .models import AccountCash, AccountMetadata, Dividend, Order, Transaction
 
 
 class Trading212APIClient(APIClient):
@@ -32,6 +32,11 @@ class Trading212APIClient(APIClient):
         res = self._get("history/transactions")
         data = res.get("items", [])
         return [Transaction.from_response(t) for t in data]
+
+    def get_dividends(self) -> list[Dividend]:
+        res = self._get("history/dividends")
+        data = res.get("items", [])
+        return [Dividend.from_response(d) for d in data]
 
     def _error_msg(self, res: Any) -> Any:
         return res.text

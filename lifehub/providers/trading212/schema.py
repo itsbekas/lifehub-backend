@@ -28,3 +28,12 @@ class T212Balance(FetchBaseModel):
     free: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
     invested: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
     result: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
+
+
+class T212Dividend(FetchBaseModel):
+    __tablename__ = "t212_dividend"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    ticker: Mapped[str] = mapped_column(String(10))
+    amount: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
+    quantity: Mapped[Decimal] = mapped_column(DECIMAL(15, 7))

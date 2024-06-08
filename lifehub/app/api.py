@@ -2,8 +2,8 @@ import uvicorn
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from lifehub.app.util.schemas import *  # noqa: F401,F403
 from lifehub.config.constants import UVICORN_HOST
+from lifehub.config.util.schemas import *  # noqa: F401,F403
 from lifehub.core.module.api.router import router as modules_router
 from lifehub.core.provider.api.router import router as providers_router
 from lifehub.core.user.api.router import router as user_router

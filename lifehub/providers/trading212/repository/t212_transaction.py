@@ -1,4 +1,4 @@
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 
 from lifehub.core.common.repository.fetch_base import FetchBaseRepository
 from lifehub.core.user.schema import User

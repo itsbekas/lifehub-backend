@@ -1,6 +1,7 @@
 from typing import Type
 
-from sqlalchemy import Session, select
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from lifehub.core.common.repository import FetchBaseModelType
 from lifehub.core.common.repository.time_base import TimeBaseRepository

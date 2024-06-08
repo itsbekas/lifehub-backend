@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 
-from lifehub.app.util.schemas import *  # noqa: F401,F403
 from lifehub.config.constants import DATABASE_URL
 from lifehub.config.providers import setup_providers
+from lifehub.config.util.schemas import *  # noqa: F401,F403
 from lifehub.core.common.base_model import BaseModel
 
 
