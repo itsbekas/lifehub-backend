@@ -27,3 +27,9 @@ lifehub-clean = "lifehub.app.setup:clean"
 
 [tool.ruff]
 lint.extend-select = ["I"]
+
+[tool.mypy]
+strict = true
+no_untyped_defs = true
+
+exclude = '^tests/'
