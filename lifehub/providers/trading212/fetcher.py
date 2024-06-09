@@ -1,5 +1,6 @@
 from lifehub.providers.base.base_fetcher import BaseFetcher
 from lifehub.providers.trading212.api_client import Trading212APIClient
+from lifehub.providers.trading212.repository.t212_balance import T212BalanceRepository
 from lifehub.providers.trading212.repository.t212_dividend import T212DividendRepository
 from lifehub.providers.trading212.repository.t212_order import T212OrderRepository
 from lifehub.providers.trading212.repository.t212_transaction import (
@@ -57,7 +58,7 @@ class Trading212Fetcher(BaseFetcher):
                 )
                 transaction_db.add(new_transaction)
 
-        # TODO: Add balance repository
+        balance_db = T212BalanceRepository(self.user, self.session)
 
         if balance:
             new_balance = T212Balance(
@@ -66,7 +67,7 @@ class Trading212Fetcher(BaseFetcher):
                 invested=balance.invested,
                 result=balance.result,
             )
-            self.session.add(new_balance)
+            balance_db.add(new_balance)
 
         dividend_db = T212DividendRepository(self.user, self.session)
 
