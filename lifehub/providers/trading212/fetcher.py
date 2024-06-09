@@ -65,7 +65,7 @@ class Trading212Fetcher(BaseFetcher):
                 user_id=self.user.id,
                 free=balance.free,
                 invested=balance.invested,
-                result=balance.result,
+                result=balance.ppl,
             )
             balance_db.add(new_balance)
 
