@@ -2,6 +2,7 @@ import datetime as dt
 
 import argon2
 from jose import JWTError
+from sqlalchemy.orm import Session
 
 from lifehub.core.common.base_service import BaseService
 from lifehub.core.common.exceptions import ServiceException
@@ -27,8 +28,8 @@ class UserServiceException(ServiceException):
 
 
 class UserService(BaseService):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, session: Session) -> None:
+        super().__init__(session)
         self.user_repository = UserRepository(self.session)
         self.provider_token_repository = ProviderTokenRepository(self.session)
         self.password_hasher = argon2.PasswordHasher()

@@ -1,3 +1,5 @@
+from sqlalchemy.orm import Session
+
 from lifehub.core.common.base_service import BaseService
 from lifehub.core.common.exceptions import ServiceException
 from lifehub.core.module.models import ModuleResponse, ModuleWithProvidersResponse
@@ -12,8 +14,8 @@ class ModuleServiceException(ServiceException):
 
 
 class ModuleService(BaseService):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, session: Session) -> None:
+        super().__init__(session)
         self.module_repository = ModuleRepository(self.session)
 
     def get_modules(self) -> list[ModuleResponse]:

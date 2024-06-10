@@ -2,12 +2,18 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException
 
+from lifehub.core.common.api.dependencies import SessionDep
 from lifehub.core.provider.schema import (
     Provider,
 )
 from lifehub.core.provider.service.provider import ProviderService
 
-ProviderServiceDep = Annotated[ProviderService, Depends(ProviderService)]
+
+def get_provider_service(session: SessionDep) -> ProviderService:
+    return ProviderService(session)
+
+
+ProviderServiceDep = Annotated[ProviderService, Depends(get_provider_service)]
 
 
 def get_provider(

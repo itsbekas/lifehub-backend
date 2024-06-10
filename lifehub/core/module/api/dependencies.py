@@ -2,10 +2,16 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException
 
+from lifehub.core.common.api.dependencies import SessionDep
 from lifehub.core.module.schema import Module
 from lifehub.core.module.service.module import ModuleService
 
-ModuleServiceDep = Annotated[ModuleService, Depends(ModuleService)]
+
+def get_module_service(session: SessionDep) -> ModuleService:
+    return ModuleService(session)
+
+
+ModuleServiceDep = Annotated[ModuleService, Depends(get_module_service)]
 
 
 def get_module(

@@ -1,3 +1,5 @@
+from sqlalchemy.orm import Session
+
 from lifehub.core.common.base_user_service import BaseUserService
 from lifehub.core.common.exceptions import ServiceException
 from lifehub.core.user.schema import User
@@ -21,8 +23,8 @@ class FinanceServiceException(ServiceException):
 
 
 class FinanceService(BaseUserService):
-    def __init__(self, user: User):
-        super().__init__(user)
+    def __init__(self, session: Session, user: User):
+        super().__init__(session, user)
 
     def get_t212_balance(self) -> T212BalanceResponse:
         balance: T212Balance | None = T212BalanceRepository(

@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 
-from lifehub.core.common.database_service import get_session
+from lifehub.core.common.base_service import BaseService
 from lifehub.core.user.schema import User
 
 
-class BaseUserService:
-    def __init__(self, user: User) -> None:
-        self.session: Session = get_session()
-        self.user = self.session.merge(user)
+class BaseUserService(BaseService):
+    def __init__(self, session: Session, user: User) -> None:
+        super().__init__(session)
+        self.user: User = user

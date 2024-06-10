@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Form, HTTPException
 
+from lifehub.core.common.api.dependencies import SessionDep
 from lifehub.core.user.api.dependencies import UserDep, UserServiceDep
 from lifehub.core.user.models import UserTokenResponse
 from lifehub.core.user.service.user import UserService, UserServiceException
@@ -29,8 +30,9 @@ async def user_signup(
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
     user_service: UserServiceDep,
+    session: SessionDep,
 ) -> UserTokenResponse:
-    user_service = UserService()
+    user_service = UserService(session)
     try:
         user = user_service.create_user(username, password, name)
     except UserServiceException as e:

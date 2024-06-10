@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 import requests
 
-from lifehub.core.common.database_service import get_session
+from lifehub.core.common.database_service import Session
 from lifehub.core.provider.repository.provider import ProviderRepository
 from lifehub.core.provider.repository.provider_token import ProviderTokenRepository
 from lifehub.core.provider.schema import Provider, ProviderToken
@@ -28,7 +28,7 @@ class APIClient:
     cookies: Optional[dict[str, str]]
 
     def __init__(self, user: User) -> None:
-        with get_session() as session:
+        with Session() as session:
             self.provider: Provider | None = ProviderRepository(session).get_by_name(
                 self.provider_name
             )
