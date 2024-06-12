@@ -11,8 +11,6 @@ from lifehub.core.user.api.user_modules.router import router as user_modules_rou
 from lifehub.core.user.api.user_providers.router import router as user_providers_router
 from lifehub.modules.finance.router import router as finance_router
 
-# from lifehub.modules.server.router import router as server_router
-
 #### Config ####
 app = FastAPI(
     title="LifeHub API",
@@ -46,7 +44,6 @@ api.include_router(user_modules_router, prefix="/user/modules", tags=["user/modu
 api.include_router(providers_router, prefix="/providers", tags=["providers"])
 api.include_router(modules_router, prefix="/modules", tags=["modules"])
 api.include_router(finance_router, prefix="/finance", tags=["finance"])
-# api.include_router(server_router, prefix="/server", tags=["server"])
 
 # TODO: Eventually replace this with a reverse proxy
 app.include_router(api, prefix="/api/v0")

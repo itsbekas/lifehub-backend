@@ -12,8 +12,14 @@ class UserLoginRequest:
 @dataclass
 class UserCreateRequest:
     username: str
+    email: str
     password: str
     name: str
+
+
+@dataclass
+class UserVerifyRequest:
+    token: str
 
 
 @dataclass

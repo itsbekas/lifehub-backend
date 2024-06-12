@@ -20,6 +20,7 @@ from lifehub.core.utils.auth import (
     hash_password,
     verify_password,
 )
+from lifehub.core.utils.mail.api_client import MailAPIClient
 
 
 class UserServiceException(ServiceException):
@@ -34,7 +35,7 @@ class UserService(BaseService):
         self.provider_token_repository = ProviderTokenRepository(self.session)
         self.password_hasher = argon2.PasswordHasher()
 
-    def create_user(self, username: str, password: str, name: str) -> User:
+    def create_user(self, username: str, email: str, password: str, name: str) -> User:
         user = self.user_repository.get_by_username(username)
 
         if user is not None:
@@ -42,8 +43,22 @@ class UserService(BaseService):
 
         hashed_password = hash_password(password)
 
-        new_user = User(username=username, password=hashed_password, name=name)
+        new_user = User(
+            username=username, email=email, password=hashed_password, name=name
+        )
         self.user_repository.add(new_user)
+
+        verification_token = create_jwt_token(
+            username, dt.datetime.now() + dt.timedelta(days=1)
+        )
+
+        mail_client = MailAPIClient()
+        mail_client.send_verification_email(
+            email,
+            name,
+            verification_token,
+        )
+
         self.user_repository.commit()
         self.user_repository.refresh(new_user)
 
@@ -78,6 +93,28 @@ class UserService(BaseService):
 
         if user is None:
             raise UserServiceException("User not found")
+
+        if not user.verified:
+            raise UserServiceException("User not verified")
+
+        return user
+
+    def verify_user(self, token: str) -> User:
+        try:
+            payload = decode_jwt_token(token)
+        except JWTError:
+            raise UserServiceException("Invalid token")
+
+        username: str | None = payload.get("sub")
+        if username is None:
+            raise UserServiceException("Invalid token")
+
+        user: User | None = self.user_repository.get_by_username(username)
+        if user is None:
+            raise UserServiceException("User not found")
+
+        user.verified = True
+        self.user_repository.commit()
 
         return user
 
