@@ -32,14 +32,12 @@ async def user_signup(
     email: Annotated[str, Form()],
     user_service: UserServiceDep,
     session: SessionDep,
-) -> UserTokenResponse:
+) -> None:
     user_service = UserService(session)
     try:
-        user = user_service.create_user(username, email, password, name)
+        user_service.create_user(username, email, password, name)
     except UserServiceException as e:
         raise HTTPException(status_code=403, detail=str(e))
-    user_token = user_service.create_access_token(user)
-    return user_token
 
 
 @router.delete("/me")

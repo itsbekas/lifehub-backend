@@ -79,6 +79,9 @@ class UserService(BaseService):
         if user is None or not verify_password(password, user.password):
             raise UserServiceException("Invalid credentials")
 
+        if not user.verified:
+            raise UserServiceException("User not verified")
+
         return user
 
     def authenticate_user(self, token: str) -> User:
