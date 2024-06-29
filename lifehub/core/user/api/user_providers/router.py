@@ -61,7 +61,10 @@ async def add_oauth_provider(
         raise OAuthTokenRequestFailedException(res)
     data = res.json()
 
-    created_at: dt.datetime = dt.datetime.fromtimestamp(data["created_at"])
+    if "created_at" in data:
+        created_at = dt.datetime.fromtimestamp(data["created_at"])
+    else:
+        created_at = dt.datetime.now()
     expires_at: dt.datetime = created_at + dt.timedelta(seconds=data["expires_in"])
 
     user_service.add_provider_token_to_user(

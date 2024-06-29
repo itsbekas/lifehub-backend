@@ -29,6 +29,14 @@ def init_setup_data() -> tuple[dict[str, dict[str, Any]], dict[str, list[str]]]:
             "auth_type": "basic",
             "allow_custom_url": True,
         },
+        "google_calendar": {
+            "auth_type": "oauth",
+            "auth_url": "https://accounts.google.com/o/oauth2/auth",
+            "token_url": "https://accounts.google.com/o/oauth2/token",
+            "client_id": getenv("GOOGLE_CALENDAR_CLIENT_ID"),
+            "client_secret": getenv("GOOGLE_CALENDAR_CLIENT_SECRET"),
+            "scope": "https://www.googleapis.com/auth/calendar.readonly",
+        },
     }
 
     module_providers: dict[str, list[str]] = {

@@ -26,4 +26,7 @@ async def get_providers(
 async def oauth_authorization_url(provider: ProviderDep) -> str:
     if not is_oauth_config(provider.config):
         raise HTTPException(404, "Provider must be an OAuth provider")
-    return provider.config.build_auth_url()
+    auth_url: str = provider.config.build_auth_url()
+    if provider.name == "google_calendar":
+        auth_url += "&access_type=offline&prompt=consent"
+    return auth_url
