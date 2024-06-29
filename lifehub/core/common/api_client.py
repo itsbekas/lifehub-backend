@@ -1,5 +1,5 @@
 from os import getenv
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import requests
 
@@ -8,6 +8,27 @@ from lifehub.core.provider.repository.provider import ProviderRepository
 from lifehub.core.provider.repository.provider_token import ProviderTokenRepository
 from lifehub.core.provider.schema import Provider, ProviderToken
 from lifehub.core.user.schema import User
+
+
+def request_handler(func: Callable[..., Any]) -> Callable[..., Any]:
+    def wrapper(self: "APIClient", endpoint: str, params: dict[str, Any]) -> Any:
+        try:
+            url = f"{self.base_url}/{endpoint}"
+            res = func(self, url, params)
+            if res.status_code != 200:
+                raise APIException(
+                    type(self).__name__, url, res.status_code, self._error_msg(res)
+                )
+            return res.json()
+        except requests.exceptions.RequestException as e:
+            raise APIException(
+                type(self).__name__,
+                url,
+                500,
+                f"Error accessing {self.base_url}: {str(e)}",
+            )
+
+    return wrapper
 
 
 class APIException(Exception):
@@ -47,73 +68,67 @@ class APIClient:
 
             self.token = api_token.token
 
-    def _get(self, endpoint: str) -> dict[str, Any]:
+    @property
+    def _token_headers(self) -> dict[str, str]:
+        return {"Authorization": self.token}
+
+    @property
+    def _token_bearer_headers(self) -> dict[str, str]:
+        return {"Authorization": f"Bearer {self.token}"}
+
+    def _get(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
         """
         GET request to the API
         """
         raise NotImplementedError
 
-    def _get_basic(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
+    def _post(self, endpoint: str, data: dict[str, Any] = {}) -> Any:
+        """
+        POST request to the API
+        """
+        raise NotImplementedError
+
+    @request_handler
+    def _get_basic(self, url: str, params: dict[str, Any]) -> Any:
         """
         Basic GET request to the API
         """
-        url = f"{self.base_url}/{endpoint}"
-        res = requests.get(url, params=params)
-        if res.status_code != 200:
-            raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res)
-            )
-        return res.json()
+        return requests.get(url, params=params)
 
-    def _get_with_token(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
-        """
-        GET request to the API with token in the header
-        """
-        url = f"{self.base_url}/{endpoint}"
-        headers = {"Authorization": self.token}
-        res = requests.get(url, headers=headers, params=params)
-        if res.status_code != 200:
-            raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res)
-            )
-        return res.json()
-
-    def _get_with_token_bearer(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
-        """
-        GET request to the API with token bearer in the header
-        """
-        url = f"{self.base_url}/{endpoint}"
-        headers = {"Authorization": f"Bearer {self.token}"}
-        res = requests.get(url, headers=headers, params=params)
-        if res.status_code != 200:
-            raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res)
-            )
-        return res.json()
-
-    def _get_with_headers(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
+    @request_handler
+    def _get_with_headers(self, url: str, params: dict[str, Any]) -> Any:
         """
         GET request to the API with custom headers
         """
-        url = f"{self.base_url}/{endpoint}"
-        res = requests.get(url, headers=self.headers, params=params)
-        if res.status_code != 200:
-            raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res)
-            )
-        return res.json()
+        return requests.get(url, headers=self.headers, params=params)
 
-    def _get_with_cookies(self, endpoint: str, params: dict[str, Any] = {}) -> Any:
+    @request_handler
+    def _get_with_cookies(self, url: str, params: dict[str, Any]) -> Any:
         """
         GET request to the API with cookies
         """
-        url = f"{self.base_url}/{endpoint}"
-        res = requests.get(url, cookies=self.cookies, params=params)
-        if res.status_code != 200:
-            raise APIException(
-                type(self).__name__, url, res.status_code, self._error_msg(res)
-            )
-        return res.json()
+        return requests.get(url, cookies=self.cookies, params=params)
+
+    @request_handler
+    def _post_basic(self, url: str, data: dict[str, Any]) -> Any:
+        """
+        Basic POST request to the API
+        """
+        return requests.post(url, data=data)
+
+    @request_handler
+    def _post_with_headers(self, url: str, data: dict[str, Any]) -> Any:
+        """
+        POST request to the API with custom headers
+        """
+        return requests.post(url, headers=self.headers, json=data)
+
+    @request_handler
+    def _post_with_cookies(self, url: str, data: dict[str, Any]) -> Any:
+        """
+        POST request to the API with cookies
+        """
+        return requests.post(url, cookies=self.cookies, data=data)
 
     def _error_msg(self, res: requests.Response) -> str:
         """

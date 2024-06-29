@@ -1,6 +1,7 @@
 from typing import Any
 
-from lifehub.providers.base.api_client import APIClient
+from lifehub.core.common.api_client import APIClient
+from lifehub.core.user.schema import User
 
 from .models import AccountCash, AccountMetadata, Dividend, Order, Transaction
 
@@ -9,8 +10,12 @@ class Trading212APIClient(APIClient):
     provider_name = "trading212"
     base_url = "https://live.trading212.com/api/v0"
 
+    def __init__(self, user: User) -> None:
+        super().__init__(user)
+        self.headers = self._token_headers
+
     def _get(self, endpoint: str, params: dict[str, str] = {}) -> Any:
-        return self._get_with_token(endpoint, params=params)
+        return self._get_with_headers(endpoint, params=params)
 
     def _test(self) -> None:
         self.get_account_metadata()

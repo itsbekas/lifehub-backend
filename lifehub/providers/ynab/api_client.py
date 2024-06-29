@@ -1,7 +1,8 @@
 import re
 from typing import Any
 
-from lifehub.providers.base.api_client import APIClient
+from lifehub.core.common.api_client import APIClient
+from lifehub.core.user.schema import User
 
 from .models import Account, CategoryGroup
 
@@ -12,10 +13,12 @@ class YNABAPIClient(APIClient):
 
     budget = "last-used"
 
-    def _get(self, endpoint: str) -> Any:
-        # TODO: Maybe catch exceptions here and return None
-        # TODO: Save endpoint's last knowledge of server
-        return self._get_with_token_bearer(endpoint)
+    def __init__(self, user: User):
+        super().__init__(user)
+        self.headers = self._token_headers
+
+    def _get(self, endpoint: str, params: dict[str, str] = {}) -> Any:
+        return self._get_with_headers(endpoint)
 
     def _test(self) -> None:
         self.get_user()

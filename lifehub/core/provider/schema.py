@@ -102,8 +102,8 @@ class OAuthProviderConfig(ProviderConfig):
     )
     auth_url: Mapped[str] = mapped_column(String(64), nullable=False)
     token_url: Mapped[str] = mapped_column(String(64), nullable=False)
-    client_id: Mapped[str] = mapped_column(String(64), nullable=False)
-    client_secret: Mapped[str] = mapped_column(String(64), nullable=False)
+    client_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    client_secret: Mapped[str] = mapped_column(String(128), nullable=False)
     scope: Mapped[str] = mapped_column(String(64), nullable=False)
 
     def build_auth_url(self) -> str:
